@@ -29,8 +29,8 @@ public class BikeController {
         }
     }
 
-    public static void addBike(int id, String type, double price, String condition) throws Exception{
-        Bike bike = new Bike(id, type, price, condition);
+    public static void addBike(int id, String type, double price, String condition, int stationID) throws Exception{
+        Bike bike = new Bike(id, type, price, condition, stationID);
         try{
             bike.addBike();
         } catch (Exception e){
@@ -52,6 +52,15 @@ public class BikeController {
         try{
             bike.markCondition();
         } catch (Exception e){
+            throw e;
+        }
+    }
+
+    public static void assignBikeToStation(int id, int stationID){
+        Bike bike = Bike.getBikeByID(id);
+        try{
+            bike.assignBikeToStation();
+        } catch (Exception e) {
             throw e;
         }
     }

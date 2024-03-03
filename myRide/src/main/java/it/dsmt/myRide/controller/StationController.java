@@ -1,8 +1,6 @@
 package it.dsmt.myRide.controller;
-import it.dsmt.myRide.model.Bike;
 import it.dsmt.myRide.model.Station;
 
-import java.util.List;
 
 public class StationController {
 
@@ -14,8 +12,8 @@ public class StationController {
         }
     }
 
-    public static void addStation(int id, String address, int numberOfBikes, List<Bike> availableBikes) throws Exception{
-        Station station = new Station(id, address, numberOfBikes, availableBikes);
+    public static void addStation(int id, String address, int numberOfBikes) throws Exception{
+        Station station = new Station(id, address, numberOfBikes);
         try{
             station.addStation();
         } catch (Exception e){
@@ -32,20 +30,10 @@ public class StationController {
         }
     }
 
-    public static void addBikeToStation(int stationID, int bikeID) throws Exception{
-        Station station = Station.getStationByID(stationID);
-        Bike bike = Bike.getBikeByID(bikeID);
-        try{
-            station.addBikeToStation(bike);
-        } catch (Exception e){
-            throw e;
-        }
-    }
-
-    public static void getAvailableBikes(int id) throws Exception{
+    public static void getBikes(int id) throws Exception{
         Station station = Station.getStationByID(id);
         try{
-            station.getAvailableBikes();
+            station.getBikes();
         } catch (Exception e){
             throw e;
         }

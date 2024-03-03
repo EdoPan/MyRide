@@ -47,7 +47,7 @@ public class BikeView {
     @PostMapping("/bike")
     public ResponseEntity<String> addBike(@RequestParam Bike bike){
         try{
-            BikeController.addBike(bike.getID(), bike.getType(), bike.getPrice(), bike.getCondition());
+            BikeController.addBike(bike.getID(), bike.getType(), bike.getPrice(), bike.getCondition(), bike.getStationID());
         } catch (Exception e){
             return new ResponseEntity<>("ERROR" , HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -74,4 +74,13 @@ public class BikeView {
         return new ResponseEntity<>("Bike marked!", HttpStatus.OK);
     }
 
+    @PostMapping("/bike/{id_bike}/station/{station_id}")
+    public ResponseEntity<String> assignBikeToStation(@RequestParam int id, int stationID){
+        try{
+            BikeController.assignBikeToStation(id, stationID);
+        } catch (Exception e){
+            return new ResponseEntity<>("ERROR" , HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("Bike assigned!", HttpStatus.OK);
+    }    
 }

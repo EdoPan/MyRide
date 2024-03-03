@@ -15,15 +15,17 @@ public class Bike {
     private String type;
     private double price;
     private String condition;
+    private int stationID;
 
     public Bike(){
     }
 
-    public Bike(int id, String type, double price, String condition){
+    public Bike(int id, String type, double price, String condition, int stationID){
         this.id = id;
         this.type = type;
         this.price = price;
         this.condition = condition;
+        this.stationID = stationID;
     }
 
     public int getID(){
@@ -57,6 +59,14 @@ public class Bike {
         this.condition = condition;
     }
 
+    public int getStationID(){
+        return this.stationID;
+    }
+
+    public void setStationID(int stationID){
+        this.stationID = stationID;
+    }
+
     public static Bike getBikeByID(int id){
         Bike bike = new Bike();
         String query = "SELECT * FROM bikes WHERE id > ?";
@@ -68,7 +78,7 @@ public class Bike {
             ResultSet rs  = pstmt.executeQuery();
 
             bike = new Bike(rs.getInt("id"), rs.getString("type"), 
-            rs.getDouble("price"), rs.getString("condition"));
+            rs.getDouble("price"), rs.getString("condition"), rs.getInt("stationID"));
             
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -84,7 +94,7 @@ public class Bike {
              ResultSet rs = stmt.executeQuery(query)){
                 while(rs.next()){
                     Bike bike = new Bike(rs.getInt("id"), rs.getString("type"), 
-                    rs.getDouble("price"), rs.getString("condition"));
+                    rs.getDouble("price"), rs.getString("condition"), rs.getInt("stationID"));
                     bikes.add(bike);
                 }
 
@@ -106,8 +116,8 @@ public class Bike {
             }        }
 
     public void addBike(){
-        String query = "INSERT INTO bikes(id, type, price, condition) VALUES(" + 
-        this.id + ",'" + this.type + "', '" + this.price + "'," + this.condition + "')";
+        String query = "INSERT INTO bikes(id, type, price, condition, stationID) VALUES(" + 
+        this.id + ",'" + this.type + "', '" + this.price + "'," + this.condition + "'," + this.stationID + "')";
         try (Connection conn = DBController.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)){
@@ -137,5 +147,16 @@ public class Bike {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }    
+    }
+
+    public void assignBikeToStation(){
+        String query = "UPDATE bikes SET stationID = " + this.stationID + "WHERE id = " + this.id;
+        try (Connection conn = DBController.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)){
+
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            } 
     }
 }

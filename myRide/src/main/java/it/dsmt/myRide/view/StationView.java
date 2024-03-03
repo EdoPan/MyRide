@@ -25,7 +25,7 @@ public class StationView {
     @PostMapping("/station")
     public ResponseEntity<String> addStation(@RequestParam Station station){
         try{
-            StationController.addStation(station. getID(), station.getAddress(), station.getNumberOfBikes(), station.getAvailableBikes());
+            StationController.addStation(station. getID(), station.getAddress(), station.getNumberOfBikes());
         } catch (Exception e){
             return new ResponseEntity<>("ERROR" , HttpStatus.INTERNAL_SERVER_ERROR);
 
@@ -44,21 +44,10 @@ public class StationView {
         return new ResponseEntity<>("Station removed!", HttpStatus.OK);
     }
 
-    @PostMapping("/station/{id_station}/{id_bike}")
-    public ResponseEntity<String> addBikeToStation(@RequestParam int stationID, int bikeID){
-        try{
-            StationController.addBikeToStation(stationID, bikeID);
-        } catch (Exception e){
-            return new ResponseEntity<>("ERROR" , HttpStatus.INTERNAL_SERVER_ERROR);
-
-        }
-        return new ResponseEntity<>("Bike added to station!", HttpStatus.OK);
-    }
-
     @GetMapping("/station/{id_station}/bikes")
-    public ResponseEntity<String> getAvailableBikes(@RequestParam int stationID){
+    public ResponseEntity<String> getBikes(@RequestParam int stationID){
         try{
-            StationController.getAvailableBikes(stationID);
+            StationController.getBikes(stationID);
         } catch (Exception e){
             return new ResponseEntity<>("ERROR" , HttpStatus.INTERNAL_SERVER_ERROR);
 
