@@ -8,6 +8,7 @@ public class Station {
     private List<Bike> availableBikes;
 
     public Station(int id, String address, int numberOfBikes, List<Bike> availableBikes){
+        this.id = id;
         this.address = address;
         this.numberOfBikes = numberOfBikes;
         this.availableBikes = availableBikes;

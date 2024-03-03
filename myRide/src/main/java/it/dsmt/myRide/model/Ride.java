@@ -1,5 +1,12 @@
 package it.dsmt.myRide.model;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
+
+import it.dsmt.myRide.controller.DBController;
 
 public class Ride {
     private int id;
@@ -32,9 +39,26 @@ public class Ride {
     }
 
     public void bookRide(){
+        String query = "INSERT INTO rides(id, startTime, endTime) VALUES(" + 
+        this.id + ",'" + this.startTime + "', '" + this.endTime + "')";
+        try (Connection conn = DBController.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)){
+
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
     }
 
     public void deleteRide(){
+        String query = "DELETE FROM rides WHERE id = " + this.id;
+        try (Connection conn = DBController.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)){
+
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }    
     }  
 
     public void extendRide(){
@@ -51,7 +75,22 @@ public class Ride {
     }
 
     public static Ride getRideByID(int id){
+       Ride ride = new Ride();
+        String query = "SELECT * FROM rides WHERE id > ?";
+        
+        try (Connection conn = DBController.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(query)){
+            
+            pstmt.setInt(1,id);
+            ResultSet rs  = pstmt.executeQuery();
 
+            // Understand how to handle LocalDate type in SQLite
+            ride = new Ride(rs.getInt("id"), null, null);
+            
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return ride;
     }
     
 }

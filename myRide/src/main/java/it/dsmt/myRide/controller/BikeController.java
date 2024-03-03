@@ -47,7 +47,7 @@ public class BikeController {
         }
     }
 
-    public static void markCondition(int id) throws Exception{
+    public static void markCondition(int id, String condition) throws Exception{
         Bike bike = Bike.getBikeByID(id);
         try{
             bike.markCondition();

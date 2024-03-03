@@ -1,5 +1,12 @@
 package it.dsmt.myRide.model;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import it.dsmt.myRide.controller.DBController;
+
 public class User {
     private String username;
     private String password;
@@ -25,9 +32,19 @@ public class User {
     }
 
     public void register(){
+        String query = "INSERT INTO users(username, password) VALUES(" + 
+        this.username + ",'" + this.password + "')";
+        try (Connection conn = DBController.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)){
+
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
     }
     
-    public String login(){
-        return "placeholder";
+    public boolean login(){
+        // handle the login
+        return true;
     }
 }

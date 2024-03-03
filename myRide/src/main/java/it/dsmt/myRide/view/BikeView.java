@@ -64,10 +64,10 @@ public class BikeView {
         return new ResponseEntity<>("Bike removed!", HttpStatus.OK);
     }
 
-    @PostMapping("/bike/{id_bike}/mark")
-    public ResponseEntity<String> markCondition(@RequestParam int id){
+    @PostMapping("/bike/{id_bike}/mark/{condition}")
+    public ResponseEntity<String> markCondition(@RequestParam int id, String condition){
         try{
-            BikeController.markCondition(id);
+            BikeController.markCondition(id, condition);
         } catch (Exception e){
             return new ResponseEntity<>("ERROR" , HttpStatus.INTERNAL_SERVER_ERROR);
         }
