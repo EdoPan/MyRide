@@ -1,0 +1,29 @@
+-- Queries SQL
+
+CREATE TABLE users (
+    username varchar(255),
+    password varchar(255),
+    isMaintainer boolean
+);
+
+CREATE TABLE bikes (
+    id int,
+    type varchar(255),
+  	price double,
+    condition varchar(255),
+  	stationID int
+);
+
+CREATE TABLE rides (
+    id int,
+    startTime date,
+  	endTime date,
+    bikeID int,
+  	username varchar(255)
+);
+
+CREATE TABLE stations (
+    id int,
+    address varchar(255),
+  	numberOfBikes int
+);
