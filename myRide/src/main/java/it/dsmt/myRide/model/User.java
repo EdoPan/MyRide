@@ -65,7 +65,7 @@ public class User {
 
     public static User getUserByUsername(String username){
         User user = new User();
-        String query = "SELECT * FROM users WHERE username > ?";
+        String query = "SELECT * FROM users WHERE username = ?";
         
         try (Connection conn = DBController.connect();
              PreparedStatement pstmt  = conn.prepareStatement(query)){

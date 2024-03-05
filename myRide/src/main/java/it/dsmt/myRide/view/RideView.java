@@ -1,12 +1,14 @@
 package it.dsmt.myRide.view;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import it.dsmt.myRide.controller.RideController;
 import it.dsmt.myRide.model.Ride;
 
+@Controller
 public class RideView {
     
     @GetMapping("/ride/{id_ride}")

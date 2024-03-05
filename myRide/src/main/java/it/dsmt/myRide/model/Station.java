@@ -50,7 +50,7 @@ public class Station {
 
     public static Station getStationByID(int id){
         Station station = new Station();
-        String query = "SELECT * FROM stations WHERE id > ?";
+        String query = "SELECT * FROM stations WHERE id = ?";
         
         try (Connection conn = DBController.connect();
              PreparedStatement pstmt  = conn.prepareStatement(query)){

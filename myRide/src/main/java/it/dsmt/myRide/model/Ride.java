@@ -58,7 +58,7 @@ public class Ride {
 
     public static Ride getRideByID(int id){
         Ride ride = new Ride();
-         String query = "SELECT * FROM rides WHERE id > ?";
+         String query = "SELECT * FROM rides WHERE id = ?";
          
          try (Connection conn = DBController.connect();
               PreparedStatement pstmt  = conn.prepareStatement(query)){
