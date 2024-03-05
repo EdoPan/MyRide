@@ -1,4 +1,6 @@
 package it.dsmt.myRide.view;
+import java.time.LocalDate;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -44,9 +46,9 @@ public class RideView {
     }
 
     @PostMapping("/ride/{id_ride}/extend")
-    public ResponseEntity<String> extendRide(@RequestParam int id){
+    public ResponseEntity<String> extendRide(@RequestParam int id, LocalDate newEndTime ){
         try{
-            RideController.extendRide(id);;
+            RideController.extendRide(id, newEndTime);
         } catch (Exception e){
             return new ResponseEntity<>("ERROR" , HttpStatus.INTERNAL_SERVER_ERROR);
         }

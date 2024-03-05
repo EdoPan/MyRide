@@ -1,4 +1,6 @@
 package it.dsmt.myRide.controller;
+import java.time.LocalDate;
+
 import it.dsmt.myRide.model.Ride;
 
 public class RideController {
@@ -28,14 +30,14 @@ public class RideController {
             throw e;
         }
     }
-
-    public static void extendRide(int id) throws Exception{
+    
+    public static void extendRide(int id, LocalDate newEndTime) throws Exception{
         Ride ride = Ride.getRideByID(id);
         try{
-            ride.extendRide();
+            ride.extendRide(newEndTime);
         } catch (Exception e){
             throw e;
         }
-    }
+    }    
     
 }

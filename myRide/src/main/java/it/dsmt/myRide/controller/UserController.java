@@ -1,4 +1,5 @@
 package it.dsmt.myRide.controller;
+import it.dsmt.myRide.dto.LoginDTO;
 import it.dsmt.myRide.model.User;
 
 public class UserController {
@@ -13,15 +14,19 @@ public class UserController {
         
     }
     
-    public static String loginUser(String username, String password, boolean isMaintainer) throws Exception{
-        User user = new User(username, password, isMaintainer);
+    public static LoginDTO loginUser(String username, String password) throws Exception{
+        User user = new User(username, password, false);
         try {
-            user.login();
-            return user.getUsername();
+            if(user.login()){
+                LoginDTO account = new LoginDTO(user.getUsername(), user.getIsMaintainer());
+                return account;
+            }
+            else{
+                throw new Exception();
+            }
         } catch (Exception e){
             throw e;
         }
-
     }
 
     public static boolean checkIfMaintainer(String username) throws Exception{

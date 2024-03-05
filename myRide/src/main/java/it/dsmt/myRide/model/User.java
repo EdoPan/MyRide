@@ -59,8 +59,20 @@ public class User {
     }
     
     public boolean login(){
-        // handle the login
-        return true;
+        String query = "SELECT * FROM user where username = '" + this.username + "' and password = '" + this.password + "'";
+        try (Connection conn = DBController.connect();
+            Statement stmt = conn.createStatement();
+        ){
+            ResultSet res = stmt.executeQuery(query);
+            if (res != null && res.next()) {
+                this.isMaintainer = res.getBoolean("isMaintainer");
+            }
+            return true;
+
+        } catch (SQLException e) {
+           System.out.println(e.getMessage());
+       }
+        return false;
     }
 
     public static User getUserByUsername(String username){

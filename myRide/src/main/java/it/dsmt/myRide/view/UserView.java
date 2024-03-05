@@ -1,6 +1,8 @@
 package it.dsmt.myRide.view;
 import it.dsmt.myRide.model.User;
 import it.dsmt.myRide.controller.UserController;
+import it.dsmt.myRide.dto.LoginDTO;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,18 +28,13 @@ public class UserView {
 
     @PostMapping("/login")
     @ResponseBody
-    public ResponseEntity<String> login(@RequestBody User user){
+    public ResponseEntity<LoginDTO> login(@RequestBody User user){
         try{
-            String username;
-            username = UserController.loginUser(user.getUsername(), user.getPassword(), user.getIsMaintainer());
-            if (username != ""){
-                return ResponseEntity.ok(username);
-            }else{
-                return new ResponseEntity(null , HttpStatus.UNAUTHORIZED);
-            }
+            LoginDTO login = UserController.loginUser(user.getUsername(), user.getPassword());
+            return ResponseEntity.ok(login);
         } catch (Exception e){
-            System.out.println("[USER VIEW] Impossible to login");
-            return new ResponseEntity(null , HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println("[USER CONTROLLER] Impossible to login");
+            return new ResponseEntity("ERROR", null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

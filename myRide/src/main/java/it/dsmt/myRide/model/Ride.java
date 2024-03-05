@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 
+import org.springframework.cglib.core.Local;
+
 import it.dsmt.myRide.controller.DBController;
 
 public class Ride {
@@ -90,14 +92,23 @@ public class Ride {
         String query = "DELETE FROM rides WHERE id = " + this.id;
         try (Connection conn = DBController.connect();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)){
-
+            ){
+                ResultSet rs = stmt.executeQuery(query);
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }    
     }  
 
-    public void extendRide(){
+    public void extendRide(LocalDate newEndTime){
+        String query = "UPDATE rides " + 
+                       "SET endTime = '" + newEndTime + "'" +
+                       "WHERE id = '" + this.id + "'";
+        try (Connection conn = DBController.connect();
+             Statement stmt = conn.createStatement();){
+                ResultSet rs = stmt.executeQuery(query);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }    
     }
 
     public boolean isTimeExpired(){
