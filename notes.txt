@@ -27,3 +27,10 @@ CREATE TABLE stations (
     address varchar(255),
   	numberOfBikes int
 );
+
+INSERT INTO stations(id, address, numberOfBikes) VALUES (1, 'Via Diotisalvi 2', 16);
+INSERT INTO stations(id, address, numberOfBikes) VALUES (2, 'Largo Bruno Pontecorvo 3', 12);
+INSERT INTO stations(id, address, numberOfBikes) VALUES (3, 'Corso Italia 60', 4);
+INSERT INTO stations(id, address, numberOfBikes) VALUES (4, 'Via di Gello 138', 8);
+INSERT INTO stations(id, address, numberOfBikes) VALUES (5, 'Piazza Martiri della Libertà 33', 0);
+INSERT INTO stations(id, address, numberOfBikes) VALUES (6, 'Via S. Marco 15', 2);

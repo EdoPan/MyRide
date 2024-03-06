@@ -44,6 +44,27 @@ public class Station {
         this.numberOfBikes = numberOfBikes;
     }
 
+    public static List<Station> getStations(){
+        List<Station> stations = new ArrayList<>();
+        String query = "SELECT * FROM stations";
+        
+        try (Connection conn = DBController.connect();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query)){
+
+            while(rs.next()){
+                Station station;
+                station = new Station(rs.getInt("id"), rs.getString("address"), 
+                rs.getInt("numberOfBikes"));
+                stations.add(station);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return stations;
+    }
+
     public static Station getStationByID(int id){
         Station station = new Station();
         String query = "SELECT * FROM stations WHERE id = " + id;

@@ -6,40 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
-    
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/magnific-popup.css">
-
     <link rel="stylesheet" href="css/aos.css">
-
     <link rel="stylesheet" href="css/ionicons.min.css">
-
     <link rel="stylesheet" href="css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="css/jquery.timepicker.css">
-
-    
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
   <body>
     
 	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
-	      <a class="navbar-brand" href="index.html">My<span>Ride</span></a>
+	      <a class="navbar-brand" href="#">My<span>Ride</span></a>
 	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 	        <span class="oi oi-menu"></span> Menu
 	      </button>
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-				<li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-				<li class="nav-item"><a href="pricing.html" class="nav-link">Pricing</a></li>
 				<li class="nav-item"><a href="stations.html" class="nav-link">Stations</a></li>
+				<li class="nav-item"><a href="pricing.html" class="nav-link">Pricing</a></li>
 				<li class="nav-item"><a href="contact.html" class="nav-link">Chat</a></li>
 			  <li class="nav-item"><a href="login.html" class="nav-link">Logout</a></li>
 	        </ul>
@@ -48,79 +42,77 @@
 	  </nav>
     <!-- END nav -->
     
-    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/bg_3.jpg');" data-stellar-background-ratio="0.5">
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/bike_station.jpg');" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
       <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
           <div class="col-md-9 ftco-animate pb-5">
-          	<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Station details <i class="ion-ios-arrow-forward"></i></span></p>
-            <h1 class="mb-3 bread">Station Details</h1>
+          	<p class="breadcrumbs"><span class="mr-2"><a href="stations.html">Stations <i class="ion-ios-arrow-forward"></i></a></span> <span>Station ID <i class="ion-ios-arrow-forward"></i></span></p>
+            <h1 class="mb-3 bread">Station Address</h1>
           </div>
         </div>
       </div>
     </section>
-		
 
-		<section class="ftco-section ftco-car-details">
-      <div class="container">
-      	<div class="row justify-content-center">
-      		<div class="col-md-12">
-      			<div class="car-details">
-      				<div class="img rounded" style="background-image: url(images/bg_1.jpg);"></div>
-      				<div class="text text-center">
-      					<span class="subheading">Station x</span>
-      					<h2>Via Nazionale 14</h2>
-      				</div>
-      			</div>
-      		</div>
-      	</div>
-    </section>
+	<br>
 
     <section class="ftco-section ftco-no-pt">
     	<div class="container">
     		<div class="row justify-content-center">
           <div class="col-md-12 heading-section text-center ftco-animate mb-5">
-          	<span class="subheading">Choose Bike</span>
-            <h2 class="mb-2">Available Bikes</h2>
+            <h2 class="mb-2">Available Bikes #</h2>
           </div>
         </div>
         <div class="row">
         	<div class="col-md-4">
     				<div class="car-wrap rounded ftco-animate">
-    					<div class="img rounded d-flex align-items-end" style="background-image: url(images/car-1.jpg);">
+    					<div class="img rounded d-flex align-items-end" style="background-image: url(images/city.jpg);">
     					</div>
     					<div class="text">
-    						<h2 class="mb-0"><a href="station-single.html">Type2</a></h2>
+    						<h2 class="mb-0"><a href="station-single.html">City Bike</a></h2>
     						<div class="d-flex mb-3">
-	    						<p class="price ml-auto">$500 <span>/day</span></p>
+	    						<p class="price ml-auto">€6.00 <span>/day</span></p>
     						</div>
-    						<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a></p>
+    						<p class="d-flex mb-0 d-block"><a href="unlock.html" class="btn btn-primary py-2 mr-1">Unlock Now</a></p>
     					</div>
     				</div>
     			</div>
     			<div class="col-md-4">
     				<div class="car-wrap rounded ftco-animate">
-    					<div class="img rounded d-flex align-items-end" style="background-image: url(images/car-2.jpg);">
+    					<div class="img rounded d-flex align-items-end" style="background-image: url(images/mountain.jpg);">
     					</div>
     					<div class="text">
-    						<h2 class="mb-0"><a href="station-single.html">Type3</a></h2>
+    						<h2 class="mb-0"><a href="station-single.html">Mountain Bike</a></h2>
     						<div class="d-flex mb-3">
-	    						<p class="price ml-auto">$500 <span>/day</span></p>
+	    						<p class="price ml-auto">€8.00 <span>/day</span></p>
     						</div>
-    						<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a></p>
+    						<p class="d-flex mb-0 d-block"><a href="unlock.html" class="btn btn-primary py-2 mr-1">Unlock Now</a></p>
     					</div>
     				</div>
     			</div>
     			<div class="col-md-4">
     				<div class="car-wrap rounded ftco-animate">
-    					<div class="img rounded d-flex align-items-end" style="background-image: url(images/car-3.jpg);">
+    					<div class="img rounded d-flex align-items-end" style="background-image: url(images/road.jpg);">
     					</div>
     					<div class="text">
-    						<h2 class="mb-0"><a href="station-single.html">Type4</a></h2>
+    						<h2 class="mb-0"><a href="station-single.html">Road Bike</a></h2>
     						<div class="d-flex mb-3">
-	    						<p class="price ml-auto">$500 <span>/day</span></p>
+	    						<p class="price ml-auto">€10.00 <span>/day</span></p>
     						</div>
-    						<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a></p>
+    						<p class="d-flex mb-0 d-block"><a href="unlock.html" class="btn btn-primary py-2 mr-1">Unlock Now</a></p>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="col-md-4">
+    				<div class="car-wrap rounded ftco-animate">
+    					<div class="img rounded d-flex align-items-end" style="background-image: url(images/tandem.jpg);">
+    					</div>
+    					<div class="text">
+    						<h2 class="mb-0"><a href="station-single.html">Tandem Bike</a></h2>
+    						<div class="d-flex mb-3">
+	    						<p class="price ml-auto">€16.00 <span>/day</span></p>
+    						</div>
+    						<p class="d-flex mb-0 d-block"><a href="unlock.html" class="btn btn-primary py-2 mr-1">Unlock Now</a></p>
     					</div>
     				</div>
     			</div>

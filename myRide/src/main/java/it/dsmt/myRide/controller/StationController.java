@@ -1,8 +1,16 @@
 package it.dsmt.myRide.controller;
 import it.dsmt.myRide.model.Station;
-
+import java.util.List;
 
 public class StationController {
+
+    public static List<Station> getStations() throws Exception{
+        try{
+            return Station.getStations();
+        } catch (Exception e){
+            throw e;
+        }
+    }
 
     public static Station getStationByID(int id) throws Exception{
         try{
