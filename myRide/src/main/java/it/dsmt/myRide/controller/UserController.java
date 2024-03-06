@@ -10,8 +10,7 @@ public class UserController {
             user.register();
         } catch (Exception e){
             throw e;
-        }
-        
+        }  
     }
     
     public static LoginDTO loginUser(String username, String password) throws Exception{

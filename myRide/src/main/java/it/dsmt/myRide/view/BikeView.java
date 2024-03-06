@@ -28,7 +28,7 @@ public class BikeView {
     public ResponseEntity<List<Bike>> getBikes(){
         List<Bike> response;
         try{
-            response = BikeController.getBikes();
+            response = BikeController.getAllBikes();
         } catch (Exception e){
             System.out.println("[BIKE VIEW] Impossible to fetch all bikes");
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);

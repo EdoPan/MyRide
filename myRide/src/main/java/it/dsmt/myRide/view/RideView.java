@@ -1,6 +1,5 @@
 package it.dsmt.myRide.view;
 import java.time.LocalDate;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

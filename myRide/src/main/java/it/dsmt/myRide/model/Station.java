@@ -1,6 +1,4 @@
 package it.dsmt.myRide.model;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -50,17 +48,13 @@ public class Station {
 
     public static Station getStationByID(int id){
         Station station = new Station();
-        String query = "SELECT * FROM stations WHERE id = ?";
+        String query = "SELECT * FROM stations WHERE id = " + id;
         
-        try (Connection conn = DBController.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(query)){
-            
-            pstmt.setInt(1,id);
-            ResultSet rs  = pstmt.executeQuery();
-
-            station = new Station(rs.getInt("id"), rs.getString("address"), 
-            rs.getInt("numberOfBikes"));
-            
+        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
+            ResultSet res = stmt.executeQuery(query);
+            station = new Station(res.getInt("id"), res.getString("address"), 
+            res.getInt("number_of_bikes"));
+            res.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -68,12 +62,11 @@ public class Station {
     }
 
     public void addStation(){
-        String query = "INSERT INTO stations(id, type, price, condition) VALUES(" + 
-        this.id + ",'" + this.address + "', '" + this.numberOfBikes + "'," + "')";
-        try (Connection conn = DBController.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)){
-
+        String query = "INSERT INTO stations(id, address, number_of_bikes) VALUES(" + 
+        this.id + ",'" + this.address + "'," + this.numberOfBikes + ")";
+        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
+            ResultSet res = stmt.executeQuery(query);
+            res.close();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -81,10 +74,9 @@ public class Station {
 
     public void removeStation(){
         String query = "DELETE FROM stations WHERE id = " + this.id;
-        try (Connection conn = DBController.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)){
-
+        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
+            ResultSet res = stmt.executeQuery(query);
+            res.close();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }     
@@ -93,16 +85,15 @@ public class Station {
     public List<Bike> getBikes(){
         List<Bike> bikes = new ArrayList<Bike>();
         String query = "SELECT * FROM bikes WHERE stationID = " + this.id;
-        try (Connection conn = DBController.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)){
-                while(rs.next()){
-                    Bike bike = new Bike(rs.getInt("id"), rs.getString("type"), 
-                    rs.getDouble("price"), rs.getString("condition"), rs.getInt("stationID"));
-                    bikes.add(bike);
-                }
-
-            } catch (SQLException e) {
+        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
+            ResultSet res = stmt.executeQuery(query);
+            while(res.next()){
+                Bike bike = new Bike(res.getInt("id"), res.getString("type"), 
+                res.getDouble("price_per_hour"), res.getString("condition"), res.getInt("stationID"));
+                bikes.add(bike);
+            }
+            res.close();
+        } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
         return bikes;

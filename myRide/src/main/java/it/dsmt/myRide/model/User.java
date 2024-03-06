@@ -1,7 +1,4 @@
 package it.dsmt.myRide.model;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -49,11 +46,9 @@ public class User {
         // Default registration is for user not maintainers so isMaintainer is set to false
         String query = "INSERT INTO users(username, password, isMaintainer) VALUES('" + 
         this.username + "','" + this.password + "',FALSE)";
-        try (Connection conn = DBController.connect();
-             Statement stmt = conn.createStatement();
-             ){
-            ResultSet rs = stmt.executeQuery(query);
-            rs.close();
+        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
+            ResultSet res = stmt.executeQuery(query);
+            res.close();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -61,19 +56,17 @@ public class User {
     
     public boolean login(){
         String query = "SELECT * FROM users where username = '" + this.username + "' and password = '" + this.password + "'";
-        try (Connection conn = DBController.connect();
-            Statement stmt = conn.createStatement();
-        ){
+
+        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
             ResultSet res = stmt.executeQuery(query);
             if (res != null && res.next()) {
                 this.isMaintainer = res.getBoolean("isMaintainer");
+                res.close();
                 return true;
             }
             else{
                 return false;
             }
-            
-
         } catch (SQLException e) {
            System.out.println(e.getMessage());
        }
@@ -82,17 +75,12 @@ public class User {
 
     public static User getUserByUsername(String username){
         User user = new User();
-        String query = "SELECT * FROM users WHERE username = ?";
-        
-        try (Connection conn = DBController.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(query)){
-            
-            pstmt.setString(1,username);
-            ResultSet rs  = pstmt.executeQuery();
-
-            user = new User(rs.getString("username"), rs.getString("password"), 
-            rs.getBoolean("isMaintainer"));
-            
+        String query = "SELECT * FROM users WHERE username = '" + username + "'";
+        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
+            ResultSet res = stmt.executeQuery(query);
+            user = new User(res.getString("username"), res.getString("password"), 
+            res.getBoolean("isMaintainer"));
+            res.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -102,10 +90,10 @@ public class User {
     public boolean checkIfMaintainer(){
         String query = "SELECT isMaintainer FROM users WHERE username = " + this.username;
         boolean check = false;
-        try (Connection conn = DBController.connect();
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery(query)){
-            check = rs.getBoolean("isMaintainer");
+        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
+            ResultSet res = stmt.executeQuery(query);
+            check = res.getBoolean("isMaintainer");
+            res.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

@@ -13,9 +13,9 @@ public class BikeController {
         } 
     }
 
-    public static List<Bike> getBikes() throws Exception{
+    public static List<Bike> getAllBikes() throws Exception{
         try{
-            return Bike.getBikes();
+            return Bike.getAllBikes();
         } catch (Exception e){
             throw e;
         }
@@ -23,7 +23,7 @@ public class BikeController {
 
     public static void repairBike(int id) throws Exception{
         try{
-            Bike.repairBike(id);
+            Bike.getBikeByID(id).repairBike();
         } catch (Exception e){
             throw e;
         }
