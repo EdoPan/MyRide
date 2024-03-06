@@ -2,7 +2,6 @@ package it.dsmt.myRide.view;
 import it.dsmt.myRide.model.User;
 import it.dsmt.myRide.controller.UserController;
 import it.dsmt.myRide.dto.LoginDTO;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

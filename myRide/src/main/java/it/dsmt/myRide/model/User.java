@@ -47,11 +47,13 @@ public class User {
 
     public void register(){
         // Default registration is for user not maintainers so isMaintainer is set to false
-        String query = "INSERT INTO users(username, password, isMaintainer) VALUES(" + 
-        this.username + ",'" + this.password + ",'" + "false"+ "')";
+        String query = "INSERT INTO users(username, password, isMaintainer) VALUES('" + 
+        this.username + "','" + this.password + "',FALSE)";
         try (Connection conn = DBController.connect();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)){
+             ){
+            ResultSet rs = stmt.executeQuery(query);
+            rs.close();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -65,8 +67,12 @@ public class User {
             ResultSet res = stmt.executeQuery(query);
             if (res != null && res.next()) {
                 this.isMaintainer = res.getBoolean("isMaintainer");
+                return true;
             }
-            return true;
+            else{
+                return false;
+            }
+            
 
         } catch (SQLException e) {
            System.out.println(e.getMessage());
