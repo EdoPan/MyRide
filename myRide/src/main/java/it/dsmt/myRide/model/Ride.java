@@ -5,9 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-
-import org.springframework.cglib.core.Local;
-
 import it.dsmt.myRide.controller.DBController;
 
 public class Ride {
