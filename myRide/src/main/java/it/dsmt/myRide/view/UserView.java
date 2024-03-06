@@ -18,7 +18,7 @@ public class UserView {
     @ResponseBody
     public ResponseEntity<String> signup(@RequestBody User user){
         try{
-            UserController.registerUser(user.getUsername(), user.getPassword(), user.getIsMaintainer());
+            UserController.registerUser(user.getUsername(), user.getPassword());
         } catch (Exception e){
             System.out.println("[USER VIEW] Unable to sign-up user");
             return new ResponseEntity<>("ERROR" , HttpStatus.INTERNAL_SERVER_ERROR);

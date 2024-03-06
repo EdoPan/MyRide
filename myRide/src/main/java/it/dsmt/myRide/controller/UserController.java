@@ -4,8 +4,8 @@ import it.dsmt.myRide.model.User;
 
 public class UserController {
 
-    public static void registerUser(String username, String password, boolean isMainteiner) throws Exception{
-        User user = new User(username, password, isMainteiner);
+    public static void registerUser(String username, String password) throws Exception{
+        User user = new User(username, password, false);
         try{
             user.register();
         } catch (Exception e){

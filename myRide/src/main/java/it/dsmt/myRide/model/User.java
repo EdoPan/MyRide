@@ -52,14 +52,13 @@ public class User {
         try (Connection conn = DBController.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)){
-
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
     }
     
     public boolean login(){
-        String query = "SELECT * FROM user where username = '" + this.username + "' and password = '" + this.password + "'";
+        String query = "SELECT * FROM users where username = '" + this.username + "' and password = '" + this.password + "'";
         try (Connection conn = DBController.connect();
             Statement stmt = conn.createStatement();
         ){
