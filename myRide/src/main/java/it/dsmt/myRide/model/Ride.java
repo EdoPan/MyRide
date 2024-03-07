@@ -60,7 +60,7 @@ public class Ride {
             ResultSet res = stmt.executeQuery(query);
             // Understand how to handle LocalDate type in SQLite
             ride = new Ride(res.getInt("id"), null, null, 
-            res.getInt("bike_id"), res.getString("user_id"));
+            res.getInt("bikeID"), res.getString("userID"));
             res.close();
          } catch (SQLException e) {
              System.out.println(e.getMessage());
@@ -69,7 +69,7 @@ public class Ride {
      }
 
     public void bookRide(){
-        String query = "INSERT INTO rides(id, bike_id, user_id, start, end) VALUES(" + 
+        String query = "INSERT INTO rides(id, bikeID, userID, startTime, endTime) VALUES(" + 
         this.id + "," + this.bikeID + "," + this.userID + ",'" + this.startTime + "','" + this.endTime + "')";
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
             ResultSet res = stmt.executeQuery(query);

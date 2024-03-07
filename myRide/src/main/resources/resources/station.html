@@ -21,7 +21,65 @@
 
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
-  <body>
+
+  <body onload="setupPage()">
+
+	<script>
+		async function getStationByID() {
+
+			var qs = parent.document.URL.substring(parent.document.URL.indexOf('?'), parent.document.URL.length);
+			var id = qs[qs.length - 1];
+			const STATION_ENDPOINT = "http://127.0.0.1:8080/station/" + id;
+			console.log(STATION_ENDPOINT)
+			let res = '';
+			await axios.get(STATION_ENDPOINT)
+				.then(response => {
+					//console.log("Success:", response.data);
+					res = response.data;
+				})
+				.catch(error => {
+					console.error("Error:", error);
+				});
+			return res;
+		}
+
+        async function setupPage() {
+            const station = await getStationByID();
+            document.getElementById("info").innerHTML = `
+					<p class="breadcrumbs"><span class="mr-2"><a href="stations.html">Stations <i class="ion-ios-arrow-forward"></i></a></span> <span>Station ${station.id} <i class="ion-ios-arrow-forward"></i></span></p>
+					<h1 class="mb-3 bread">${station.address}</h1>
+        	`
+			document.getElementById("av").innerHTML = `
+				<h2 class="mb-2">Available Bikes ${station.numberOfBikes}</h2>
+        	`
+
+			let mainRow = document.getElementById("row");
+			let bikes = station.bikes;
+			bikes.forEach(function (bikes) {
+				let type = bikes.type.charAt(0).toUpperCase() + bikes.type.slice(1);
+				let style = `"background-image: url(images/${bikes.type}.jpg);"`
+
+				let card = document.createElement("div");
+				card.className="col-md-4";
+				card.innerHTML = `
+					<div class="car-wrap rounded ftco-animate fadeInUp ftco-animated">
+						<div class="img rounded d-flex align-items-end" style=${style}>
+							</div>
+							<div class="text">
+								<h2 class="mb-0"><a href="station.html">${type} Bike</a></h2>
+								<div class="d-flex mb-3">
+									<p class="price ml-auto">€${bikes.price} <span>/hour</span></p>
+								</div>
+								<p class="d-flex mb-0 d-block"><a href="unlock.html" class="btn btn-primary py-2 mr-1">Unlock Now</a></p>
+							</div>
+						</div>
+					</div>
+				`;
+				mainRow.appendChild(card);
+			});
+        }
+
+	</script>
     
 	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
@@ -34,7 +92,7 @@
 	        <ul class="navbar-nav ml-auto">
 				<li class="nav-item"><a href="stations.html" class="nav-link">Stations</a></li>
 				<li class="nav-item"><a href="pricing.html" class="nav-link">Pricing</a></li>
-				<li class="nav-item"><a href="contact.html" class="nav-link">Chat</a></li>
+				<li class="nav-item"><a href="chat.html" class="nav-link">Chat</a></li>
 			  <li class="nav-item"><a href="login.html" class="nav-link">Logout</a></li>
 	        </ul>
 	      </div>
@@ -46,10 +104,9 @@
       <div class="overlay"></div>
       <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
-          <div class="col-md-9 ftco-animate pb-5">
-          	<p class="breadcrumbs"><span class="mr-2"><a href="stations.html">Stations <i class="ion-ios-arrow-forward"></i></a></span> <span>Station ID <i class="ion-ios-arrow-forward"></i></span></p>
-            <h1 class="mb-3 bread">Station Address</h1>
-          </div>
+			<div class="col-md-9 ftco-animate pb-5" id="info">
+
+			</div>
         </div>
       </div>
     </section>
@@ -59,64 +116,13 @@
     <section class="ftco-section ftco-no-pt">
     	<div class="container">
     		<div class="row justify-content-center">
-          <div class="col-md-12 heading-section text-center ftco-animate mb-5">
-            <h2 class="mb-2">Available Bikes #</h2>
+          <div class="col-md-12 heading-section text-center ftco-animate mb-5" id="av">
+
           </div>
         </div>
-        <div class="row">
-        	<div class="col-md-4">
-    				<div class="car-wrap rounded ftco-animate">
-    					<div class="img rounded d-flex align-items-end" style="background-image: url(images/city.jpg);">
-    					</div>
-    					<div class="text">
-    						<h2 class="mb-0"><a href="station-single.html">City Bike</a></h2>
-    						<div class="d-flex mb-3">
-	    						<p class="price ml-auto">€6.00 <span>/day</span></p>
-    						</div>
-    						<p class="d-flex mb-0 d-block"><a href="unlock.html" class="btn btn-primary py-2 mr-1">Unlock Now</a></p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-md-4">
-    				<div class="car-wrap rounded ftco-animate">
-    					<div class="img rounded d-flex align-items-end" style="background-image: url(images/mountain.jpg);">
-    					</div>
-    					<div class="text">
-    						<h2 class="mb-0"><a href="station-single.html">Mountain Bike</a></h2>
-    						<div class="d-flex mb-3">
-	    						<p class="price ml-auto">€8.00 <span>/day</span></p>
-    						</div>
-    						<p class="d-flex mb-0 d-block"><a href="unlock.html" class="btn btn-primary py-2 mr-1">Unlock Now</a></p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-md-4">
-    				<div class="car-wrap rounded ftco-animate">
-    					<div class="img rounded d-flex align-items-end" style="background-image: url(images/road.jpg);">
-    					</div>
-    					<div class="text">
-    						<h2 class="mb-0"><a href="station-single.html">Road Bike</a></h2>
-    						<div class="d-flex mb-3">
-	    						<p class="price ml-auto">€10.00 <span>/day</span></p>
-    						</div>
-    						<p class="d-flex mb-0 d-block"><a href="unlock.html" class="btn btn-primary py-2 mr-1">Unlock Now</a></p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-md-4">
-    				<div class="car-wrap rounded ftco-animate">
-    					<div class="img rounded d-flex align-items-end" style="background-image: url(images/tandem.jpg);">
-    					</div>
-    					<div class="text">
-    						<h2 class="mb-0"><a href="station-single.html">Tandem Bike</a></h2>
-    						<div class="d-flex mb-3">
-	    						<p class="price ml-auto">€16.00 <span>/day</span></p>
-    						</div>
-    						<p class="d-flex mb-0 d-block"><a href="unlock.html" class="btn btn-primary py-2 mr-1">Unlock Now</a></p>
-    					</div>
-    				</div>
-    			</div>
-        </div>
+
+        <div class="row" id="row">
+			
     	</div>
     </section>
 

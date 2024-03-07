@@ -4,6 +4,7 @@
     <title>MyRide</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
@@ -52,77 +53,104 @@
     </script>
 	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
-	      <a class="navbar-brand" href="index.html">My<span>Ride</span></a>
+	      <a class="navbar-brand" href="#">My<span>Ride</span></a>
 	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 	        <span class="oi oi-menu"></span> Menu
 	      </button>
+
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li>
-	          <li class="nav-item"><a href="pricing.html" class="nav-link">Pricing</a></li>
-	          <li class="nav-item"><a href="stations.html" class="nav-link">Stations</a></li>
-	          <li class="nav-item"><a href="contact.html" class="nav-link">Chat</a></li>
-            <li id="logout_nav" class="nav-item"><a class="nav-link">Logout</a></li>
+            <li class="nav-item"><a href="stations.html" class="nav-link">Stations</a></li>
+            <li class="nav-item"><a href="pricing.html" class="nav-link">Pricing</a></li>
+            <li class="nav-item"><a href="chat.html" class="nav-link">Chat</a></li>
+            <li class="nav-item"><a href="login.html" class="nav-link">Logout</a></li>
 	        </ul>
 	      </div>
 	    </div>
 	  </nav>
     <!-- END nav -->
+    
     <div class="hero-wrap ftco-degree-bg" style="background-image: url('images/bg_1.jpg');" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
       <div class="container">
         <div class="row no-gutters slider-text justify-content-start align-items-center justify-content-center">
           <div class="col-lg-8 ftco-animate">
           	<div class="text w-100 text-center mb-md-5 pb-md-5">
-	            <h1 class="mb-4">Welcome to MyRide</h1>
-	            <p style="font-size: 18px;">A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.
-	            On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
+	            <h1 class="mb-4">Fast &amp; Easy Way To Rent A Bike</h1>
+	            <p style="font-size: 18px;">A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts</p>
             </div>
           </div>
         </div>
       </div>
     </div>
+
      <section class="ftco-section ftco-no-pt bg-light">
     	<div class="container">
     		<div class="row no-gutters">
     			<div class="col-md-12	featured-top">
     				<div class="row no-gutters">
 	  					<div class="col-md-4 d-flex align-items-center">
-	  						<form id="search_station" action="stations.html" class="request-form ftco-animate bg-primary">
-		          		<h2>Take Your Bike</h2>
+	  						<form action="#" class="request-form ftco-animate bg-primary">
+		          		<h2>Make Your Ride</h2>
 			    				<div class="form-group">
 			    					<label for="type" class="label">Type</label>
 			    					<select id="type" name="type">
                       <option value="all">All</option>
-                      <option value="city_bike">CityBike</option>
-                      <option value="mountain_bike">MountainBike</option>
-                      <option value="road_bike">RoadBike</option>
-                      <option value="tandem_bike">TandemBike</option>
+                      <option value="type1">Type1</option>
+                      <option value="type2">Type2</option>
+                      <option value="type3">Type3</option>
+                      <option value="type4">Type4</option>
                     </select>
-                    </div>
-                    <div class="form-group">
-                    <label for="station" class="label">Station</label>
-			    					<select id="station" name="station">
-                      <option value="all">All</option>
-                      <option value="station1">Station1</option>
-                      <option value="station2">Station2</option>
-                      <option value="station3">Station3</option>
-                      <option value="station4">Station4</option>
-                    </select>
-                  </div>
+			    				</div>
+			    				<div class="d-flex">
+			    					<div class="form-group mr-2">
+			                <label for="book_off_date" class="label">Pick-up date</label>
+			                <input type="text" class="form-control" id="book_pick_date" placeholder="Date" required>
+			              </div>
+			              <div class="form-group ml-2">
+			                <label for="" class="label">Drop-off date</label>
+			                <input type="text" class="form-control" id="book_off_date" placeholder="Date">
+			              </div>
+		              </div>
+		              <div class="form-group">
+		                <label for="time_pick" class="label">Pick-up time</label>
+		                <input type="text" class="form-control" id="time_pick" placeholder="Time" required>
+		              </div>
+                  <div class="form-group">
+		                <label for="time_drop_off" class="label">Drop-off time</label>
+		                <input type="text" class="form-control" id="time_drop_off" placeholder="Time" required>
+		              </div>
 			            <div class="form-group">
 			              <input type="submit" value="Rent A Bike Now" class="btn btn-secondary py-3 px-4">
 			            </div>
-                </div>
 			    			</form>
 	  					</div>
 	  				</div>
 				</div>
   		</div>
     </section>
+
+    <section class="ftco-section ftco-about">
+			<div class="container">
+				<div class="row no-gutters">
+					<div class="col-md-6 p-md-5 img img-2 d-flex justify-content-center align-items-center" style="background-image: url(images/bike_station.jpg);">
+					</div>
+					<div class="col-md-6 wrap-about ftco-animate">
+	          <div class="heading-section heading-section-white pl-md-5">
+	          	<span class="subheading">About us</span>
+	            <h2 class="mb-4">Welcome to MyRide</h2>
+
+	            <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
+	            <p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
+	          </div>
+					</div>
+				</div>
+			</div>
+		</section>
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
-  
+
+
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/popper.min.js"></script>

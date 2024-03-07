@@ -48,8 +48,7 @@ public class Station {
         List<Station> stations = new ArrayList<>();
         String query = "SELECT * FROM stations";
         
-        try (Connection conn = DBController.connect();
-        Statement stmt = conn.createStatement();
+        try (Statement stmt = DBController.getInstance().getConnection().createStatement();
         ResultSet rs = stmt.executeQuery(query)){
 
             while(rs.next()){
@@ -72,7 +71,7 @@ public class Station {
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
             ResultSet res = stmt.executeQuery(query);
             station = new Station(res.getInt("id"), res.getString("address"), 
-            res.getInt("number_of_bikes"));
+            res.getInt("numberOfBikes"));
             res.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -81,7 +80,7 @@ public class Station {
     }
 
     public void addStation(){
-        String query = "INSERT INTO stations(id, address, number_of_bikes) VALUES(" + 
+        String query = "INSERT INTO stations(id, address, numberOfBikes) VALUES(" + 
         this.id + ",'" + this.address + "'," + this.numberOfBikes + ")";
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
             ResultSet res = stmt.executeQuery(query);
@@ -108,7 +107,7 @@ public class Station {
             ResultSet res = stmt.executeQuery(query);
             while(res.next()){
                 Bike bike = new Bike(res.getInt("id"), res.getString("type"), 
-                res.getDouble("price_per_hour"), res.getString("condition"), res.getInt("stationID"));
+                res.getDouble("price"), res.getString("condition"), res.getInt("stationID"));
                 bikes.add(bike);
             }
             res.close();

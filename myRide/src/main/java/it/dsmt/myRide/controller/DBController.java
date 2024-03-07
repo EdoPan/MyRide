@@ -1,9 +1,7 @@
 package it.dsmt.myRide.controller;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class DBController {
     private static DBController instance = null;
@@ -43,7 +41,7 @@ public class DBController {
         ResultSet rs2 = stmt.executeQuery("CREATE TABLE IF NOT EXISTS stations (\n" +
                 "id INTEGER PRIMARY KEY autoincrement,\n" +
                 "address varchar(255),\n" +
-                "number_of_bikes integer,\n" +
+                "numberOfBikes integer,\n" +
                 ");");
         System.out.println(rs2.toString());
         rs2.close();
@@ -52,7 +50,7 @@ public class DBController {
         ResultSet rs3 = stmt.executeQuery("CREATE TABLE IF NOT EXISTS bikes (\n" +
                 "id integer not null primary key autoincrement,\n" +
                 "type varchar(255),\n" +
-                "price_per_hour double,\n" +
+                "price double,\n" +
                 "condition varchar(255),\n" +
                 "stationID integer,\n" +
                 "foreign key (stationID) references stations(id)\n" +
@@ -63,12 +61,12 @@ public class DBController {
         System.out.println("[DB] CREATE RIDES TABLE");
         ResultSet rs4 = stmt.executeQuery("CREATE TABLE IF NOT EXISTS rides (\n" +
                 "id INTEGER PRIMARY KEY autoincrement,\n" +
-                "bike_id INTEGER,\n" +
-                "user_id INTEGER,\n" +
+                "bikeID INTEGER,\n" +
+                "userID INTEGER,\n" +
                 "start DATE,\n" +
                 "end DATE\n"+
-                "FOREIGN KEY (bike_id) REFERENCES bikes(id)\n" +
-                "FOREIGN KEY (user_id) REFERENCES users(id)\n" +
+                "FOREIGN KEY (bikeID) REFERENCES bikes(id)\n" +
+                "FOREIGN KEY (userID) REFERENCES users(id)\n" +
                 ");");
         System.out.println(rs4.toString());
         rs4.close();
