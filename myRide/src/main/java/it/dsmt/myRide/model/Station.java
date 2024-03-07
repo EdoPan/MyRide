@@ -2,9 +2,7 @@ package it.dsmt.myRide.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import it.dsmt.myRide.controller.DBController;
-
 import java.util.ArrayList;
 import java.util.List;
 

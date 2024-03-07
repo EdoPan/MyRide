@@ -96,7 +96,7 @@ public class Bike {
     }
 
     public void repairBike(){
-        String query = "UPDATE bikes SET condition = 'new'" + "WHERE id = " + this.id;
+        String query = "UPDATE bikes SET condition = 'new' " + "WHERE id = " + this.id;
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
             ResultSet res = stmt.executeQuery(query);
             res.close();
