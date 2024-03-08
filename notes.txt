@@ -24,16 +24,15 @@ CREATE TABLE rides (
 
 CREATE TABLE stations (
     id int,
-    address varchar(255),
-  	numberOfBikes int
+    address varchar(255)
 );
 
-INSERT INTO stations(id, address, numberOfBikes) VALUES (1, 'Via Diotisalvi 2', 16);
-INSERT INTO stations(id, address, numberOfBikes) VALUES (2, 'Largo Bruno Pontecorvo 3', 0);
-INSERT INTO stations(id, address, numberOfBikes) VALUES (3, 'Corso Italia 60', 0);
-INSERT INTO stations(id, address, numberOfBikes) VALUES (4, 'Via di Gello 138', 0);
-INSERT INTO stations(id, address, numberOfBikes) VALUES (5, 'Piazza Martiri della Libertà 33', 0);
-INSERT INTO stations(id, address, numberOfBikes) VALUES (6, 'Via S. Marco 15', 0);
+INSERT INTO stations(id, address) VALUES (1, 'Via Diotisalvi 2');
+INSERT INTO stations(id, address) VALUES (2, 'Largo Bruno Pontecorvo 3');
+INSERT INTO stations(id, address) VALUES (3, 'Corso Italia 60');
+INSERT INTO stations(id, address) VALUES (4, 'Via di Gello 138');
+INSERT INTO stations(id, address) VALUES (5, 'Piazza Martiri della Libertà 33');
+INSERT INTO stations(id, address) VALUES (6, 'Via S. Marco 15');
 
 
 
