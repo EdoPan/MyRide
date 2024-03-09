@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
   </head>
-  <body>
+  <body onload="setupPage()">
     
 	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
@@ -34,7 +34,7 @@
             <li class="nav-item"><a href="pricing.html" class="nav-link">Pricing</a></li>
 	          <li class="nav-item"><a href="stations.html" class="nav-link">Stations</a></li>
 	          <li class="nav-item active"><a href="chat.html" class="nav-link">Chat</a></li>
-            <li class="nav-item"><a href="login.html" class="nav-link">Logout</a></li>
+            <li class="nav-item"><a href="login.html" class="nav-link" id="logout_nav">Logout</a></li>
 	        </ul>
 	      </div>
 	    </div>
@@ -98,3 +98,31 @@
     
   </body>
 </html>
+
+<script>
+  function checkIfIsLogged() {
+      let isLogged = localStorage.getItem("loggedIn");
+      if (!isLogged) {
+          document.getElementById("logout_nav").style.display = "none";
+          window.location.href = "login.html";
+          return false;
+      }
+      document.getElementById("logout_nav").style.display = "block";
+      return true;
+  }
+  
+  async function setupPage() {
+      if (!checkIfIsLogged()) {
+          alert("Login to view content");
+      }
+  }
+
+  document.getElementById("logout_nav").addEventListener("click", function (event) {
+      event.preventDefault();
+      localStorage.removeItem("loggedIn");
+      localStorage.removeItem("username");
+      localStorage.removeItem("isMaintainer");
+      window.location.href = "login.html";
+  });
+
+</script>

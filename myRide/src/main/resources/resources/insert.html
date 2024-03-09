@@ -190,4 +190,12 @@
     const stations = await getStationsAPI();
     fillOptions(stations);
   }
+
+  document.getElementById("logout_nav").addEventListener("click", function (event) {
+      event.preventDefault();
+      localStorage.removeItem("loggedIn");
+      localStorage.removeItem("username");
+      localStorage.removeItem("isMaintainer");
+      window.location.href = "login.html";
+  });
 </script>

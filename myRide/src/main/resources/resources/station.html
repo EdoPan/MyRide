@@ -93,7 +93,7 @@
 				<li class="nav-item"><a href="pricing.html" class="nav-link">Pricing</a></li>
 				<li class="nav-item"><a href="stations.html" class="nav-link">Stations</a></li>
 				<li class="nav-item"><a href="chat.html" class="nav-link">Chat</a></li>
-			  <li class="nav-item"><a href="login.html" class="nav-link">Logout</a></li>
+			  <li id="logout_nav" class="nav-item"><a href="login.html" class="nav-link">Logout</a></li>
 	        </ul>
 	      </div>
 	    </div>
@@ -148,3 +148,13 @@
     
   </body>
 </html>
+
+<script>
+	document.getElementById("logout_nav").addEventListener("click", function (event) {
+		event.preventDefault();
+		localStorage.removeItem("loggedIn");
+		localStorage.removeItem("username");
+		localStorage.removeItem("isMaintainer");
+		window.location.href = "login.html";
+	});
+  </script>
