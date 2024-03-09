@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
@@ -20,11 +19,21 @@
     <link rel="stylesheet" href="css/style.css">
 
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			if (!(localStorage.hasOwnProperty("username"))) {
+			  window.location.href = "login.html";
+			}
+		});
+	</script>
+
   </head>
 
   <body onload="setupPage()">
 
 	<script>
+		
 		async function getStationByID() {
 			var qs = parent.document.URL.substring(parent.document.URL.indexOf('?'), parent.document.URL.length);
 			var id = qs[qs.length - 1];
@@ -45,12 +54,19 @@
         async function setupPage() {
             const station = await getStationByID();
             document.getElementById("info").innerHTML = `
-					<p class="breadcrumbs"><span class="mr-2"><a href="stations.html">Stations <i class="ion-ios-arrow-forward"></i></a></span> <span>Station ${station.id} <i class="ion-ios-arrow-forward"></i></span></p>
 					<h1 class="mb-3 bread">${station.address}</h1>
         	`
 			document.getElementById("av").innerHTML = `
-				<h2 class="mb-2">Available Bikes ${station.numberOfBikes}</h2>
+				<h2 class="mb-2">Available Bikes ${station.bikes.length}</h2>
         	`
+
+			document.addEventListener("DOMContentLoaded", function () {
+			if (localStorage.getItem("isMaintainer") === 'true') {
+			document.getElementById("li").innerHTML = `
+				<a href="maintainer.html" class="nav-link">Maintainer</a>
+			`
+			}
+			});
 
 			let mainRow = document.getElementById("row");
 			let bikes = station.bikes;
@@ -79,21 +95,30 @@
         }
 
 	</script>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			if (localStorage.getItem("isMaintainer") === 'true') {
+			document.getElementById("li").innerHTML = `
+				<a href="maintainer.html" class="nav-link">Maintainer</a>
+			`
+			}
+		});
+  	</script>
     
-	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
 	      <a class="navbar-brand" href="index.html">My<span>Ride</span></a>
 	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 	        <span class="oi oi-menu"></span> Menu
 	      </button>
-
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-				<li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-				<li class="nav-item"><a href="pricing.html" class="nav-link">Pricing</a></li>
-				<li class="nav-item"><a href="stations.html" class="nav-link">Stations</a></li>
-				<li class="nav-item"><a href="chat.html" class="nav-link">Chat</a></li>
-			  <li id="logout_nav" class="nav-item"><a href="login.html" class="nav-link">Logout</a></li>
+	          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+	          <li class="nav-item"><a href="stations.html" class="nav-link">Stations</a></li>
+	          <li class="nav-item"><a href="chat.html" class="nav-link">Chat</a></li>
+            <li class="nav-item"id="li"></li>
+            <li id="logout_nav" class="nav-item"><a class="nav-link">Logout</a></li>
 	        </ul>
 	      </div>
 	    </div>
@@ -145,16 +170,15 @@
   <script src="js/jquery.timepicker.min.js"></script>
   <script src="js/scrollax.min.js"></script>
   <script src="js/main.js"></script>
-    
-  </body>
-</html>
 
-<script>
+  <script>
 	document.getElementById("logout_nav").addEventListener("click", function (event) {
 		event.preventDefault();
-		localStorage.removeItem("loggedIn");
 		localStorage.removeItem("username");
 		localStorage.removeItem("isMaintainer");
 		window.location.href = "login.html";
 	});
   </script>
+    
+  </body>
+</html>

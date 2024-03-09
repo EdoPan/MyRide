@@ -44,7 +44,7 @@ public class BikeController {
                 break;
         }
         for(int i = 0; i < quantity; i++){
-            Bike bike = new Bike(type, price, "new", stationID);
+            Bike bike = new Bike(type, price, stationID);
             try{
                 bike.addBike();
             } catch (Exception e){

@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
@@ -17,39 +16,26 @@
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-          // Controlla se il flag nel localStorage è impostato
-          var isLoggedIn = localStorage.getItem("loggedIn");
-
-          // Se l'utente è loggato, mostra il link del profilo, altrimenti mostra il link di accesso
-          if (isLoggedIn) {
-            document.getElementById("logout_nav").style.display = "block";
-          } else {
-            document.getElementById("logout_nav").style.display = "none";
+          if (!(localStorage.hasOwnProperty("username"))) {
+            window.location.href = "login.html";
           }
       });
     </script>
   </head>
-  <body onload="setupPage()">
+  <body>
     <script>
-        function checkIfIsLogged() {
-            let isLogged = localStorage.getItem("loggedIn");
-            if (!isLogged) {
-                document.getElementById("logout_nav").style.display = "none";
-                window.location.href = "login.html";
-                return false;
-            }
-            document.getElementById("logout_nav").style.display = "block";
-            return true;
-        }
-        
-        async function setupPage() {
-            if (!checkIfIsLogged()) {
-                alert("Login to view content");
-            }
-        }
+      document.addEventListener("DOMContentLoaded", function () {
+          if (localStorage.getItem("isMaintainer") === 'true') {
+            document.getElementById("li").innerHTML = `
+	          <a href="maintainer.html" class="nav-link">Maintainer</a>
+        	`
+          }
+      });
     </script>
+
 	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
 	      <a class="navbar-brand" href="index.html">My<span>Ride</span></a>
@@ -59,9 +45,9 @@
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
 	          <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li>
-	          <li class="nav-item"><a href="pricing.html" class="nav-link">Pricing</a></li>
 	          <li class="nav-item"><a href="stations.html" class="nav-link">Stations</a></li>
 	          <li class="nav-item"><a href="chat.html" class="nav-link">Chat</a></li>
+            <li class="nav-item"id="li"></li>
             <li id="logout_nav" class="nav-item"><a class="nav-link">Logout</a></li>
 	        </ul>
 	      </div>
@@ -75,8 +61,10 @@
           <div class="col-lg-8 ftco-animate">
           	<div class="text w-100 text-center mb-md-5 pb-md-5">
 	            <h1 class="mb-4">Welcome to MyRide</h1>
-	            <p style="font-size: 18px;">A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.
-	            On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
+	            <p style="font-size: 18px;">MyRide is a platform that allows users to book a bike and use it for a certain period. At the end
+                of this period, the user can leave the bike and declare its condition or extend the booking
+                period. If the condition of the bike is drastic the user can contact through a chat a maintainer
+                that will check the bike.</p>
             </div>
           </div>
         </div>
@@ -89,9 +77,8 @@
     				<div class="row no-gutters">
 	  					<div class="col-md-4 d-flex align-items-center">
 	  						<form id="search_station" action="stations.html" class="request-form ftco-animate bg-primary">
-		          		<h2>Take Your Bike</h2>
+		          		<h2>Find A Bike</h2>
 			    				<div class="form-group">
-			    					<label for="type" class="label">Type</label>
 			    					<select id="type" name="type">
                       <option value="all">All</option>
                       <option value="city">City Bike</option>
@@ -101,7 +88,7 @@
                     </select>
                     </div>
 			            <div class="form-group">
-			              <input type="submit" value="Rent A Bike Now" class="btn btn-secondary py-3 px-4">
+			              <input type="submit" value="Search" class="btn btn-secondary py-3 px-4">
 			            </div>
                 </div>
 			    			</form>
@@ -127,16 +114,17 @@
   <script src="js/bootstrap-datepicker.js"></script>
   <script src="js/jquery.timepicker.min.js"></script>
   <script src="js/scrollax.min.js"></script>
-  <script src="js/main.js"></script>  
+  <script src="js/main.js"></script>
+
+  <script>
+    document.getElementById("logout_nav").addEventListener("click", function (event) {
+        event.preventDefault();
+        localStorage.removeItem("username");
+        localStorage.removeItem("isMaintainer");
+        window.location.href = "login.html";
+    });
+  </script>
+
   </body>
 </html>
 
-<script>
-  document.getElementById("logout_nav").addEventListener("click", function (event) {
-      event.preventDefault();
-      localStorage.removeItem("loggedIn");
-      localStorage.removeItem("username");
-      localStorage.removeItem("isMaintainer");
-      window.location.href = "login.html";
-  });
-</script>

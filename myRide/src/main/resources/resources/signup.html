@@ -7,7 +7,6 @@
     
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
@@ -24,17 +23,13 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-          //Check if the user is logged in 
-          var isLoggedIn = localStorage.getItem("loggedIn");
-          //If the user is logged, can't show this page
-          if (isLoggedIn) {
-            alert("Already logged!");
-            window.location.href = "stations.html";
-          }
+        if (localStorage.hasOwnProperty("username")) {
+          window.location.href = "index.html";
+        }
       });
-  </script>
-  
+    </script>
   </head>
+
   <body>
 	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
@@ -98,7 +93,7 @@
   <script src="js/jquery.timepicker.min.js"></script>
   <script src="js/scrollax.min.js"></script>
   <script src="js/main.js"></script>
-    
+
   </body>
 </html>
 
@@ -115,12 +110,12 @@
       // Make Axios request
       axios.post(SIGNUP_ENDPOINT, jsonData)
           .then(response => {
-              console.log("Success:", response.data);
+              //console.log("Success:", response.data);
               alert("User correctly registered!");
               window.location.href = "login.html";
           })
           .catch(error => {
-              console.error("Error:", error);
+              //console.error("Error:", error);
               //alert("Impossible to register, retry!");
           });
   });

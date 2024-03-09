@@ -23,15 +23,11 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-          //Check if the user is logged in 
-          var isLoggedIn = localStorage.getItem("loggedIn");
-          //If the user is logged, can't show this page
-          if (isLoggedIn) {
-            alert("Already logged!");
-            window.location.href = "stations.html";
+          if (localStorage.hasOwnProperty("username")) {
+            window.location.href = "index.html";
           }
       });
-  </script>
+    </script>
 
   </head>
   <body>
@@ -114,8 +110,7 @@
       // Make Axios request
       axios.post(LOGIN_ENDPOINT, jsonData)
           .then(response => {
-              console.log("Success:", response.data);
-              localStorage.setItem("loggedIn" , true);
+              //console.log("Success:", response.data);
               localStorage.setItem("username" , response.data["username"]);
               localStorage.setItem("isMaintainer" , response.data["isMaintainer"]);
               window.location.href = "index.html";

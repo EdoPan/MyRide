@@ -50,9 +50,6 @@ public class BikeView {
 
     @PostMapping("/bike")
     public ResponseEntity<String> addBike(@RequestBody InsertBikeDTO bike){
-        System.out.println(bike.getQuantity());
-        System.out.println(bike.getType());
-        System.out.println(bike.getStationID());
         try{
             BikeController.addBike(bike.getType(), bike.getQuantity(), bike.getStationID());
         } catch (Exception e){

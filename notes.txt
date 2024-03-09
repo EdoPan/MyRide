@@ -7,7 +7,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE bikes (
-    id int,
+    id INTEGER PRIMARY KEY,
     type varchar(255),
   	price double,
     condition varchar(255),
@@ -15,7 +15,7 @@ CREATE TABLE bikes (
 );
 
 CREATE TABLE rides (
-    id int,
+    id INTEGER PRIMARY KEY,
     startTime date,
   	endTime date,
     bikeID int,
@@ -23,32 +23,32 @@ CREATE TABLE rides (
 );
 
 CREATE TABLE stations (
-    id int,
+    id INTEGER PRIMARY KEY,
     address varchar(255)
 );
 
-INSERT INTO stations(id, address) VALUES (1, 'Via Diotisalvi 2');
-INSERT INTO stations(id, address) VALUES (2, 'Largo Bruno Pontecorvo 3');
-INSERT INTO stations(id, address) VALUES (3, 'Corso Italia 60');
-INSERT INTO stations(id, address) VALUES (4, 'Via di Gello 138');
-INSERT INTO stations(id, address) VALUES (5, 'Piazza Martiri della Libertà 33');
-INSERT INTO stations(id, address) VALUES (6, 'Via S. Marco 15');
+INSERT INTO stations(address) VALUES ('Via Diotisalvi 2');
+INSERT INTO stations(address) VALUES ('Largo Bruno Pontecorvo 3');
+INSERT INTO stations(address) VALUES ('Corso Italia 60');
+INSERT INTO stations(address) VALUES ('Via di Gello 138');
+INSERT INTO stations(address) VALUES ('Piazza Martiri della Libertà 33');
+INSERT INTO stations(address) VALUES ('Via S. Marco 15');
 
 
 
-INSERT INTO bikes(id, type, price, condition, stationID) VALUES (1, 'city', 0.25, 'new', 1);
-INSERT INTO bikes(id, type, price, condition, stationID) VALUES (2, 'city', 0.25, 'new', 1);
-INSERT INTO bikes(id, type, price, condition, stationID) VALUES (3, 'city', 0.25, 'new', 1);
-INSERT INTO bikes(id, type, price, condition, stationID) VALUES (4, 'city', 0.25, 'new', 1);
-INSERT INTO bikes(id, type, price, condition, stationID) VALUES (5, 'mountain', 0.50, 'new', 1);
-INSERT INTO bikes(id, type, price, condition, stationID) VALUES (6, 'mountain', 0.50, 'new', 1);
-INSERT INTO bikes(id, type, price, condition, stationID) VALUES (7, 'mountain', 0.50, 'new', 1);
-INSERT INTO bikes(id, type, price, condition, stationID) VALUES (8, 'mountain', 0.50, 'new', 1);
-INSERT INTO bikes(id, type, price, condition, stationID) VALUES (9, 'road', 0.75, 'new', 1);
-INSERT INTO bikes(id, type, price, condition, stationID) VALUES (10, 'road', 0.75, 'new', 1);
-INSERT INTO bikes(id, type, price, condition, stationID) VALUES (11, 'road', 0.75, 'new', 1);
-INSERT INTO bikes(id, type, price, condition, stationID) VALUES (12, 'road', 0.75, 'new', 1);
-INSERT INTO bikes(id, type, price, condition, stationID) VALUES (13, 'tandem', 1.00, 'new', 1);
-INSERT INTO bikes(id, type, price, condition, stationID) VALUES (14, 'tandem', 1.00, 'new', 1);
-INSERT INTO bikes(id, type, price, condition, stationID) VALUES (15, 'tandem', 1.00, 'new', 1);
-INSERT INTO bikes(id, type, price, condition, stationID) VALUES (16, 'tandem', 1.00, 'new', 1);
+INSERT INTO bikes(type, price, condition, stationID) VALUES ('city', 0.25, 'new', 1);
+INSERT INTO bikes(type, price, condition, stationID) VALUES ('city', 0.25, 'new', 1);
+INSERT INTO bikes(type, price, condition, stationID) VALUES ('city', 0.25, 'new', 1);
+INSERT INTO bikes(type, price, condition, stationID) VALUES ('city', 0.25, 'new', 1);
+INSERT INTO bikes(type, price, condition, stationID) VALUES ('mountain', 0.50, 'new', 1);
+INSERT INTO bikes(type, price, condition, stationID) VALUES ('mountain', 0.50, 'new', 1);
+INSERT INTO bikes(type, price, condition, stationID) VALUES ('mountain', 0.50, 'new', 1);
+INSERT INTO bikes(type, price, condition, stationID) VALUES ('mountain', 0.50, 'new', 1);
+INSERT INTO bikes(type, price, condition, stationID) VALUES ('road', 0.75, 'new', 1);
+INSERT INTO bikes(type, price, condition, stationID) VALUES ('road', 0.75, 'new', 1);
+INSERT INTO bikes(type, price, condition, stationID) VALUES ('road', 0.75, 'new', 1);
+INSERT INTO bikes(type, price, condition, stationID) VALUES ('road', 0.75, 'new', 1);
+INSERT INTO bikes(type, price, condition, stationID) VALUES ('tandem', 1.00, 'new', 1);
+INSERT INTO bikes(type, price, condition, stationID) VALUES ('tandem', 1.00, 'new', 1);
+INSERT INTO bikes(type, price, condition, stationID) VALUES ('tandem', 1.00, 'new', 1);
+INSERT INTO bikes(type, price, condition, stationID) VALUES ('tandem', 1.00, 'new', 1);

@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
@@ -17,29 +16,50 @@
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-          //Check if the user is logged in 
-          let isLoggedIn = localStorage.getItem("loggedIn");
-          let isMaintainer = localStorage.getItem("isMaintainer");
+        if (localStorage.getItem("isMaintainer") === 'false') {
+          window.location.href =  "index.html";
+        } else if (!(localStorage.hasOwnProperty("username"))){
+          window.location.href =  "login.html";
+        }
+      });
+    </script>
+  </head>
 
-          //If the user is not a maintainer, can't show this page
-          if (!isLoggedIn || !isMaintainer) {
-            alert("Access denied!");
-            window.location.href = "index.html";
+  <body onload="getStations()">
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          if (localStorage.getItem("isMaintainer") === 'true') {
+            document.getElementById("li").innerHTML = `
+	          <a href="maintainer.html" class="nav-link">Maintainer</a>
+        	`
           }
       });
-  </script>
+    </script>
 
-  </head>
-  <body onload="getStations()">
 	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
-	      <a class="navbar-brand" href="#">My<span>Ride</span></a>
+	      <a class="navbar-brand" href="index.html">My<span>Ride</span></a>
+	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+	        <span class="oi oi-menu"></span> Menu
+	      </button>
+	      <div class="collapse navbar-collapse" id="ftco-nav">
+	        <ul class="navbar-nav ml-auto">
+	          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+	          <li class="nav-item"><a href="stations.html" class="nav-link">Stations</a></li>
+	          <li class="nav-item"><a href="chat.html" class="nav-link">Chat</a></li>
+            <li class="nav-item active"id="li"></li>
+            <li id="logout_nav" class="nav-item"><a class="nav-link">Logout</a></li>
+	        </ul>
+	      </div>
 	    </div>
 	  </nav>
     <!-- END nav -->
+
     <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/bg_5.jpg');" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
       <div class="container">
@@ -47,6 +67,7 @@
         </div>
       </div>
     </section>
+
     <section class="ftco-section ftco-no-pt bg-light">
     	<div class="container">
     		<div class="row no-gutters">
@@ -96,9 +117,6 @@
   		</div>
     </section>
 
-
-    
-	
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
   <script src="js/jquery.min.js"></script>

@@ -17,10 +17,9 @@ public class Bike {
     public Bike(){
     }
 
-    public Bike(String type, double price, String condition, int stationID){
+    public Bike(String type, double price, int stationID){
         this.type = type;
         this.price = price;
-        this.condition = condition;
         this.stationID = stationID;
     }
 
@@ -113,8 +112,9 @@ public class Bike {
     }
 
     public void addBike(){
-        String query = "INSERT INTO bikes(type, price, condition, stationID) VALUES('" + 
-        this.type + "', '" + this.price + "'," + this.condition + "'," + this.stationID + "')";
+        //INSERT INTO bikes(type, price, condition, stationID) VALUES ('city', 0.25, 'new', 1);
+        String query = "INSERT INTO bikes(type, price, stationID) VALUES('" + this.type + "'," + this.price + 
+        ",'" + "new" + "'," + this.stationID + ")";
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
             ResultSet res = stmt.executeQuery(query);
             res.close();

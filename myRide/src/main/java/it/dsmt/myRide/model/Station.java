@@ -51,7 +51,6 @@ public class Station {
             "GROUP BY a.id " +
             "HAVING COUNT(*) > 0";
         }    
-        System.out.println(query);
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();
         ResultSet rs = stmt.executeQuery(query)){
 
@@ -82,7 +81,7 @@ public class Station {
     }
 
     public void addStation(){
-        String query = "INSERT INTO stations(address) VALUES('" + 
+        String query = "INSERT INTO stations(address) VALUES('" +
         this.address + "')";
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
             ResultSet res = stmt.executeQuery(query);
