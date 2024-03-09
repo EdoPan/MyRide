@@ -4,9 +4,9 @@ import java.util.List;
 
 public class StationController {
 
-    public static List<Station> getStations() throws Exception{
+    public static List<Station> getStations(String type) throws Exception{
         try{
-            return Station.getStations();
+            return Station.getStations(type);
         } catch (Exception e){
             throw e;
         }
@@ -20,8 +20,8 @@ public class StationController {
         }
     }
 
-    public static void addStation(int id, String address, int numberOfBikes) throws Exception{
-        Station station = new Station(id, address, numberOfBikes);
+    public static void addStation(String address) throws Exception{
+        Station station = new Station(address);
         try{
             station.addStation();
         } catch (Exception e){

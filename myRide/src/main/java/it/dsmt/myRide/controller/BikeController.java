@@ -29,14 +29,30 @@ public class BikeController {
         }
     }
 
-    public static void addBike(int id, String type, double price, String condition, int stationID) throws Exception{
-        Bike bike = new Bike(id, type, price, condition, stationID);
-        try{
-            bike.addBike();
-        } catch (Exception e){
-            throw e;
+    public static void addBike(String type, int quantity, int stationID) throws Exception{
+        double price; 
+        switch (type) {
+            case "city": price=0.25;
+                break;
+            case "mountain": price=0.5;
+                break;
+            case "road": price=0.75;
+                break;
+            case "tandem": price=1;
+                break;    
+            default: price = 1;
+                break;
         }
+        for(int i = 0; i < quantity; i++){
+            Bike bike = new Bike(type, price, "new", stationID);
+            try{
+                bike.addBike();
+            } catch (Exception e){
+                throw e;
+            }
+        }    
     }
+
 
     public static void removeBike(int id) throws Exception{
         Bike bike = Bike.getBikeByID(id);

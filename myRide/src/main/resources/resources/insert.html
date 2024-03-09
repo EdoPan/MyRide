@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>MyRide</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/aos.css">
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          //Check if the user is logged in 
+          let isLoggedIn = localStorage.getItem("loggedIn");
+          let isMaintainer = localStorage.getItem("isMaintainer");
+
+          //If the user is not a maintainer, can't show this page
+          if (!isLoggedIn || !isMaintainer) {
+            alert("Access denied!");
+            window.location.href = "index.html";
+          }
+      });
+  </script>
+
+  </head>
+  <body onload="getStations()">
+	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+	    <div class="container">
+	      <a class="navbar-brand" href="#">My<span>Ride</span></a>
+	    </div>
+	  </nav>
+    <!-- END nav -->
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/bg_5.jpg');" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+        </div>
+      </div>
+    </section>
+    <section class="ftco-section ftco-no-pt bg-light">
+    	<div class="container">
+    		<div class="row no-gutters">
+    			<div class="col-md-12	featured-top">
+    				<div class="row no-gutters">
+	  					<div class="col-md-4 d-flex align-items-center">
+	  						<form action="#" class="request-form ftco-animate bg-primary" id="insert_station_form">
+		          		<h2>Insert New Station</h2>
+			    				<div class="d-flex">
+			    					<div class="form-group mr-2">
+			                <label for="address" class="label">Address</label>
+			                <input type="text" class="form-control" id="address" placeholder="Address" required>
+			              </div>
+		              </div>
+                  <div class="form-group">
+			              <input type="submit" value="Insert" class="btn btn-secondary py-3 px-4">
+			            </div>
+			    			</form>
+	  					</div>
+              <form action="#" class="request-form ftco-animate bg-primary" id="insert_bikes_form">
+                <h2>Insert New Bikes</h2>
+                <div class="d-flex">
+                  <div class="form-group mr-2">
+                    <label for="type" class="label">Type</label>
+                    <select id="type" name="type" required>
+                      <option value="city">City Bike</option>
+                      <option value="mountain">Mountain Bike</option>
+                      <option value="road">Road Bike</option>
+                      <option value="tandem">Tandem Bike</option>
+                    </select>
+                    <div class="form-group">
+                      <label for="bikes_quantity" class="label">Quantity</label>
+                      <input type="number" class="form-control" id="bikes_quantity" placeholder="1" min="1" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="station_id" class="label">Station</label>
+                      <select id="station_id" name="station_id" required>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input type="submit" value="Insert" class="btn btn-secondary py-3 px-4">
+                </div>
+              </form>
+				</div>
+  		</div>
+    </section>
+
+
+    
+	
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.easing.1.3.js"></script>
+  <script src="js/jquery.waypoints.min.js"></script>
+  <script src="js/jquery.stellar.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script src="js/jquery.magnific-popup.min.js"></script>
+  <script src="js/aos.js"></script>
+  <script src="js/jquery.animateNumber.min.js"></script>
+  <script src="js/bootstrap-datepicker.js"></script>
+  <script src="js/jquery.timepicker.min.js"></script>
+  <script src="js/scrollax.min.js"></script>
+  <script src="js/main.js"></script>
+    
+  </body>
+</html>
+
+<script>
+  const INSERT_STATION_ENDPOINT = "http://127.0.0.1:8080/station"
+  document.getElementById("insert_station_form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const jsonData = {
+          "address" : document.getElementById("address").value,
+      }
+      // Make Axios request
+      axios.post(INSERT_STATION_ENDPOINT, jsonData)
+          .then(response => {
+              console.log("Success:", response.data);
+              window.location.href = "#";
+          })
+          .catch(error => {
+              console.error("Error:", error);
+          });
+  });
+
+
+
+  const INSERT_BIKES_ENDPOINT = "http://127.0.0.1:8080/bike"
+  document.getElementById("insert_bikes_form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      console.log(document.getElementById("station_id").value);
+      console.log(document.getElementById("type").value);
+      console.log(document.getElementById("bikes_quantity").value);
+      const jsonData = {
+          "type" : document.getElementById("type").value,
+          "quantity" : document.getElementById("bikes_quantity").value,
+          "station_id" : document.getElementById("station_id").value,
+      };
+      // Make Axios request
+      axios.post(INSERT_BIKES_ENDPOINT, jsonData)
+          .then(response => {
+              console.log("Success:", response.data);
+              window.location.href = "#";
+          })
+          .catch(error => {
+              console.error("Error:", error);
+          });
+  });
+
+  async function getStationsAPI() {
+    const STATIONS_ENDPOINT = "http://127.0.0.1:8080/stations/all";
+    let res = '';
+
+    await axios.get(STATIONS_ENDPOINT)
+      .then(response => {
+        res = response.data;
+      })
+      .catch(error => {
+        console.error("Error:", error);
+      });
+    return res;
+  }
+
+  function fillOptions(stations){
+    let options = document.getElementById("station_id");
+    stations?.forEach(function (station) {
+      let option = document.createElement("option");
+      option.value = `${station.id}`;
+      option.innerHTML = `${station.address}`;
+      options.appendChild(option);
+    });
+  }
+
+  async function getStations(){
+    const stations = await getStationsAPI();
+    fillOptions(stations);
+  }
+</script>

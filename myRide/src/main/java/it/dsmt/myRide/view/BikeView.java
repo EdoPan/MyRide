@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import it.dsmt.myRide.controller.BikeController;
+import it.dsmt.myRide.dto.InsertBikeDTO;
 import it.dsmt.myRide.model.Bike;
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class BikeView {
@@ -47,9 +49,12 @@ public class BikeView {
     }
 
     @PostMapping("/bike")
-    public ResponseEntity<String> addBike(@RequestParam Bike bike){
+    public ResponseEntity<String> addBike(@RequestBody InsertBikeDTO bike){
+        System.out.println(bike.getQuantity());
+        System.out.println(bike.getType());
+        System.out.println(bike.getStationID());
         try{
-            BikeController.addBike(bike.getID(), bike.getType(), bike.getPrice(), bike.getCondition(), bike.getStationID());
+            BikeController.addBike(bike.getType(), bike.getQuantity(), bike.getStationID());
         } catch (Exception e){
             return new ResponseEntity<>("ERROR" , HttpStatus.INTERNAL_SERVER_ERROR);
         }

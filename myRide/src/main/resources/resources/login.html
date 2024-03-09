@@ -24,7 +24,7 @@
     <script>
       document.addEventListener("DOMContentLoaded", function () {
           //Check if the user is logged in 
-          var isLoggedIn = localStorage.getItem("isLoggedIn");
+          var isLoggedIn = localStorage.getItem("loggedIn");
           //If the user is logged, can't show this page
           if (isLoggedIn) {
             alert("Already logged!");
@@ -107,12 +107,10 @@
   const LOGIN_ENDPOINT = "http://127.0.0.1:8080/login"
   document.getElementById("login_form").addEventListener("submit", function (event) {
       event.preventDefault();
-
       const jsonData = {
           "username" : document.getElementById("username").value,
           "password" : document.getElementById("password").value,
       }
-
       // Make Axios request
       axios.post(LOGIN_ENDPOINT, jsonData)
           .then(response => {
@@ -120,11 +118,11 @@
               localStorage.setItem("loggedIn" , true);
               localStorage.setItem("username" , response.data["username"]);
               localStorage.setItem("isMaintainer" , response.data["isMaintainer"]);
-              window.location.href = "stations.html";
+              window.location.href = "index.html";
           })
           .catch(error => {
               console.error("Error:", error);
-              //alert("Impossible to log in, retry!");
+              alert("Impossible to log in, retry!");
               //window.location.href = "login.html";
           });
   });

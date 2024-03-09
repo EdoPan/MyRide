@@ -9,15 +9,17 @@ import java.util.List;
 public class Station {
     private int id;
     private String address;
-    private int numberOfBikes;
 
     public Station(){
     }
 
-    public Station(int id, String address, int numberOfBikes){
+    public Station(String address){
+        this.address = address;
+    }
+
+    public Station(int id, String address){
         this.id = id;
         this.address = address;
-        this.numberOfBikes = numberOfBikes;
     }
 
     public int getID(){
@@ -36,26 +38,27 @@ public class Station {
         this.address = address;
     }
 
-    public int getNumberOfBikes(){
-        return this.numberOfBikes;
-    }
-
-    public void setNumberOfBikes(int numberOfBikes){
-        this.numberOfBikes = numberOfBikes;
-    }
-
-    public static List<Station> getStations(){
+    public static List<Station> getStations(String type){
         List<Station> stations = new ArrayList<>();
-        String query = "SELECT * FROM stations";
+        String query;
         
+        if(type.equals("all")){
+            query = "SELECT * FROM stations";
+        }
+        else{
+            query = "SELECT * FROM stations a INNER JOIN bikes b ON a.id = b.stationID " +
+            "WHERE b.type = '" + type + "' " +
+            "GROUP BY a.id " +
+            "HAVING COUNT(*) > 0";
+        }    
+        System.out.println(query);
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();
         ResultSet rs = stmt.executeQuery(query)){
 
             while(rs.next()){
-                Station station;
-                station = new Station(rs.getInt("id"), rs.getString("address"), 
-                rs.getInt("numberOfBikes"));
-                stations.add(station);
+                Station stationIstance;
+                stationIstance = new Station(rs.getInt("id"), rs.getString("address"));
+                stations.add(stationIstance);
             }
 
         } catch (SQLException e) {
@@ -70,8 +73,7 @@ public class Station {
         
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
             ResultSet res = stmt.executeQuery(query);
-            station = new Station(res.getInt("id"), res.getString("address"), 
-            res.getInt("numberOfBikes"));
+            station = new Station(res.getInt("id"), res.getString("address"));
             res.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -80,8 +82,8 @@ public class Station {
     }
 
     public void addStation(){
-        String query = "INSERT INTO stations(id, address, numberOfBikes) VALUES(" + 
-        this.id + ",'" + this.address + "'," + this.numberOfBikes + ")";
+        String query = "INSERT INTO stations(address) VALUES('" + 
+        this.address + "')";
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
             ResultSet res = stmt.executeQuery(query);
             res.close();

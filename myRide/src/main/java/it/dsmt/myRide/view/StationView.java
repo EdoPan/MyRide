@@ -5,11 +5,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import it.dsmt.myRide.controller.BikeController;
 import it.dsmt.myRide.controller.StationController;
+import it.dsmt.myRide.dto.InsertBikeDTO;
 import it.dsmt.myRide.model.Station;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -27,11 +32,11 @@ public class StationView {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/stations")
-    public ResponseEntity<List<Station>> getStations(){
+    @GetMapping("/stations/{type}")
+    public ResponseEntity<List<Station>> getStations(@PathVariable("type") String type){
         List<Station> response;
         try{
-            response = StationController.getStations();
+            response = StationController.getStations(type);
         } catch (Exception e){
             System.out.println("[STATION VIEW] Impossible to fetch stations");
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -40,14 +45,14 @@ public class StationView {
     }
 
     @PostMapping("/station")
-    public ResponseEntity<String> addStation(@RequestParam Station station){
+    public ResponseEntity<String> addStation(@RequestBody Station station){
         try{
-            StationController.addStation(station. getID(), station.getAddress(), station.getNumberOfBikes());
+            StationController.addStation(station.getAddress());
         } catch (Exception e){
-            return new ResponseEntity<>("ERROR" , HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity("ERROR", null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
-        return new ResponseEntity<>("Station added!", HttpStatus.OK);
+        return new ResponseEntity("Station inserted",null, HttpStatus.OK);
     }
 
     @PostMapping("/station/{id_station}/remove")
