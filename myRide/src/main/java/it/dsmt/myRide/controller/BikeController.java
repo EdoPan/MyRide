@@ -1,4 +1,5 @@
 package it.dsmt.myRide.controller;
+import it.dsmt.myRide.dto.BikeToBeRepairedDTO;
 import it.dsmt.myRide.model.Bike;
 import java.util.List;
 
@@ -16,6 +17,14 @@ public class BikeController {
     public static List<Bike> getAllBikes() throws Exception{
         try{
             return Bike.getAllBikes();
+        } catch (Exception e){
+            throw e;
+        }
+    }
+
+    public static List<BikeToBeRepairedDTO> getBikesToBeRepaired() throws Exception{
+        try{
+            return Bike.getBikesToBeRepaired();
         } catch (Exception e){
             throw e;
         }
@@ -58,6 +67,17 @@ public class BikeController {
         Bike bike = Bike.getBikeByID(id);
         try{
             bike.removeBike();
+        } catch (Exception e){
+            throw e;
+        }
+    }
+
+    public static void removeBikesByStation(int stationID) throws Exception{
+        try{
+            List<Bike> bikes = Bike.getAllBikesByStation(stationID);
+            for (Bike bike : bikes) {
+                bike.removeBike();
+            }
         } catch (Exception e){
             throw e;
         }

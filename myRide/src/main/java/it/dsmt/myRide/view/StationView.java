@@ -2,19 +2,15 @@ package it.dsmt.myRide.view;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import it.dsmt.myRide.controller.BikeController;
 import it.dsmt.myRide.controller.StationController;
-import it.dsmt.myRide.dto.InsertBikeDTO;
 import it.dsmt.myRide.model.Station;
-
 import java.util.List;
-import java.util.Map;
 
 
 @Controller
@@ -55,10 +51,10 @@ public class StationView {
         return new ResponseEntity("Station inserted",null, HttpStatus.OK);
     }
 
-    @PostMapping("/station/{id_station}/remove")
-    public ResponseEntity<String> removeStation(@RequestParam int id){
+    @DeleteMapping("/station/{id_station}")
+    public ResponseEntity<String> removeStation(@PathVariable("id_station") int stationID){
         try{
-            StationController.removeStation(id);
+            StationController.removeStation(stationID);
         } catch (Exception e){
             return new ResponseEntity<>("ERROR" , HttpStatus.INTERNAL_SERVER_ERROR);
 

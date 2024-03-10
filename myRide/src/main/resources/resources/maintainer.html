@@ -16,9 +16,7 @@
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
-
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         if (localStorage.getItem("isMaintainer") === 'false') {
@@ -29,8 +27,7 @@
       });
     </script>
   </head>
-
-  <body onload="getStations()">
+  <body onload="getStations(); getBikesToBeRepaired();">
     <script>
       document.addEventListener("DOMContentLoaded", function () {
           if (localStorage.getItem("isMaintainer") === 'true') {
@@ -40,7 +37,6 @@
           }
       });
     </script>
-
 	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
 	      <a class="navbar-brand" href="index.html">My<span>Ride</span></a>
@@ -59,7 +55,6 @@
 	    </div>
 	  </nav>
     <!-- END nav -->
-
     <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/bg_5.jpg');" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
       <div class="container">
@@ -67,7 +62,6 @@
         </div>
       </div>
     </section>
-
     <section class="ftco-section ftco-no-pt bg-light">
     	<div class="container">
     		<div class="row no-gutters">
@@ -113,6 +107,39 @@
                   <input type="submit" value="Insert" class="btn btn-secondary py-3 px-4">
                 </div>
               </form>
+              <div class="col-md-4 d-flex align-items-center">
+              <form action="#" class="request-form ftco-animate bg-primary" id="delete_station_form">
+                <h2>Delete Station</h2>
+                <div class="d-flex">
+                  <div class="form-group mr-2">
+                    <div class="form-group">
+                      <label for="station_id_delete" class="label">Station</label>
+                      <select id="station_id_delete" name="station_id_delete" required>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input type="submit" value="Delete" class="btn btn-secondary py-3 px-4">
+                </div>
+              </form>
+              <div class="col-md-4 d-flex align-items-center">
+                <form action="#" class="request-form ftco-animate bg-primary" id="repair_bike_form">
+                  <h2>Repair Bike</h2>
+                  <div class="d-flex">
+                    <div class="form-group mr-2">
+                      <div class="form-group">
+                        <label for="bike_to_be_repaired" class="label">Bike</label>
+                        <select id="bike_to_be_repaired" name="bike_to_be_repaired" required>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <input type="submit" value="Repair" class="btn btn-secondary py-3 px-4">
+                  </div>
+                </form>
+            </div>
 				</div>
   		</div>
     </section>
@@ -149,11 +176,12 @@
       axios.post(INSERT_STATION_ENDPOINT, jsonData)
           .then(response => {
               console.log("Success:", response.data);
-              window.location.href = "#";
           })
           .catch(error => {
               console.error("Error:", error);
           });
+          
+      location.reload();    
   });
 
 
@@ -161,30 +189,81 @@
   const INSERT_BIKES_ENDPOINT = "http://127.0.0.1:8080/bike"
   document.getElementById("insert_bikes_form").addEventListener("submit", function (event) {
       event.preventDefault();
-      console.log(document.getElementById("station_id").value);
-      console.log(document.getElementById("type").value);
-      console.log(document.getElementById("bikes_quantity").value);
       const jsonData = {
           "type" : document.getElementById("type").value,
           "quantity" : document.getElementById("bikes_quantity").value,
-          "station_id" : document.getElementById("station_id").value,
+          "stationID" : document.getElementById("station_id").value,
       };
       // Make Axios request
       axios.post(INSERT_BIKES_ENDPOINT, jsonData)
           .then(response => {
               console.log("Success:", response.data);
-              window.location.href = "#";
           })
           .catch(error => {
               console.error("Error:", error);
           });
+          
+      location.reload();    
+  });
+  
+  document.getElementById("delete_station_form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const stationID = document.getElementById("station_id_delete").value;
+      const DELETE_STATION_ENDPOINT = "http://127.0.0.1:8080/station/" + stationID;
+      const DELETE_BIKES_ENDPOINT = "http://127.0.0.1:8080/bikes/station/" + stationID;
+      // Make Axios requests
+      axios.delete(DELETE_BIKES_ENDPOINT)
+          .then(response => {
+              console.log("Success:", response.data);
+          })
+          .catch(error => {
+              console.error("Error:", error);
+          });
+
+      axios.delete(DELETE_STATION_ENDPOINT)
+          .then(response => {
+              console.log("Success:", response.data);
+          })
+          .catch(error => {
+              console.error("Error:", error);
+          });
+
+      location.reload();    
+  });
+
+  
+  document.getElementById("repair_bike_form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const bikeID = document.getElementById("bike_to_be_repaired").value;
+      const REPAIR_BIKE_ENDPOINT = "http://127.0.0.1:8080/bike/repair/" + bikeID;
+      // Make Axios request
+      axios.post(REPAIR_BIKE_ENDPOINT)
+          .then(response => {
+              console.log("Success:", response.data);
+          })
+          .catch(error => {
+              console.error("Error:", error);
+          });   
+      location.reload();    
   });
 
   async function getStationsAPI() {
     const STATIONS_ENDPOINT = "http://127.0.0.1:8080/stations/all";
     let res = '';
-
     await axios.get(STATIONS_ENDPOINT)
+      .then(response => {
+        res = response.data;
+      })
+      .catch(error => {
+        console.error("Error:", error);
+      });
+    return res;
+  }
+
+  async function getBikesToBeRepairedAPI() {
+    const BIKES_ENDPOINT = "http://127.0.0.1:8080/bikes/toberepaired";
+    let res = '';
+    await axios.get(BIKES_ENDPOINT)
       .then(response => {
         res = response.data;
       })
@@ -196,10 +275,25 @@
 
   function fillOptions(stations){
     let options = document.getElementById("station_id");
+    let optionsDelete = document.getElementById("station_id_delete");
     stations?.forEach(function (station) {
       let option = document.createElement("option");
+      let optionDelete = document.createElement("option");
       option.value = `${station.id}`;
       option.innerHTML = `${station.address}`;
+      optionDelete.value = `${station.id}`;
+      optionDelete.innerHTML = `${station.address}`;
+      options.appendChild(option);
+      optionsDelete.appendChild(optionDelete);
+    });
+  }
+
+  function fillOptionsBikes(bikes){
+    let options = document.getElementById("bike_to_be_repaired");
+    bikes?.forEach(function (bike) {
+      let option = document.createElement("option");
+      option.value = `${bike.id}`;
+      option.innerHTML = `${bike.id} - ${bike.type} - ${bike.address}`;
       options.appendChild(option);
     });
   }
@@ -209,6 +303,10 @@
     fillOptions(stations);
   }
 
+  async function getBikesToBeRepaired(){
+    const bikes = await getBikesToBeRepairedAPI();
+    fillOptionsBikes(bikes);
+  }
   document.getElementById("logout_nav").addEventListener("click", function (event) {
       event.preventDefault();
       localStorage.removeItem("loggedIn");

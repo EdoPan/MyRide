@@ -5,6 +5,7 @@ import it.dsmt.myRide.controller.DBController;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import it.dsmt.myRide.dto.BikeToBeRepairedDTO;
 
 
 public class Bike {
@@ -101,8 +102,43 @@ public class Bike {
         return bikes;
     }
 
+    public static List<BikeToBeRepairedDTO> getBikesToBeRepaired(){
+        List<BikeToBeRepairedDTO> bikes = new ArrayList<BikeToBeRepairedDTO>();
+        String query = "SELECT a.id, a.type, b.address FROM bikes a INNER JOIN stations b ON a.stationID = b.id WHERE a.condition = 'new'";
+        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
+            ResultSet res = stmt.executeQuery(query);
+                while(res.next()){
+                    BikeToBeRepairedDTO bike = new BikeToBeRepairedDTO(res.getInt("id"), res.getString("type"), 
+                    res.getString("address"));
+                    bikes.add(bike);
+                }
+                res.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        return bikes;
+    }
+
+
+    public static List<Bike> getAllBikesByStation(int stationID){
+        List<Bike> bikes = new ArrayList<Bike>();
+        String query = "SELECT * FROM bikes WHERE stationID = " + stationID;
+        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
+            ResultSet res = stmt.executeQuery(query);
+                while(res.next()){
+                    Bike bike = new Bike(res.getInt("id"), res.getString("type"), 
+                    res.getDouble("price"), res.getString("condition"), res.getInt("stationID"));
+                    bikes.add(bike);
+                }
+                res.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        return bikes;
+    }
+
     public void repairBike(){
-        String query = "UPDATE bikes SET condition = 'new' " + "WHERE id = " + this.id;
+        String query = "UPDATE bikes SET condition = 'repaired' " + "WHERE id = " + this.id;
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
             ResultSet res = stmt.executeQuery(query);
             res.close();
@@ -112,8 +148,7 @@ public class Bike {
     }
 
     public void addBike(){
-        //INSERT INTO bikes(type, price, condition, stationID) VALUES ('city', 0.25, 'new', 1);
-        String query = "INSERT INTO bikes(type, price, stationID) VALUES('" + this.type + "'," + this.price + 
+        String query = "INSERT INTO bikes(type, price, condition, stationID) VALUES('" + this.type + "'," + this.price + 
         ",'" + "new" + "'," + this.stationID + ")";
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
             ResultSet res = stmt.executeQuery(query);
