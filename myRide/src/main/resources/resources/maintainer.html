@@ -7,12 +7,8 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/magnific-popup.css">
-    <link rel="stylesheet" href="css/aos.css">
     <link rel="stylesheet" href="css/ionicons.min.css">
-    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
-    <link rel="stylesheet" href="css/jquery.timepicker.css">
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
@@ -66,9 +62,8 @@
     	<div class="container">
     		<div class="row no-gutters">
     			<div class="col-md-12	featured-top">
-    				<div class="row no-gutters">
-	  					<div class="col-md-4 d-flex align-items-center">
-	  						<form action="#" class="request-form ftco-animate bg-primary" id="insert_station_form">
+
+	  						<form action="" class="request-form ftco-animate bg-primary" id="insert_station_form">
 		          		<h2>Insert New Station</h2>
 			    				<div class="d-flex">
 			    					<div class="form-group mr-2">
@@ -80,24 +75,30 @@
 			              <input type="submit" value="Insert" class="btn btn-secondary py-3 px-4">
 			            </div>
 			    			</form>
-	  					</div>
-              <form action="#" class="request-form ftco-animate bg-primary" id="insert_bikes_form">
+
+                <br>
+
+              <form action="" class="request-form ftco-animate bg-primary" id="insert_bikes_form">
                 <h2>Insert New Bikes</h2>
                 <div class="d-flex">
-                  <div class="form-group mr-2">
+                  <div class="form-group">
                     <label for="type" class="label">Type</label>
+                    <br>
                     <select id="type" name="type" required>
                       <option value="city">City Bike</option>
                       <option value="mountain">Mountain Bike</option>
                       <option value="road">Road Bike</option>
                       <option value="tandem">Tandem Bike</option>
                     </select>
+
                     <div class="form-group">
                       <label for="bikes_quantity" class="label">Quantity</label>
                       <input type="number" class="form-control" id="bikes_quantity" placeholder="1" min="1" required>
                     </div>
+
                     <div class="form-group">
                       <label for="station_id" class="label">Station</label>
+                      <br>
                       <select id="station_id" name="station_id" required>
                       </select>
                     </div>
@@ -107,39 +108,45 @@
                   <input type="submit" value="Insert" class="btn btn-secondary py-3 px-4">
                 </div>
               </form>
-              <div class="col-md-4 d-flex align-items-center">
-              <form action="#" class="request-form ftco-animate bg-primary" id="delete_station_form">
+
+              <br>
+                
+              <form action="" class="request-form ftco-animate bg-primary" id="delete_station_form">
                 <h2>Delete Station</h2>
                 <div class="d-flex">
                   <div class="form-group mr-2">
                     <div class="form-group">
                       <label for="station_id_delete" class="label">Station</label>
+                      <br>
                       <select id="station_id_delete" name="station_id_delete" required>
                       </select>
                     </div>
                   </div>
                 </div>
                 <div class="form-group">
-                  <input type="submit" value="Delete" class="btn btn-secondary py-3 px-4">
+                  <input type="submit" value="Delete" class="btn btn-danger py-3 px-4">
                 </div>
               </form>
-              <div class="col-md-4 d-flex align-items-center">
-                <form action="#" class="request-form ftco-animate bg-primary" id="repair_bike_form">
-                  <h2>Repair Bike</h2>
-                  <div class="d-flex">
-                    <div class="form-group mr-2">
-                      <div class="form-group">
-                        <label for="bike_to_be_repaired" class="label">Bike</label>
-                        <select id="bike_to_be_repaired" name="bike_to_be_repaired" required>
-                        </select>
-                      </div>
+
+              <br>
+
+              <form action="" class="request-form ftco-animate bg-primary" id="repair_bike_form">
+                <h2>Repair Bike</h2>
+                <div class="d-flex">
+                  <div class="form-group mr-2">
+                    <div class="form-group">
+                      <label for="bike_to_be_repaired" class="label">Bike</label>
+                      <br>
+                      <select id="bike_to_be_repaired" name="bike_to_be_repaired" required>
+                      </select>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <input type="submit" value="Repair" class="btn btn-secondary py-3 px-4">
-                  </div>
-                </form>
-            </div>
+                </div>
+                <div class="form-group">
+                  <input type="submit" value="Repair" class="btn btn-warning py-3 px-4">
+                </div>
+              </form>
+          </div>
 				</div>
   		</div>
     </section>
