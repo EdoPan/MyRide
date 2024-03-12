@@ -186,7 +186,6 @@ public class Bike {
     }
 
     public void deallocateBikeByStation(){
-        System.out.println(this.id);
         String query = "UPDATE bikes SET stationID = NULL WHERE id = " + this.id;
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
             int rowsAffected = stmt.executeUpdate(query);

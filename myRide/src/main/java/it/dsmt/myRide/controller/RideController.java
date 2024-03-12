@@ -43,15 +43,12 @@ public class RideController {
     
     public static void endRide(int rideID, int stationID) throws Exception{
         Ride ride = Ride.getRideByID(rideID);
-        System.out.println("station:" + stationID);
         ride.setEndTime(java.time.LocalDateTime.now().toString());
         Bike bike = Bike.getBikeByID(ride.getBikeID());
         bike.setStationID(stationID);
         try{
             ride.endRide();
-            System.out.println("DEBUGGIN");
             bike.assignBikeToStation();
-            System.out.println("DEBUGGIN2");
         } catch (Exception e){
             throw e;
         }
