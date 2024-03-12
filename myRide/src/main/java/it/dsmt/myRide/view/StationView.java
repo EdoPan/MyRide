@@ -22,7 +22,7 @@ public class StationView {
         try{
             response = StationController.getStationByID(id);
         } catch (Exception e){
-            System.out.println("[STATION VIEW] Impossible to fetch the station");
+            System.out.println("Impossible to fetch the station");
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(response);
@@ -34,8 +34,8 @@ public class StationView {
         try{
             response = StationController.getStations(type);
         } catch (Exception e){
-            System.out.println("[STATION VIEW] Impossible to fetch stations");
-            return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println("Impossible to fetch stations");
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(response);
     }
@@ -68,7 +68,6 @@ public class StationView {
             StationController.getBikes(stationID);
         } catch (Exception e){
             return new ResponseEntity<>("ERROR" , HttpStatus.INTERNAL_SERVER_ERROR);
-
         }
         return new ResponseEntity<>("Bikes listed!", HttpStatus.OK);
     }

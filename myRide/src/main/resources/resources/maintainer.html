@@ -62,7 +62,6 @@
     	<div class="container">
     		<div class="row no-gutters">
     			<div class="col-md-12	featured-top">
-
 	  						<form action="" class="request-form ftco-animate bg-primary" id="insert_station_form">
 		          		<h2>Insert New Station</h2>
 			    				<div class="d-flex">
@@ -75,9 +74,7 @@
 			              <input type="submit" value="Insert" class="btn btn-secondary py-3 px-4">
 			            </div>
 			    			</form>
-
                 <br>
-
               <form action="" class="request-form ftco-animate bg-primary" id="insert_bikes_form">
                 <h2>Insert New Bikes</h2>
                 <div class="d-flex">
@@ -90,12 +87,10 @@
                       <option value="road">Road Bike</option>
                       <option value="tandem">Tandem Bike</option>
                     </select>
-
                     <div class="form-group">
                       <label for="bikes_quantity" class="label">Quantity</label>
                       <input type="number" class="form-control" id="bikes_quantity" placeholder="1" min="1" required>
                     </div>
-
                     <div class="form-group">
                       <label for="station_id" class="label">Station</label>
                       <br>
@@ -108,9 +103,7 @@
                   <input type="submit" value="Insert" class="btn btn-secondary py-3 px-4">
                 </div>
               </form>
-
               <br>
-                
               <form action="" class="request-form ftco-animate bg-primary" id="delete_station_form">
                 <h2>Delete Station</h2>
                 <div class="d-flex">
@@ -127,9 +120,7 @@
                   <input type="submit" value="Delete" class="btn btn-danger py-3 px-4">
                 </div>
               </form>
-
               <br>
-
               <form action="" class="request-form ftco-animate bg-primary" id="repair_bike_form">
                 <h2>Repair Bike</h2>
                 <div class="d-flex">
@@ -190,8 +181,6 @@
           
       location.reload();    
   });
-
-
 
   const INSERT_BIKES_ENDPOINT = "http://127.0.0.1:8080/bike"
   document.getElementById("insert_bikes_form").addEventListener("submit", function (event) {

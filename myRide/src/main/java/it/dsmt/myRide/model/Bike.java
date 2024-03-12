@@ -35,6 +35,7 @@ public class Bike {
     public int getID(){
         return this.id;
     }
+
     public void setID(int id){
         this.id = id;
     }
@@ -80,7 +81,7 @@ public class Bike {
             res.getDouble("price"), res.getString("condition"), res.getInt("stationID"));
             res.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return bike;
     }
@@ -97,7 +98,7 @@ public class Bike {
                 }
                 res.close();
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         return bikes;
     }
@@ -114,11 +115,10 @@ public class Bike {
                 }
                 res.close();
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
+                e.printStackTrace();
+        }
         return bikes;
     }
-
 
     public static List<Bike> getAllBikesByStation(int stationID){
         List<Bike> bikes = new ArrayList<Bike>();
@@ -132,7 +132,7 @@ public class Bike {
                 }
                 res.close();
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();    
             }
         return bikes;
     }
@@ -140,10 +140,9 @@ public class Bike {
     public void repairBike(){
         String query = "UPDATE bikes SET condition = 'repaired' " + "WHERE id = " + this.id;
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            ResultSet res = stmt.executeQuery(query);
-            res.close();
+            int rowsAffected = stmt.executeUpdate(query);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }        
     }
 
@@ -151,20 +150,18 @@ public class Bike {
         String query = "INSERT INTO bikes(type, price, condition, stationID) VALUES('" + this.type + "'," + this.price + 
         ",'" + "new" + "'," + this.stationID + ")";
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            ResultSet res = stmt.executeQuery(query);
-            res.close();
+            int rowsAffected = stmt.executeUpdate(query);
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
     }
     
     public void removeBike(){
         String query = "DELETE FROM bikes WHERE id = " + this.id;
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            ResultSet res = stmt.executeQuery(query);
-            res.close();
+            int rowsAffected = stmt.executeUpdate(query);
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }    
     }
 
@@ -178,13 +175,23 @@ public class Bike {
             }    
     }
 
-    public void assignBikeToStation(){
+    public void assignBikeToStation() throws SQLException{
         String query = "UPDATE bikes SET stationID = " + this.stationID + " WHERE id = " + this.id;
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            ResultSet res = stmt.executeQuery(query);
-            res.close();
+            int rowsAffected = stmt.executeUpdate(query);
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
+                throw e;
+            } 
+    }
+
+    public void deallocateBikeByStation(){
+        System.out.println(this.id);
+        String query = "UPDATE bikes SET stationID = NULL WHERE id = " + this.id;
+        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
+            int rowsAffected = stmt.executeUpdate(query);
+            } catch (SQLException e) {
+                e.printStackTrace();
             } 
     }
 }

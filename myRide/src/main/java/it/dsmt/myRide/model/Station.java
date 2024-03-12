@@ -53,13 +53,11 @@ public class Station {
         }    
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();
         ResultSet rs = stmt.executeQuery(query)){
-
             while(rs.next()){
                 Station stationIstance;
                 stationIstance = new Station(rs.getInt("id"), rs.getString("address"));
                 stations.add(stationIstance);
             }
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -113,8 +111,8 @@ public class Station {
             }
             res.close();
         } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
+            e.printStackTrace();
+        }
         return bikes;
     }
 

@@ -2,26 +2,33 @@ package it.dsmt.myRide.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import it.dsmt.myRide.controller.DBController;
+import it.dsmt.myRide.dto.ActiveRideDTO;
 
 public class Ride {
     private int id;
-    private LocalDate startTime;
-    private LocalDate endTime;
+    private String startTime;
+    private String endTime;
     private int bikeID;
-    private String userID;
+    private String username;
 
     public Ride(){
         
     }
 
-    public Ride(int id, LocalDate startTime, LocalDate endTime, int bikeID, String userID){
+    public Ride(String startTime, int bikeID, String username){
+        this.startTime = startTime;
+        this.bikeID = bikeID;
+        this.username = username;
+    }
+
+    public Ride(int id, String startTime, String endTime, int bikeID, String username){
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
         this.bikeID = bikeID;
-        this.userID = userID;
+        this.username = username;
     }
 
     public int getID(){
@@ -32,10 +39,10 @@ public class Ride {
         this.id = id;
     }
 
-    public LocalDate getStartTime(){
+    public String getStartTime(){
         return this.startTime;
     }
-    public LocalDate getEndTime(){
+    public String getEndTime(){
         return this.endTime;
     }
 
@@ -47,35 +54,67 @@ public class Ride {
     }
 
     public String getUsername(){
-        return this.userID;
+        return this.username;
     }
-    public void setUserID(String userID){
-        this.userID = userID;
+
+    public void setUsername(String username){
+        this.username = username;
+    }
+
+    public void setStartTime(String startTime){
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(String endTime){
+        this.endTime = endTime;
     }
 
     public static Ride getRideByID(int id){
         Ride ride = new Ride();
-        String query = "SELECT * FROM rides WHERE id = ?";
+        String query = "SELECT * FROM rides WHERE id = " + id;
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
             ResultSet res = stmt.executeQuery(query);
-            // Understand how to handle LocalDate type in SQLite
-            ride = new Ride(res.getInt("id"), null, null, 
-            res.getInt("bikeID"), res.getString("userID"));
+            ride = new Ride(res.getInt("id"), res.getString("startTime"), res.getString("endTime"), 
+            res.getInt("bikeID"), res.getString("username"));
             res.close();
          } catch (SQLException e) {
              System.out.println(e.getMessage());
          }
          return ride;
-     }
+    }
 
-    public void bookRide(){
-        String query = "INSERT INTO rides(id, bikeID, userID, startTime, endTime) VALUES(" + 
-        this.id + "," + this.bikeID + "," + this.userID + ",'" + this.startTime + "','" + this.endTime + "')";
+    public static ActiveRideDTO getActiveRide(String username){
+        String query = "SELECT a.id, a.startTime, a.bikeID, b.type FROM rides a INNER JOIN bikes b ON a.bikeID = b.id  WHERE a.username = '" + username + "' AND a.endTime = 'null'";
+        ActiveRideDTO activeRide = null;
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
             ResultSet res = stmt.executeQuery(query);
-            res.close();
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
+            if(res.next()){
+                activeRide = new ActiveRideDTO(res.getInt("id"), res.getInt("bikeID"),
+                res.getString("type"),res.getString("startTime"));
+                res.close();
+            }
+         } catch (SQLException e) {
+             e.printStackTrace();
+         }
+         return activeRide;
+     }
+
+    public void bookRide() throws Exception{
+        String queryCheck = "SELECT * FROM rides WHERE endTime = 'null' AND username = '" + this.username + "'" ;
+        String query = "INSERT INTO rides(startTime, endTime, bikeID, username) VALUES('" + 
+        this.startTime + "', 'null'," + this.bikeID + ",'" + this.username + "')";
+        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
+            ResultSet resCheck = stmt.executeQuery(queryCheck);
+            if(resCheck.next()){
+                throw new Exception("\"Ride already exists\"");
+            }
+            else{
+                int rowsAffected = stmt.executeUpdate(query);
+                return;
+            }    
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
             }
     }
 
@@ -89,26 +128,15 @@ public class Ride {
             }    
     }  
 
-    public void extendRide(LocalDate newEndTime){
+    public void endRide() throws SQLException{
         String query = "UPDATE rides " + 
-                       "SET endTime = '" + newEndTime + "'" +
+                       "SET endTime = '" + this.endTime + "'" +
                        "WHERE id = " + this.id;
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            ResultSet res = stmt.executeQuery(query);
-            res.close();
+            int rowsAffected = stmt.executeUpdate(query);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+            throw e;
         }    
-    }
-
-    public boolean isTimeExpired(){
-        LocalDate currentTime = java.time.LocalDate.now();
-        endTime = getEndTime();
-        if (currentTime.isAfter(endTime) || currentTime.isEqual(endTime)){
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
+    }    
 }

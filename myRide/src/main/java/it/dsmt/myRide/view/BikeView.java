@@ -90,7 +90,7 @@ public class BikeView {
         } catch (Exception e){
             return new ResponseEntity<>("ERROR" , HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>("Bikes removed!", HttpStatus.OK);
+        return new ResponseEntity<>("All bikes removed!", HttpStatus.OK);
     }
 
     @PostMapping("/bike/{id_bike}/mark/{condition}")
@@ -111,5 +111,15 @@ public class BikeView {
             return new ResponseEntity<>("ERROR" , HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>("Bike assigned!", HttpStatus.OK);
-    }    
+    } 
+    
+    @PostMapping("/bike/{id_bike}/station")
+    public ResponseEntity<String> deallocateBikeByStation(@PathVariable("id_bike") int bikeID){
+        try{
+            BikeController.deallocateBikeByStation(bikeID);
+        } catch (Exception e){
+            return new ResponseEntity<>("ERROR" , HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("Bike deallocated!", HttpStatus.OK);
+    }  
 }

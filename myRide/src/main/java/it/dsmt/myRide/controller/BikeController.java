@@ -92,10 +92,20 @@ public class BikeController {
         }
     }
 
-    public static void assignBikeToStation(int id, int stationID){
+    public static void assignBikeToStation(int id, int stationID) throws Exception{
         Bike bike = Bike.getBikeByID(id);
+        bike.setStationID(stationID);
         try{
             bike.assignBikeToStation();
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public static void deallocateBikeByStation(int bikeID){
+        Bike bike = Bike.getBikeByID(bikeID);
+        try{
+            bike.deallocateBikeByStation();
         } catch (Exception e) {
             throw e;
         }

@@ -1,13 +1,18 @@
 package it.dsmt.myRide.view;
-import java.time.LocalDate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import it.dsmt.myRide.controller.RideController;
 import it.dsmt.myRide.model.Ride;
+import it.dsmt.myRide.dto.RideDTO;
+import it.dsmt.myRide.dto.ActiveRideDTO;
+import it.dsmt.myRide.dto.EndRideDTO;
 
 @Controller
 public class RideView {
@@ -24,17 +29,28 @@ public class RideView {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/ride/book")
-    public ResponseEntity<String> bookRide(){
+    @GetMapping("/ride/active/{username}")
+    public ResponseEntity<ActiveRideDTO> getActiveRide(@PathVariable("username") String username){
         try{
-            RideController.bookRide();;
+            RideController.getActiveRide(username);
         } catch (Exception e){
-            return new ResponseEntity<>("ERROR" , HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println("Impossible to fetch the active ride");
+            return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<ActiveRideDTO>(HttpStatus.OK);
+    }
+
+    @PostMapping("/ride")
+    public ResponseEntity<String> bookRide(@RequestBody RideDTO ride) throws Exception{
+        try{
+            RideController.bookRide(ride.getBikeID(), ride.getUsername());
+        } catch (Exception e){
+            return new ResponseEntity<>("ERROR: A ride already exists" , HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>("Ride booked!", HttpStatus.OK);
     }
 
-    @PostMapping("/ride/{id_ride}/delete")
+    @DeleteMapping("/ride/{id_ride}")
     public ResponseEntity<String> deleteRide(@RequestParam int id){
         try{
             RideController.deleteRide(id);;
@@ -44,13 +60,13 @@ public class RideView {
         return new ResponseEntity<>("Ride deleted!", HttpStatus.OK);
     }
 
-    @PostMapping("/ride/{id_ride}/extend")
-    public ResponseEntity<String> extendRide(@RequestParam int id, LocalDate newEndTime ){
+    @PostMapping("/ride/end")
+    public ResponseEntity<String> endRide(@RequestBody EndRideDTO ride){
         try{
-            RideController.extendRide(id, newEndTime);
+            RideController.endRide(ride.getRideID(),ride.getStationID());
         } catch (Exception e){
             return new ResponseEntity<>("ERROR" , HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>("Ride extended!", HttpStatus.OK);
+        return new ResponseEntity<>("Ride ended!", HttpStatus.OK);
     }
 }
