@@ -31,13 +31,14 @@ public class RideView {
 
     @GetMapping("/ride/active/{username}")
     public ResponseEntity<ActiveRideDTO> getActiveRide(@PathVariable("username") String username){
+       ActiveRideDTO response;
         try{
-            RideController.getActiveRide(username);
+            response = RideController.getActiveRide(username);
         } catch (Exception e){
             System.out.println("Impossible to fetch the active ride");
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<ActiveRideDTO>(HttpStatus.OK);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/ride")

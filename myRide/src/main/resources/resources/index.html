@@ -85,13 +85,14 @@
 			            <div class="form-group">
 			              <input type="submit" value="Search" class="btn btn-secondary py-3 px-4">
 			            </div>
+                </form>
                 </div>
-			    			</form>
+                <div id="release_bike_div"></div>
+                <form class="request-form ftco-animate bg-primary" id="release_bike_form">
+                </form>
 	  					</div>
 	  				</div>
-              <form class="request-form ftco-animate bg-primary" id="release_bike_form">
-              </form>
-            </div>
+        </div>
 				</div>
   		</div>
     </section>
@@ -171,11 +172,10 @@
 
   async function getActiveRide() {
     const ACTIVE_RIDE_ENDPOINT = "http://127.0.0.1:8080/ride/active/" + localStorage.getItem("username");
-    let res= '';
     await axios.get(ACTIVE_RIDE_ENDPOINT)
       .then(response => {
         const res = response.data;
-        if (res !== null & res != ""){ 
+        if (res != ''){ 
           fillPage(res);
         }  
       })
