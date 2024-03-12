@@ -82,8 +82,7 @@ public class Station {
         String query = "INSERT INTO stations(address) VALUES('" +
         this.address + "')";
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            ResultSet res = stmt.executeQuery(query);
-            res.close();
+            stmt.executeUpdate(query);
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -92,8 +91,7 @@ public class Station {
     public void removeStation(){
         String query = "DELETE FROM stations WHERE id = " + this.id;
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            ResultSet res = stmt.executeQuery(query);
-            res.close();
+            stmt.executeUpdate(query);
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }     
@@ -106,7 +104,7 @@ public class Station {
             ResultSet res = stmt.executeQuery(query);
             while(res.next()){
                 Bike bike = new Bike(res.getInt("id"), res.getString("type"), 
-                res.getDouble("price"), res.getString("condition"), res.getInt("stationID"));
+                res.getDouble("price"), res.getInt("stationID"));
                 bikes.add(bike);
             }
             res.close();

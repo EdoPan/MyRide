@@ -2,7 +2,6 @@ package it.dsmt.myRide.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDateTime;
 import it.dsmt.myRide.controller.DBController;
 import it.dsmt.myRide.dto.ActiveRideDTO;
 
@@ -84,13 +83,13 @@ public class Ride {
     }
 
     public static ActiveRideDTO getActiveRide(String username){
-        String query = "SELECT a.id, a.startTime, a.bikeID, b.type FROM rides a INNER JOIN bikes b ON a.bikeID = b.id  WHERE a.username = '" + username + "' AND a.endTime = 'null'";
+        String query = "SELECT a.id, a.startTime, a.bikeID, b.type, b.price FROM rides a INNER JOIN bikes b ON a.bikeID = b.id  WHERE a.username = '" + username + "' AND a.endTime = 'null'";
         ActiveRideDTO activeRide = null;
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
             ResultSet res = stmt.executeQuery(query);
             if(res.next()){
                 activeRide = new ActiveRideDTO(res.getInt("id"), res.getInt("bikeID"),
-                res.getString("type"),res.getString("startTime"));
+                res.getString("type"),res.getString("startTime"), res.getDouble("price"));
                 res.close();
             }
          } catch (SQLException e) {
@@ -109,7 +108,7 @@ public class Ride {
                 throw new Exception("\"Ride already exists\"");
             }
             else{
-                int rowsAffected = stmt.executeUpdate(query);
+                stmt.executeUpdate(query);
                 return;
             }    
             } catch (Exception e) {
@@ -121,8 +120,7 @@ public class Ride {
     public void deleteRide(){
         String query = "DELETE FROM rides WHERE id = " + this.id;
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            ResultSet res = stmt.executeQuery(query);
-            res.close();
+            stmt.executeUpdate(query);
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }    
@@ -133,7 +131,7 @@ public class Ride {
                        "SET endTime = '" + this.endTime + "'" +
                        "WHERE id = " + this.id;
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            int rowsAffected = stmt.executeUpdate(query);
+            stmt.executeUpdate(query);
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;

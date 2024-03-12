@@ -5,12 +5,14 @@ public class ActiveRideDTO {
     private int bikeID;
     private String bikeType;
     private String startTime;
+    private double price;
     
-    public ActiveRideDTO(int rideID, int bikeID, String bikeType, String startTime){
+    public ActiveRideDTO(int rideID, int bikeID, String bikeType, String startTime, double price){
         this.rideID = rideID;
         this.bikeID = bikeID;
         this.bikeType = bikeType;
         this.startTime = startTime;
+        this.price = price;
     }
 
     public int getRideID(){
@@ -29,6 +31,10 @@ public class ActiveRideDTO {
         return this.startTime;
     }
 
+    public double getPrice(){
+        return this.price;
+    }
+
     public void setRideID(int rideID){
         this.rideID = rideID;
     }
@@ -44,4 +50,8 @@ public class ActiveRideDTO {
     public void setStartTime(String startTime){
         this.startTime = startTime;
     }
+
+    public void setPrice(double price){
+        this.price = price;
+    }  
 }

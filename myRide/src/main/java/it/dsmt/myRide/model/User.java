@@ -42,15 +42,15 @@ public class User {
         this.isMaintainer = isMaintainer;
     }
 
-    public void register(){
+    public void register() throws Exception{
         // Default registration is for user not maintainers so isMaintainer is set to false
         String query = "INSERT INTO users(username, password, isMaintainer) VALUES('" + 
         this.username + "','" + this.password + "',FALSE)";
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            ResultSet res = stmt.executeQuery(query);
-            res.close();
+            stmt.executeUpdate(query);
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
+                throw e;
             }
     }
     

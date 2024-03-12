@@ -70,7 +70,7 @@
     		<div class="row no-gutters">
     			<div class="col-md-12	featured-top">
     				<div class="row no-gutters">
-	  					<div class="col-md-4 d-flex align-items-center">
+	  					<div class="col-md-4 d-flex align-items-center" id="index_box">
 	  						<form id="search_station" action="stations.html" class="request-form ftco-animate bg-primary">
 		          		<h2>Find A Bike</h2>
 			    				<div class="form-group">
@@ -87,9 +87,6 @@
 			            </div>
                 </form>
                 </div>
-                <div id="release_bike_div"></div>
-                <form class="request-form ftco-animate bg-primary" id="release_bike_form">
-                </form>
 	  					</div>
 	  				</div>
         </div>
@@ -121,31 +118,42 @@
     await getActiveRide();
   }
   async function fillPage(activeRide){
-    document.getElementById("release_bike_form").innerHTML=`<h2>Release Bike</h2>
-              <div class="d-flex">
-                <div class="form-group mr-2">
-                  <div class="text">
-                    <label class="label">BikeID: ${activeRide.bikeID} - Type: ${activeRide.bikeType} Bike</label>
-                    <div class="d-flex mb-3">
-                      <label class="label" id="timer_display"></label>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="station_id" class="label">Release Station</label>
-                    <br>
-                    <select id="station_id" name="station_id" required>
-                    </select>
-                  </div> 
-                </div>
-              </div>
-              <div class="form-group">
-                <input type="submit" value="Release" class="btn btn-secondary py-3 px-4">
-              </div>`;
-              updateTimer(activeRide.startTime);
-              document.getElementById("release_bike_form").addEventListener("submit", function (event) {
-                releaseBike(activeRide.rideID);
-              });
-              await getStations();
+    document.getElementById("index_box").innerHTML=`
+    <div id="release_bike_div"></div>
+    <form class="request-form ftco-animate bg-primary fadeInUp ftco-animated" id="release_bike_form">
+      <h2>Release Bike</h2>
+      <div class="d-flex">
+        <div class="form-group mr-2">
+          <div class="text">
+            <label class="label">BikeID: ${activeRide.bikeID} - Type: ${activeRide.bikeType} Bike</label>
+            <div class="d-flex mb-3">
+              <label class="label" id="timer_display"></label>
+            </div>
+            <div class="d-flex mb-3">
+              <label class="label" id="price_display"></label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="station_id" class="label">Release Station</label>
+            <br>
+            <select id="station_id" name="station_id" required>
+            </select>
+          </div> 
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Release" class="btn btn-secondary py-3 px-4">
+      </div>
+      <div class="form-group">
+        <input value="Chat" class="btn btn-warning py-3 px-4" onclick="location.href='chat.html?id=${activeRide.bikeID}';">
+      </div>
+    </form>
+    `;
+      updateTimer(activeRide.startTime, activeRide.price);
+      document.getElementById("release_bike_form").addEventListener("submit", function (event) {
+        releaseBike(activeRide.rideID);
+      });
+      await getStations();
 	}
 
   document.getElementById("logout_nav").addEventListener("click", function (event) {
@@ -166,7 +174,7 @@
         }
       })
       .catch(error => {
-        console.error("Error:", error);
+        //console.error("Error:", error);
       });
   }
 
@@ -180,7 +188,7 @@
         }  
       })
       .catch(error => {
-        console.error("Error:", error);
+        //console.error("Error:", error);
       });
   }
 
@@ -194,7 +202,7 @@
   });
 }
 
-function updateTimer(localDateTime) {
+function updateTimer(localDateTime, price) {
   var startTime = convertToLocalDateTime(localDateTime);
   var now = new Date();
   var elapsedTime = now - startTime;
@@ -208,8 +216,12 @@ function updateTimer(localDateTime) {
   timerDisplay.innerHTML = days + " days, " + hours + " hours, " + minutes + " minutes, " + seconds + " seconds";
   // Aggiorna ogni secondo
   setTimeout(function() {
-      updateTimer(localDateTime);
+      updateTimer(localDateTime, price);
   }, 1000);
+
+  var totalPrice = (hours*price) + (days*24*price) + (minutes/60*price);
+  var priceDisplay = document.getElementById("price_display");
+  priceDisplay.innerHTML = "Price: " + totalPrice.toFixed(2) + " €";
 }
 
 function convertToLocalDateTime(localDateTime) {
@@ -243,11 +255,11 @@ const jsonData = {
 // Make Axios request
 axios.post(RELEASE_BIKE_ENDPOINT, jsonData)
   .then(response => {
-    console.log("Success:", response.data);
+    //console.log("Success:", response.data);
     location.reload();  
   })
   .catch(error => {
-    console.error("Error:", error);
+    //console.error("Error:", error);
 });
 }
 </script>

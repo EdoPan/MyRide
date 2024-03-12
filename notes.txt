@@ -1,7 +1,7 @@
 -- Queries SQL
 
 CREATE TABLE users (
-    username varchar(255),
+    username varchar(255) PRIMARY KEY,
     password varchar(255),
     isMaintainer boolean
 );
@@ -10,7 +10,6 @@ CREATE TABLE bikes (
     id INTEGER PRIMARY KEY,
     type varchar(255),
   	price double,
-    condition varchar(255),
   	stationID int
 );
 
@@ -27,6 +26,8 @@ CREATE TABLE stations (
     address varchar(255)
 );
 
+INSERT INTO users(username, password, isMaintainer) VALUES ('maintainer', 'maintainer', true);
+
 INSERT INTO stations(address) VALUES ('Via Diotisalvi 2');
 INSERT INTO stations(address) VALUES ('Largo Bruno Pontecorvo 3');
 INSERT INTO stations(address) VALUES ('Corso Italia 60');
@@ -34,23 +35,53 @@ INSERT INTO stations(address) VALUES ('Via di Gello 138');
 INSERT INTO stations(address) VALUES ('Piazza Martiri della Libertà 33');
 INSERT INTO stations(address) VALUES ('Via S. Marco 15');
 
+INSERT INTO bikes(type, price, stationID) VALUES ('city', 0.25, 1);
+INSERT INTO bikes(type, price, stationID) VALUES ('city', 0.25, 1);
+INSERT INTO bikes(type, price, stationID) VALUES ('city', 0.25, 1);
+INSERT INTO bikes(type, price, stationID) VALUES ('city', 0.25, 1);
+INSERT INTO bikes(type, price, stationID) VALUES ('mountain', 0.50, 1);
+INSERT INTO bikes(type, price, stationID) VALUES ('mountain', 0.50, 1);
+INSERT INTO bikes(type, price, stationID) VALUES ('mountain', 0.50, 1);
+INSERT INTO bikes(type, price, stationID) VALUES ('mountain', 0.50, 1);
+INSERT INTO bikes(type, price, stationID) VALUES ('road', 0.75, 1);
+INSERT INTO bikes(type, price, stationID) VALUES ('road', 0.75, 1);
+INSERT INTO bikes(type, price, stationID) VALUES ('road', 0.75, 1);
+INSERT INTO bikes(type, price, stationID) VALUES ('road', 0.75, 1);
+INSERT INTO bikes(type, price, stationID) VALUES ('tandem', 1.00, 1);
+INSERT INTO bikes(type, price, stationID) VALUES ('tandem', 1.00, 1);
+INSERT INTO bikes(type, price, stationID) VALUES ('tandem', 1.00, 1);
+INSERT INTO bikes(type, price, stationID) VALUES ('tandem', 1.00, 1);
 
+// Comportamento nodi Erlang
 
-INSERT INTO bikes(type, price, condition, stationID) VALUES ('city', 0.25, 'new', 1);
-INSERT INTO bikes(type, price, condition, stationID) VALUES ('city', 0.25, 'new', 1);
-INSERT INTO bikes(type, price, condition, stationID) VALUES ('city', 0.25, 'new', 1);
-INSERT INTO bikes(type, price, condition, stationID) VALUES ('city', 0.25, 'new', 1);
-INSERT INTO bikes(type, price, condition, stationID) VALUES ('mountain', 0.50, 'new', 1);
-INSERT INTO bikes(type, price, condition, stationID) VALUES ('mountain', 0.50, 'new', 1);
-INSERT INTO bikes(type, price, condition, stationID) VALUES ('mountain', 0.50, 'new', 1);
-INSERT INTO bikes(type, price, condition, stationID) VALUES ('mountain', 0.50, 'new', 1);
-INSERT INTO bikes(type, price, condition, stationID) VALUES ('road', 0.75, 'new', 1);
-INSERT INTO bikes(type, price, condition, stationID) VALUES ('road', 0.75, 'new', 1);
-INSERT INTO bikes(type, price, condition, stationID) VALUES ('road', 0.75, 'new', 1);
-INSERT INTO bikes(type, price, condition, stationID) VALUES ('road', 0.75, 'new', 1);
-INSERT INTO bikes(type, price, condition, stationID) VALUES ('tandem', 1.00, 'new', 1);
-INSERT INTO bikes(type, price, condition, stationID) VALUES ('tandem', 1.00, 'new', 1);
-INSERT INTO bikes(type, price, condition, stationID) VALUES ('tandem', 1.00, 'new', 1);
-INSERT INTO bikes(type, price, condition, stationID) VALUES ('tandem', 1.00, 'new', 1);
+10.2.1.122 -> master node -> fa spawnare le chat sui container inizializza i DB Mnesia 
+    Nota sui DB Mnesia è che questi condividono gli stessi dati fra di loro
+10.2.1.123-124 -> slave node -> fanno l'handling delle chat
 
+// NGINX
+10.2.1.121 -> backend, frontend, database
+10.2.1.122 -> backed, frontend, database, NGINX, master node Erlang
+10.2.1.123 -> slave node Erlang
+10.2.1.124 -> slave node Erlang
 
+Creare file: nginx.conf
+Spostarlo in: etc/nginx
+Riavviare il servizio NGINX: systemctl restart nginx
+
+# Inizio file
+
+http {
+    upstream myride {
+        least_conn;
+        server 10.2.1.123:porta;
+        server 10.2.1.124:porta;
+    }
+
+    server {
+        listen 80;
+
+        location / {
+            proxy_pass http://myride;
+        }
+    }
+}
