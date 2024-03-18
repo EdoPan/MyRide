@@ -84,7 +84,7 @@ websocket_info(Info, State) ->
 
 % Cowboy will call terminate/3 with the reason for the termination of the connection. 
 terminate(_Reason, _Req, _State = {BikeID, Username}) ->
-    % end_chat user from chatroom
+    % end_chat user from chat
     io:format("[chat_websocket] terminate => end_chat request received from Pid: ~p in the bike_id: ~p ~n", [self(), BikeID]),
     chat_server:end_chat(self(), Username, BikeID),
     ok.

@@ -57,7 +57,7 @@ start_nodes([]) ->
 
 start_nodes([Node | T]) ->
 	io:format("[master_node_app] start_nodes => ~p~n", [Node]),
-	spawn(Node, application, start, [chat_server]), % application:start(chat_server)
+	spawn(Node, application, start, [chat_node]), % application:start(chat_node)
 	start_nodes(T).
 
 
@@ -68,7 +68,7 @@ stop_nodes([]) ->
 
 stop_nodes([Node | T]) ->
 	io:format("[master_node_app] stop_nodes => ~p~n", [Node]),
-	spawn(Node, application, stop, [chat_server]),
+	spawn(Node, application, stop, [chat_node]),
 	stop_nodes(T).
 
 

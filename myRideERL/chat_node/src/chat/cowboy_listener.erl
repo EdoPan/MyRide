@@ -21,11 +21,11 @@ init(_) ->
 	% Compile the route for the websocket handler
 	Dispatch = cowboy_router:compile([
 		{'_', [
-			{Url, chatroom_websocket, []}
+			{Url, chat_websocket, []}
 		]}
 	]),
 	% Start listening for connections over a clear TCP channel 
-	{ok, Pid} = cowboy:start_clear(chatroom_listener,
+	{ok, Pid} = cowboy:start_clear(chat_listener,
 		[{port, Port}],
 		#{env => #{dispatch => Dispatch}}
 	),

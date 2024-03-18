@@ -60,7 +60,7 @@ remove_users_by_username(Username) ->
 	Fun = fun() ->
 		io:format("[mnesia_manager] remove_users_by_username => Remove all users ~p~n", [Username]),
 		Requests = #requests{username='$2', bike_id = '$3'},
-		Guard = {'==', '$1', Username},
+		Guard = {'==', '$2', Username},
 		RecordList = mnesia:select(requests, [{Requests, [Guard], ['$_']}]),
 		delete_by_username(RecordList)
 	end,
