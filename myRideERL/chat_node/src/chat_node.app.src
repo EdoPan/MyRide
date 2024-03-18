@@ -1,0 +1,19 @@
+{application, chat_node,
+ [{description, "An OTP application"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {mod, {chat_node_app, []}},
+  {applications,
+   [kernel,
+    stdlib,
+    cowboy,
+    jsone
+   ]},
+  {env,[
+    {websocket_endpoint, "/"},
+    {websocket_port, 8300}]},
+  {modules, []},
+
+  {licenses, ["Apache-2.0"]},
+  {links, []}
+ ]}.

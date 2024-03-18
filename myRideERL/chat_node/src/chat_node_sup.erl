@@ -1,4 +1,4 @@
--module(chat_server_sup).
+-module(chat_node_sup).
 -behaviour(supervisor).
 
 -export([start_link/0, init/1]).

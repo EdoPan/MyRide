@@ -85,3 +85,17 @@ http {
         }
     }
 }
+
+% Rebar3 create app and check dependencies
+rebar3 new app <app_name>
+rebar3 get-deps
+rebar3 tree
+
+% Rebar3 compile project
+rebar3 compile
+
+% Rebar3 Master Node (run inside master_node/)
+rebar3 shell --name master@127.0.0.1 --setcookie myRide
+
+% Rebar3 Chat Node (run inside chat_node/)
+rebar3 shell --name server@127.0.0.1 --setcookie myRide
