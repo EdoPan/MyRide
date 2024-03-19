@@ -10,7 +10,7 @@
 % Execute start_chat for user
 start_chat(Pid, Username, BikeID) when is_pid(Pid), is_integer(BikeID) ->
 	io:format("[chat_server] start_chat => pid ~p, bike_id ~p~n", [Pid, BikeID]),
-	mnesia_manager:join_course(Pid, Username, BikeID, node()).
+	mnesia_manager:start_chat(Pid, Username, BikeID).
 
 
 
@@ -18,7 +18,7 @@ start_chat(Pid, Username, BikeID) when is_pid(Pid), is_integer(BikeID) ->
 end_chat(Pid, Username, BikeID) when is_pid(Pid), is_integer(BikeID)->
 	io:format("[chat_server] end_chat => pid ~p, bike_id ~p~n", [Pid, BikeID]),
 	% Remove the websocket PID from DB list of users inside the chat
-	mnesia_manager:end_chat(Pid, Username, BikeID, node()),
+	mnesia_manager:end_chat(Pid, Username, BikeID),
 	ok.
 
 

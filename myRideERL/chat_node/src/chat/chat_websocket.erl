@@ -1,6 +1,6 @@
 -module(chat_websocket).
 
--export([init/2, websocket_handle/2, websocket_info/2, terminate/3]).
+-export([init/2, websocket_handle/2, websocket_info/2, terminate/3, terminate/2]).
 
 
 % Cowboy will call init/2 whenever a request is received,
@@ -49,8 +49,8 @@ handle_websocket_frame(Map, State) ->
 
 % Handle a start_chat request
 handle_start(Map, _State) ->
-    {ok, BikeID} = maps:find(<<"bike_id">>, Map),
-    {ok, Username} = maps:find(<<"username">>, Map),
+    BikeID = binary_to_integer(maps:get(<<"bike_id">>, Map)),
+    Username = maps:get(<<"username">>, Map),
     io:format(
         "[chat_websocket] handle_start => start_chat request received for bike_id ~p by user ~p~n",
         [BikeID, Username]
@@ -88,3 +88,7 @@ terminate(_Reason, _Req, _State = {BikeID, Username}) ->
     io:format("[chat_websocket] terminate => end_chat request received from Pid: ~p in the bike_id: ~p ~n", [self(), BikeID]),
     chat_server:end_chat(self(), Username, BikeID),
     ok.
+
+terminate({crash, error, {badmatch, BikeID}}, _State) ->
+    io:format("Received badmatch error with BikeID: ~p~n", [BikeID]),
+    {ok, _State}.
