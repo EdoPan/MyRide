@@ -88,7 +88,3 @@ terminate(_Reason, _Req, _State = {BikeID, Username}) ->
     io:format("[chat_websocket] terminate => end_chat request received from Pid: ~p in the bike_id: ~p ~n", [self(), BikeID]),
     chat_server:end_chat(self(), Username, BikeID),
     ok.
-
-terminate({crash, error, {badmatch, BikeID}}, _State) ->
-    io:format("Received badmatch error with BikeID: ~p~n", [BikeID]),
-    {ok, _State}.
