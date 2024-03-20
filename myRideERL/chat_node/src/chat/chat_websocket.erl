@@ -1,6 +1,6 @@
 -module(chat_websocket).
 
--export([init/2, websocket_handle/2, websocket_info/2, terminate/3, terminate/2]).
+-export([init/2, websocket_handle/2, websocket_info/2, terminate/3]).
 
 
 % Cowboy will call init/2 whenever a request is received,

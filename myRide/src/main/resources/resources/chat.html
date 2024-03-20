@@ -36,9 +36,12 @@
     <script>
       document.addEventListener("DOMContentLoaded", function () {
           if (localStorage.getItem("isMaintainer") === 'true') {
-            document.getElementById("li").innerHTML = `
-	          <a href="maintainer.html" class="nav-link">Maintainer</a>
-        	`
+            document.getElementById("maint").innerHTML = `
+              <a href="maintainer.html" class="nav-link">Maintainer</a>
+              `
+            document.getElementById("cha").innerHTML = `
+              <a href="chats.html" class="nav-link">Chats</a>
+              `
           }
       });
     </script>
@@ -53,8 +56,8 @@
 	        <ul class="navbar-nav ml-auto">
 	          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
 	          <li class="nav-item"><a href="stations.html" class="nav-link">Stations</a></li>
-	          <li class="nav-item active"><a href="chat.html" class="nav-link">Chat</a></li>
-            <li class="nav-item"id="li"></li>
+	          <li class="nav-item" id="cha"></li>
+            <li class="nav-item"id="maint"></li>
             <li id="logout_nav" class="nav-item"><a class="nav-link">Logout</a></li>
 	        </ul>
 	      </div>
