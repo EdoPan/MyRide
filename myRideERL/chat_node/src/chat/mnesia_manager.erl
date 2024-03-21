@@ -1,6 +1,6 @@
 -module(mnesia_manager).
 
--export([start_chat/3, end_chat/3, remove_users_by_username/1]).
+-export([start_chat/3, end_chat/3, remove_users_by_username/1, get_maintainer_pid/1]).
 
 -record(requests, {user_pid, username, bike_id}).
 
@@ -83,3 +83,26 @@ delete_by_username([{_, Username, BikeID} | T]) ->
 	),
 	io:format("[mnesia_manager] delete_by_username => User ~p removed from the chat ~p~n", [Username, BikeID]),
 	delete_by_username(T).
+
+% Get the process ids of the maintainer
+get_maintainer_pid(BikeID) when is_integer(BikeID) ->
+	Fun = fun() ->
+		Maintainer = #requests{user_pid='$1', username = '$2', bike_id = '$3'},
+		Guard = {'==', '$3', BikeID},
+		mnesia:select(requests, [{Maintainer, [Guard], ['$1']}])
+	end,
+	
+	{atomic, Result} = mnesia:transaction(Fun),
+	io:format("[mnesia_manager] get_maintainer_pid => ~p~n", [Result]),
+	Result.
+
+%get_maintainer_pid(BikeID) ->
+%    Fun =
+%        fun() ->
+%            mnesia:match_object({requests, '_', "maintainer", BikeID})
+%        end,
+%    {atomic, Response} = mnesia:transaction(Fun),
+%	Result = hd(Response),
+%	MaintainerPid = Result#requests.user_pid,
+%	io:format("[mnesia_manager] get_maintainer_pid => ~p~n", [MaintainerPid]),
+%   MaintainerPid.
