@@ -41,7 +41,11 @@ handle_websocket_frame(Map, State) ->
         <<"START">> ->
             handle_start(Map, State);
         <<"MESSAGE">> ->
-            handle_chat_message(Map, State)
+            handle_chat_message(Map, State);
+        <<"HEARTBEAT">> ->
+            handle_heartbeat(Map, State);
+        <<"CHAT_REQUESTS">> ->
+            handle_get_chat_requests(State)       
     end,
     Response.
 
@@ -57,6 +61,24 @@ handle_start(Map, _State) ->
     ),
     chat_server:start_chat(self(), Username, BikeID),
     {ok, {BikeID, Username}}. % init state with bike_id id and username
+
+% Handle a start_chat request
+handle_heartbeat(Map, _State) ->
+    BikeID = binary_to_integer(maps:get(<<"bike_id">>, Map)),
+    Username = maps:get(<<"username">>, Map),
+    io:format(
+        "[chat_websocket] handle_heartbeat => heartbeat received for bike_id ~p by user ~p~n",
+        [BikeID, Username]
+    ),
+    {ok, {BikeID, Username}}. % init state with bike_id id and username
+
+
+% Handle a request for getting chat requests
+handle_get_chat_requests(State = {_, _}) ->
+    io:format("[chat_websocket] handle_get_chat_requests => get_chat_requests request received~n"),
+    Message = chat_server:get_chat_requests(),
+    io:format("[chat_websocket] handle_get_chat_requests => Message ~p~n", [Message]),
+    {[{text, Message}], State}.
 
 
 

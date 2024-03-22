@@ -1,6 +1,6 @@
 -module(mnesia_manager).
 
--export([start_chat/3, end_chat/3, remove_users_by_username/1, get_maintainer_pid/1]).
+-export([start_chat/3, end_chat/3, remove_users_by_username/1, get_bike_pids/1, get_chat_requests/0]).
 
 -record(requests, {user_pid, username, bike_id}).
 
@@ -68,6 +68,19 @@ remove_users_by_username(Username) ->
 	io:format("[mnesia_manager] remove_users_by_username => transaction succeeded"),
 	ok.
 
+% Get all the active chat requests
+get_chat_requests()-> 
+	Fun = fun() ->
+		io:format("[mnesia_manager] get_chat_requests => Get all the chat requests"),
+		ChatRequests = #requests{user_pid='$1', username = '$2', bike_id = '$3'},
+		Guard = {'!=', '$2', "maintainer"},
+		mnesia:select(requests, [{ChatRequests, [Guard], ['$S2','$3']}])
+	end,
+	
+	{atomic, Result} = mnesia:transaction(Fun),
+	io:format("[mnesia_manager] get_chat_requests => Chat Requests: ~p~n", [Result]),
+	Result.
+
 
 
 % Recursively remove all users connected to the chat through the crashed erlang node
@@ -85,7 +98,7 @@ delete_by_username([{_, Username, BikeID} | T]) ->
 	delete_by_username(T).
 
 % Get the process ids of the maintainer
-get_maintainer_pid(BikeID) when is_integer(BikeID) ->
+get_bike_pids(BikeID) when is_integer(BikeID) ->
 	Fun = fun() ->
 		Maintainer = #requests{user_pid='$1', username = '$2', bike_id = '$3'},
 		Guard = {'==', '$3', BikeID},
@@ -93,7 +106,7 @@ get_maintainer_pid(BikeID) when is_integer(BikeID) ->
 	end,
 	
 	{atomic, Result} = mnesia:transaction(Fun),
-	io:format("[mnesia_manager] get_maintainer_pid => ~p~n", [Result]),
+	io:format("[mnesia_manager] get_bike_pids => ~p~n", [Result]),
 	Result.
 
 %get_maintainer_pid(BikeID) ->

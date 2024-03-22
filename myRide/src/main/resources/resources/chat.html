@@ -4,7 +4,6 @@
     <title>MyRide</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/owl.carousel.min.css">
@@ -51,7 +50,7 @@
         var bikeID = Number(urlParams.get("bike_id"));
         var username = localStorage.getItem("username");
         const ride = await getRideByUsername(username);
-        if(bikeID !== ride.bikeID) {
+        if(bikeID !== ride.bikeID && username != "maintainer") {
           window.location.href = "index.html";
         }
       }
@@ -104,7 +103,6 @@
         </div>
       </div>
     </div>
-
     <section class="ftco-section ftco-no-pt bg-light">
     	<div class="container">
     		<div class="row no-gutters">
@@ -158,6 +156,7 @@
     let websocket;
     const START = "START";
     const MESSAGE = "MESSAGE";
+    const HEARTBEAT = "HEARTBEAT"
     let id_timer = null;
     const serverUrl = "ws://127.0.0.1:8300/";
 
@@ -208,6 +207,27 @@
       websocket.send(JSON.stringify(json_string));
     }
 
+
+    /**
+    * this function execute an automatic refresh of the websocket connection every 20 sec
+    */
+    function refreshWebsocketConnection(){
+      // refresh interval time
+      const timeout = 20000;
+      if (websocket.readyState === websocket.OPEN){
+          // send the refresh message
+          sendObjectThroughWebsocket(true, HEARTBEAT, username, bikeID);
+          id_timer = setTimeout(refreshWebsocketConnection, timeout);
+      }
+    }
+
+    /**
+    * this function stop the automatic refresh of the websocket connection
+    */
+    function stopRefreshWebsocketConnection(){
+      clearTimeout(id_timer);
+    }
+
     /**
      * this function start the connection with websocket, sending the start message
      * and with the start of the automatic refresh of the websocket connection, by the call of the
@@ -216,12 +236,15 @@
     function openWebsocketConnection(){
         // creation json object
         sendObjectThroughWebsocket(true, START, username, bikeID);
+        // start of the counter for the websocket connection refresh
+        refreshWebsocketConnection();
     }
 
     /**
      * this function is invoked when the connection with the websocket is closed
      */
     function closeWebsocketConnection(){
+        stopRefreshWebsocketConnection();
         console.error("WebSocket connection closed");
         // Try to connect again to chat servers
         setTimeout(function() {
@@ -282,7 +305,7 @@
      *                      substituted by the YOU word
      * @param message is the text of the message
      * @param isMyMessage is a boolean, in order to understand if the sender is the user
-     *                    or another student
+     *                    or another one
      */
     function appendMessageToTheChat(sender_name, message, isMyMessage){
 
@@ -290,8 +313,8 @@
 
         const divMessageContainer = document.createElement("div");
 
-        const divStudentProfile = document.createElement("div");
-        divStudentProfile.setAttribute("class", "student-profile-image");
+        const divUserProfile = document.createElement("div");
+        divUserProfile.setAttribute("class", "user-profile-image");
 
         const divMessage = document.createElement("div");
         divMessage.setAttribute("class", "message");
@@ -315,7 +338,7 @@
         }
 
         chatContainer.appendChild(divMessageContainer);
-        divMessageContainer.appendChild(divStudentProfile);
+        divMessageContainer.appendChild(divUserProfile);
         divMessageContainer.appendChild(divMessage);
         divMessage.appendChild(divMessageHeader);
         divMessageHeader.appendChild(divMessageHeaderUsername);
