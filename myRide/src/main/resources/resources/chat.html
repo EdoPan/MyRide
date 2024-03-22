@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/chat.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <script>
       let username = null;
@@ -29,6 +30,32 @@
             username = localStorage.getItem("username");
           }
       });
+
+      async function getRideByUsername(username) {
+            const RIDE_ENDPOINT = "http://127.0.0.1:8080/ride/active/" + username;
+            let res = '';
+            await axios.get(RIDE_ENDPOINT)
+              .then(response => {
+                //console.log("Success:", response.data);
+                res = response.data;
+              })
+              .catch(error => {
+                //console.error("Error:", error);
+              });
+            return res;
+      }
+
+      async function check(){
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        var bikeID = Number(urlParams.get("bike_id"));
+        var username = localStorage.getItem("username");
+        const ride = await getRideByUsername(username);
+        if(bikeID !== ride.bikeID) {
+          window.location.href = "index.html";
+        }
+      }
+      check();
     </script>
 
   </head>
@@ -64,39 +91,40 @@
 	    </div>
 	  </nav>
     <!-- END nav -->
-
-    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/bg_5.jpg');" data-stellar-background-ratio="0.5">
+    <div class="hero-wrap ftco-degree-bg" style="background-image: url('images/bg_5.jpg');" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
       <div class="container">
-        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
-          <div class="col-md-9 ftco-animate pb-5">
-            <h1 class="mb-3 bread">Chat With Us</h1>
+        <div class="row slider-text align-items-center justify-content-start">
+          <div class="col-lg-8 ftco-animate">
+          	<div class="col-md-9 ftco-animate pb-5">
+	            <h1 class="mb-3 bread">Chat With Us</h1>
+	            <p style="font-size: 18px;">Wait for a maintainer to contact you. Messages sent before won't be seen.</p>
+            </div>
           </div>
         </div>
       </div>
-    </section>
-    <section class="ftco-section contact-section">
-      <div class="container">
-        <div class="row d-flex mb-5 contact-info">
-          <div class="col block-9 mb-md-5">
-            <div id="chat-container">
-              <div class="chat">
-                  <header class="form-control">
-                    <h5 class="mb-md-5">Chat</h5>
-                  </header>
-                  <main id="chatservice-chat"> </main>
-                  <div class="chat-submit-area">
-                      <input type="text" id="chat-submit-area-input" placeholder="Enter your message...">
-                      <button type="submit" class="btn btn-primary py-3 px-5" onclick="sendMessage()">
-                          Send
-                      </button>
+    </div>
+
+    <section class="ftco-section ftco-no-pt bg-light">
+    	<div class="container">
+    		<div class="row no-gutters">
+    			<div class="col-md-12	featured-top">
+                  <div id="chat-container">
+                    <div class="chat">
+                        <main id="chatservice-chat"> </main>
+                        <div class="chat-submit-area">
+                            <input type="text" id="chat-submit-area-input" placeholder="Enter your message...">
+                            <button type="submit" class="btn btn-primary py-3 px-5" onclick="sendMessage()">
+                                Send
+                            </button>
+                        </div>
+                    </div>
                   </div>
-              </div>
-          </div>
           </div>
         </div>
       </div>
     </section>
+
     
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
@@ -180,130 +208,130 @@
       websocket.send(JSON.stringify(json_string));
     }
 
-/**
- * this function start the connection with websocket, sending the start message
- * and with the start of the automatic refresh of the websocket connection, by the call of the
- * provided function
- */
-function openWebsocketConnection(){
-    // creation json object
-    sendObjectThroughWebsocket(true, START, username, bikeID);
-}
-
-/**
- * this function is invoked when the connection with the websocket is closed
- */
-function closeWebsocketConnection(){
-    console.error("WebSocket connection closed");
-    // Try to connect again to chat servers
-    setTimeout(function() {
-        connect(username, bikeID);
-    }, 1000);
-}
-
-/**
- * function that parse the JSON object received and execute the action
- * provided by the opcode parameter of the object
- * @param event is the JSON object that has to be parsed
- */
-function receiveObjectThroughWebsocket(event){
-    // parse of the JSON object received and execute
-    const message = JSON.parse(event.data);
-    if(message.opcode === MESSAGE){
-        appendMessageToTheChat(message.sender, message.text, false);
-    }
-    else{
-        alert("Unknown Message Received");
-    }
-}
-
-/**
- * function that handle possible errors with the websocket connection
- */
-function handleWebsocketError() {
-    if (websocket.readyState === 3) {
-        // Connection is closed
-        //alert("Error: cannot connect to chat server");
-    }
-    console.log("Websocket error");
-}
-
-/**
- * function that create a JSON object message with the provided function and
- * that append it directly to the chat of the user, because it is one of his messages
- */
-function sendMessage(){
-
-    const input_message = document.getElementById("chat-submit-area-input");
-    const message_text = input_message.value;
-    input_message.value = "";
-    
-    if (websocket.readyState === 3) {
-        // Connection closed
-        //alert("Error: the chat is offline. Please wait for reconnection");
-    }
-    else {
-        sendObjectThroughWebsocket(false, MESSAGE, message_text);
-        appendMessageToTheChat("You", message_text, true);
-    }
-}
-
-/**
- * function that append a message to the div of the chat
- * @param sender_name is the name of the sender, if the sender is the user it is
- *                      substituted by the YOU word
- * @param message is the text of the message
- * @param isMyMessage is a boolean, in order to understand if the sender is the user
- *                    or another student
- */
-function appendMessageToTheChat(sender_name, message, isMyMessage){
-
-    const chatContainer = document.getElementById("chatservice-chat");
-
-    const divMessageContainer = document.createElement("div");
-
-    const divStudentProfile = document.createElement("div");
-    divStudentProfile.setAttribute("class", "student-profile-image");
-
-    const divMessage = document.createElement("div");
-    divMessage.setAttribute("class", "message");
-
-    const divMessageHeader = document.createElement("div");
-    divMessageHeader.setAttribute("class", "message-header");
-
-    const divMessageHeaderUsername = document.createElement("div");
-    divMessageHeaderUsername.setAttribute("class", "message-header-username");
-    divMessageHeaderUsername.textContent = sender_name;
-
-    const divMessageContent = document.createElement("div");
-    divMessageContent.setAttribute("class", "message-content");
-    divMessageContent.textContent = message;
-
-    if(isMyMessage){
-        divMessageContainer.setAttribute("class", "message-container sent-message");
-    }
-    else{
-        divMessageContainer.setAttribute("class", "message-container received-message");
+    /**
+     * this function start the connection with websocket, sending the start message
+     * and with the start of the automatic refresh of the websocket connection, by the call of the
+     * provided function
+     */
+    function openWebsocketConnection(){
+        // creation json object
+        sendObjectThroughWebsocket(true, START, username, bikeID);
     }
 
-    chatContainer.appendChild(divMessageContainer);
-    divMessageContainer.appendChild(divStudentProfile);
-    divMessageContainer.appendChild(divMessage);
-    divMessage.appendChild(divMessageHeader);
-    divMessageHeader.appendChild(divMessageHeaderUsername);
-    divMessage.appendChild(divMessageContent);
-    
-    // Scroll chat to bottom
-    scrollChatToBottom();
-}
+    /**
+     * this function is invoked when the connection with the websocket is closed
+     */
+    function closeWebsocketConnection(){
+        console.error("WebSocket connection closed");
+        // Try to connect again to chat servers
+        setTimeout(function() {
+            connect(username, bikeID);
+        }, 1000);
+    }
 
-/**
- * Scroll chat to bottom
- */
-function scrollChatToBottom() {
-    const chat = document.getElementById("chatservice-chat");
-    chat.scrollTop = chat.scrollHeight;
-}
+    /**
+     * function that parse the JSON object received and execute the action
+     * provided by the opcode parameter of the object
+     * @param event is the JSON object that has to be parsed
+     */
+    function receiveObjectThroughWebsocket(event){
+        // parse of the JSON object received and execute
+        const message = JSON.parse(event.data);
+        if(message.opcode === MESSAGE){
+            appendMessageToTheChat(message.sender, message.text, false);
+        }
+        else{
+            alert("Unknown Message Received");
+        }
+    }
+
+    /**
+     * function that handle possible errors with the websocket connection
+     */
+    function handleWebsocketError() {
+        if (websocket.readyState === 3) {
+            // Connection is closed
+            //alert("Error: cannot connect to chat server");
+        }
+        console.log("Websocket error");
+    }
+
+    /**
+     * function that create a JSON object message with the provided function and
+     * that append it directly to the chat of the user, because it is one of his messages
+     */
+    function sendMessage(){
+
+        const input_message = document.getElementById("chat-submit-area-input");
+        const message_text = input_message.value;
+        input_message.value = "";
+        
+        if (websocket.readyState === 3) {
+            // Connection closed
+            //alert("Error: the chat is offline. Please wait for reconnection");
+        }
+        else {
+            sendObjectThroughWebsocket(false, MESSAGE, message_text);
+            appendMessageToTheChat("You", message_text, true);
+        }
+    }
+
+    /**
+     * function that append a message to the div of the chat
+     * @param sender_name is the name of the sender, if the sender is the user it is
+     *                      substituted by the YOU word
+     * @param message is the text of the message
+     * @param isMyMessage is a boolean, in order to understand if the sender is the user
+     *                    or another student
+     */
+    function appendMessageToTheChat(sender_name, message, isMyMessage){
+
+        const chatContainer = document.getElementById("chatservice-chat");
+
+        const divMessageContainer = document.createElement("div");
+
+        const divStudentProfile = document.createElement("div");
+        divStudentProfile.setAttribute("class", "student-profile-image");
+
+        const divMessage = document.createElement("div");
+        divMessage.setAttribute("class", "message");
+
+        const divMessageHeader = document.createElement("div");
+        divMessageHeader.setAttribute("class", "message-header");
+
+        const divMessageHeaderUsername = document.createElement("div");
+        divMessageHeaderUsername.setAttribute("class", "message-header-username");
+        divMessageHeaderUsername.textContent = sender_name;
+
+        const divMessageContent = document.createElement("div");
+        divMessageContent.setAttribute("class", "message-content");
+        divMessageContent.textContent = message;
+
+        if(isMyMessage){
+            divMessageContainer.setAttribute("class", "message-container sent-message");
+        }
+        else{
+            divMessageContainer.setAttribute("class", "message-container received-message");
+        }
+
+        chatContainer.appendChild(divMessageContainer);
+        divMessageContainer.appendChild(divStudentProfile);
+        divMessageContainer.appendChild(divMessage);
+        divMessage.appendChild(divMessageHeader);
+        divMessageHeader.appendChild(divMessageHeaderUsername);
+        divMessage.appendChild(divMessageContent);
+        
+        // Scroll chat to bottom
+        scrollChatToBottom();
+    }
+
+    /**
+     * Scroll chat to bottom
+     */
+    function scrollChatToBottom() {
+        const chat = document.getElementById("chatservice-chat");
+        chat.scrollTop = chat.scrollHeight;
+    }
   </script>
   </body>
 </html>
