@@ -12,7 +12,6 @@ start_link() ->
 init(_) ->
 	% Cleanup Mnesia (in case of restoring from a crash)
 	ok = mnesia_manager:remove_users_by_username(node()),
-	
 	% Read endpoint and port from configuration file
 	{ok, Url} = application:get_env(websocket_endpoint),
 	{ok, Port} = application:get_env(websocket_port),
@@ -20,9 +19,10 @@ init(_) ->
 
 	% Compile the route for the websocket handler
 	Dispatch = cowboy_router:compile([
-		{'_', [
-			{Url, chat_websocket, []}
-		]}
+	{'_', [
+		{Url, chat_websocket, []},  % Define the WebSocket route
+		{"/requests", http_server, []}  % Define the HTTP route
+	]}
 	]),
 	% Start listening for connections over a clear TCP channel 
 	{ok, Pid} = cowboy:start_clear(chat_listener,

@@ -71,11 +71,9 @@ remove_users_by_username(Username) ->
 % Get all the active chat requests
 get_chat_requests()-> 
 	Fun = fun() ->
-		io:format("[mnesia_manager] get_chat_requests => Get all the chat requests"),
-		ChatRequests = #requests{user_pid='$1', username = '$2', bike_id = '$3'},
-		Guard = {'!=', '$2', "maintainer"},
-		mnesia:select(requests, [{ChatRequests, [Guard], ['$S2','$3']}])
-	end,
+        io:format("[mnesia_manager] get_chat_requests => Get all the chat requests~n"),
+		mnesia:match_object({requests, '_', '_', '_'}) % Utilizziamo '$1', '$2', '$3' per riferirci ai campi della query
+    end,
 	
 	{atomic, Result} = mnesia:transaction(Fun),
 	io:format("[mnesia_manager] get_chat_requests => Chat Requests: ~p~n", [Result]),

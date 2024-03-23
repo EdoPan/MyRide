@@ -3,19 +3,9 @@
 %%%-------------------------------------------------------------------
 -module(chat_server).
 
--export([start_chat/3, end_chat/3, send_message/4, send_message_in_chat/3, get_chat_requests/0]).
+-export([start_chat/3, end_chat/3, send_message/4, send_message_in_chat/3]).
 
-% Get list of currently chat requests
-get_chat_requests() ->
-	io:format("[chat_server] get_chat_requests"),
-	Requests = mnesia_manager:get_chat_requests(),
-	Message = jsone:encode(
-        #{
-            <<"opcode">> => <<"GET_CHAT_REQUESTS">>,
-            <<"list">> => Requests
-        }
-    ),
-	Message.
+
 
 % Execute start_chat for user
 start_chat(Pid, Username, BikeID) when is_pid(Pid), is_integer(BikeID) ->
