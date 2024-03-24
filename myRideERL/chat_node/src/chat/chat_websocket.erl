@@ -9,7 +9,6 @@ init(Req, _State) ->
     % Switch to cowboy_websocket module
     {cowboy_websocket, Req, none}.
 
-
 % Cowboy will call websocket_handle/2 whenever a text, binary, ping or pong frame arrives from the client.
 websocket_handle(Frame = {text, Message}, State) ->
     io:format("[chat_websocket] websocket_handle => Frame: ~p, State: ~p~n", [Frame, State]),
@@ -30,8 +29,6 @@ websocket_handle(Frame = {text, Message}, State) ->
 websocket_handle(_Frame, State) ->
     {ok, State}.
 
-
-
 % Handle a frame after JSON decoding
 handle_websocket_frame(Map, State) ->
     io:format("[chat_websocket] handle_websocket_frame => Map is ~p~n", [Map]),
@@ -43,13 +40,9 @@ handle_websocket_frame(Map, State) ->
         <<"MESSAGE">> ->
             handle_chat_message(Map, State);
         <<"HEARTBEAT">> ->
-            handle_heartbeat(Map, State);
-        <<"CHAT_REQUESTS">> ->
-            handle_get_chat_requests(State)       
+            handle_heartbeat(Map, State)
     end,
     Response.
-
-
 
 % Handle a start_chat request
 handle_start(Map, _State) ->
@@ -62,26 +55,6 @@ handle_start(Map, _State) ->
     chat_server:start_chat(self(), Username, BikeID),
     {ok, {BikeID, Username}}. % init state with bike_id id and username
 
-% Handle a start_chat request
-handle_heartbeat(Map, _State) ->
-    BikeID = binary_to_integer(maps:get(<<"bike_id">>, Map)),
-    Username = maps:get(<<"username">>, Map),
-    io:format(
-        "[chat_websocket] handle_heartbeat => heartbeat received for bike_id ~p by user ~p~n",
-        [BikeID, Username]
-    ),
-    {ok, {BikeID, Username}}. % init state with bike_id id and username
-
-
-% Handle a request for getting chat requests
-handle_get_chat_requests(State = {_, _}) ->
-    io:format("[chat_websocket] handle_get_chat_requests => get_chat_requests request received~n"),
-    Message = chat_server:get_chat_requests(),
-    io:format("[chat_websocket] handle_get_chat_requests => Message ~p~n", [Message]),
-    {[{text, Message}], State}.
-
-
-
 % Handle a new message sent in the chat
 handle_chat_message(Map, State = {BikeID, Username}) ->
     io:format("[chat_websocket] handle_chat_message => message received from Pid: ~p in the bike_id: ~p ~n", [self(), BikeID]),
@@ -92,6 +65,15 @@ handle_chat_message(Map, State = {BikeID, Username}) ->
                                 binary_to_list(Text)),
     {ok, State}.
 
+% Handle a start_chat request
+handle_heartbeat(Map, _State) ->
+    BikeID = binary_to_integer(maps:get(<<"bike_id">>, Map)),
+    Username = maps:get(<<"username">>, Map),
+    io:format(
+        "[chat_websocket] handle_heartbeat => heartbeat received for bike_id ~p by user ~p~n",
+        [BikeID, Username]
+    ),
+    {ok, {BikeID, Username}}. % init state with bike_id id and username
 
 % Cowboy will call websocket_info/2 whenever an Erlang message arrives 
 % (=> from another Erlang process).
@@ -102,7 +84,6 @@ websocket_info({send_message, Msg}, State) ->
 websocket_info(Info, State) ->
     io:format("chat_websocket:websocket_info(Info, State) => Received info ~p~n", [Info]),
     {ok, State}.
-
 
 % Cowboy will call terminate/3 with the reason for the termination of the connection. 
 terminate(_Reason, _Req, _State = {BikeID, Username}) ->

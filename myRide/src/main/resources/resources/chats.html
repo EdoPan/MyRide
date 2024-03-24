@@ -12,9 +12,27 @@
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+      async function erlangTest() {
+        const ERLANG_ENDPOINT = 'http://127.0.0.1:8300/requests/';
+        let res = '';
+        await axios.get(ERLANG_ENDPOINT)
+          .then(response => {
+            console.log("Success:", response.data);
+            res = response.data;
+          })
+          .catch(error => {
+            console.error("Error:", error);
+          });
+        return res;
+      }
+      erlangTest();
+    </script>
 
   </head>
-  <body onload="connect(username,bikeID)" onunload="disconnect()">
+  <body onload="">
     <script>
       document.addEventListener("DOMContentLoaded", function () {
           if (localStorage.getItem("isMaintainer") === 'true') {

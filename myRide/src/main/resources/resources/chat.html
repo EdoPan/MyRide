@@ -32,7 +32,6 @@
 
       async function getRideByUsername(username) {
             const RIDE_ENDPOINT = "http://127.0.0.1:8080/ride/active/" + username;
-            const erlangTest = axios.get('http://127.0.0.1:8300/requests/');
             let res = '';
             await axios.get(RIDE_ENDPOINT)
               .then(response => {

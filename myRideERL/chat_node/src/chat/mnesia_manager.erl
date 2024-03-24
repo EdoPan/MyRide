@@ -72,14 +72,11 @@ remove_users_by_username(Username) ->
 get_chat_requests()-> 
 	Fun = fun() ->
         io:format("[mnesia_manager] get_chat_requests => Get all the chat requests~n"),
-		mnesia:match_object({requests, '_', '_', '_'}) % Utilizziamo '$1', '$2', '$3' per riferirci ai campi della query
+		qlc:e(qlc:q([X || X <- mnesia:table(requests)]))
     end,
-	
 	{atomic, Result} = mnesia:transaction(Fun),
 	io:format("[mnesia_manager] get_chat_requests => Chat Requests: ~p~n", [Result]),
 	Result.
-
-
 
 % Recursively remove all users connected to the chat through the crashed erlang node
 delete_by_username([]) ->
@@ -106,14 +103,3 @@ get_bike_pids(BikeID) when is_integer(BikeID) ->
 	{atomic, Result} = mnesia:transaction(Fun),
 	io:format("[mnesia_manager] get_bike_pids => ~p~n", [Result]),
 	Result.
-
-%get_maintainer_pid(BikeID) ->
-%    Fun =
-%        fun() ->
-%            mnesia:match_object({requests, '_', "maintainer", BikeID})
-%        end,
-%    {atomic, Response} = mnesia:transaction(Fun),
-%	Result = hd(Response),
-%	MaintainerPid = Result#requests.user_pid,
-%	io:format("[mnesia_manager] get_maintainer_pid => ~p~n", [MaintainerPid]),
-%   MaintainerPid.
