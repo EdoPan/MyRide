@@ -1,5 +1,5 @@
 -module(chats_handler).
-%-behaviour(cowboy_rest).
+-behaviour(cowboy_rest).
 
 %% Callback Callbacks
 -export([allowed_methods/2]).
@@ -15,12 +15,11 @@
 -record(requests, {user_pid, username, bike_id}).
 
 init(Req, State) ->
-    io:format("DEBUG1"),
     Method = cowboy_req:method(Req),
     HasBody = cowboy_req:has_body(Req),
     Reply = handle(Method, HasBody, Req),
-    {ok, Reply, State}.
-    %{cowboy_rest, Req, State}.
+    {ok, Reply, State},
+    {cowboy_rest, Reply, State}.
 
 allowed_methods(Req, State) ->
     {[<<"GET">> , <<"POST">>], Req, State}.
@@ -48,26 +47,24 @@ iter_chat_list([], Acc) ->
     lists:reverse(Acc);
 
 iter_chat_list([Request | Rest], Acc) ->
-    #requests{user_pid = UserPid, username = Username, bike_id = BikeID} =
-        Request,
+    #requests{user_pid = UserPid, username = Username, bike_id = BikeID} = Request,
     UserTuple = {<<"user_pid">>, UserPid},
     UsernameTuple = {<<"username">>, Username},
     BikeTuple = {<<"bike_id">>, BikeID},
-    iter_chat_list(Rest, [UserTuple, UsernameTuple, BikeTuple | Acc]).
+    iter_chat_list(Rest, [BikeTuple, UsernameTuple, UserTuple | Acc]).
 
-handle(_, true, Req) ->
-    io:format("[CHATS REQUESTS HANDLER] Handling chats requests in handle/3~n", []),
-    io:format("DEBUG2"),
+handle(_, false, Req) ->
+    io:format("[chats_handler] => handle~n", []),
     Requests = mnesia_manager:get_chat_requests(),
     ResultList = {iter_chat_list(Requests)},
     JsonString = jsone:encode(ResultList),
-    BinString = iolist_to_binary([JsonString]),
-    Resp = cowboy_req:reply(
-        200,
-        #{<<"content-type">> => <<"text/plain">>},
-        BinString
-        ),
-    io:format("HISTORY HANDLER] Response sent from handle/3~n");
+        Resp = cowboy_req:reply(         
+            200,         
+        #{<<"content-type">> => <<"application/json">>},         
+        JsonString,
+        Req
+    ),
+    {ok, Resp};
 
 handle(_, _, Req) ->
     cowboy_req:reply(

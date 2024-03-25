@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,7 +43,7 @@ public class UserView {
         try{
             response = UserController.checkIfMaintainer(username);
         } catch (Exception e){
-            System.out.println("[RIDE VIEW] Impossible to fetch the ride");
+            System.out.println("[USER VIEW] Impossible to fetch the user");
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(response);
@@ -56,7 +55,7 @@ public class UserView {
         try{
             result = UserController.getChatRequests();
         } catch (Exception e){
-        System.out.println("[AUCTION VIEW] Impossible to get active chats");
+        System.out.println("[USER VIEW] Impossible to get active chats");
             return new ResponseEntity<>("NOT_FOUND" , HttpStatus.NOT_FOUND);
 
         }

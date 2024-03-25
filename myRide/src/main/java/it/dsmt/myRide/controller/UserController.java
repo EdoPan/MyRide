@@ -41,14 +41,6 @@ public class UserController {
     public static String getChatRequests() throws RuntimeException{
         try{
             String res = MasterNode.getChatRequests();
-            String charsToRemove = "{";
-            for (char c : charsToRemove.toCharArray()) {
-                res = res.replace(String.valueOf(c), "");
-            }
-            charsToRemove = "}";
-            for (char c : charsToRemove.toCharArray()) {
-                res = res.replace(String.valueOf(c), "");
-            }
             return res;
         }catch(RuntimeException e){
             throw e;
