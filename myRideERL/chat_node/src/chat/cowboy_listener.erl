@@ -20,8 +20,7 @@ init(_) ->
 	% Compile the route for the websocket handler
 	Dispatch = cowboy_router:compile([
 	{'_', [
-		{Url, chat_websocket, []},  % Define the WebSocket route
-		{"/requests", http_server, []}  % Define the HTTP route
+		{Url, chat_websocket, []}  % Define the WebSocket route
 	]}
 	]),
 	% Start listening for connections over a clear TCP channel 

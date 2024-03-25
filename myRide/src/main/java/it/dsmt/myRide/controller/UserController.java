@@ -1,5 +1,6 @@
 package it.dsmt.myRide.controller;
 import it.dsmt.myRide.dto.LoginDTO;
+import it.dsmt.myRide.model.MasterNode;
 import it.dsmt.myRide.model.User;
 
 public class UserController {
@@ -33,6 +34,23 @@ public class UserController {
         try {
             return user.checkIfMaintainer();
         } catch (Exception e){
+            throw e;
+        }
+    }
+
+    public static String getChatRequests() throws RuntimeException{
+        try{
+            String res = MasterNode.getChatRequests();
+            String charsToRemove = "{";
+            for (char c : charsToRemove.toCharArray()) {
+                res = res.replace(String.valueOf(c), "");
+            }
+            charsToRemove = "}";
+            for (char c : charsToRemove.toCharArray()) {
+                res = res.replace(String.valueOf(c), "");
+            }
+            return res;
+        }catch(RuntimeException e){
             throw e;
         }
     }

@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,6 +48,19 @@ public class UserView {
             return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/chats")
+    public ResponseEntity<String> getChatRequests(){
+        String result = "";
+        try{
+            result = UserController.getChatRequests();
+        } catch (Exception e){
+        System.out.println("[AUCTION VIEW] Impossible to get active chats");
+            return new ResponseEntity<>("NOT_FOUND" , HttpStatus.NOT_FOUND);
+
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 }

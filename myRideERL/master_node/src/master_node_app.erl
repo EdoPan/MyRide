@@ -12,6 +12,8 @@
 start(_StartType, _StartArgs) ->
 	% Connect to cluster nodes
 	{ok, Nodes} = application:get_env(nodes),
+	%{ok, Port} = application:get_env(http_rest_port),
+	%io:format("[cowboy_listener] init => Start listener on and port ~p~n", [Port]),
 	io:format("[master_node_app] start => Nodes ~p~n", [Nodes]),
 	connect_nodes(Nodes),
 	
@@ -26,9 +28,21 @@ start(_StartType, _StartArgs) ->
 	% Print info about mnesia DB
 	timer:sleep(5000),
 	mnesia:info(),
-	
-	% Return current Pid and state
-	{ok, self(), Nodes}.
+
+	Dispatch = cowboy_router:compile([
+        {'_', [
+            {"/chats", chats_handler, []}
+        ]}
+    ]),
+    {ok, _} = cowboy:start_clear(
+        http_listener,
+        [{port, 8023}],
+        #{env => #{dispatch => Dispatch}}
+    ),
+    io:format("[MASTER NODE] Cowboy started on port ~p~n", [8023]),
+
+    % Return current Pid and state
+    {ok, self(), Nodes}.
 
 
 

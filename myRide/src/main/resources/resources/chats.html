@@ -16,11 +16,11 @@
 
     <script>
       async function erlangTest() {
-        const ERLANG_ENDPOINT = 'http://127.0.0.1:8300/requests/';
+        const CHATS_ENDPOINT = 'http://127.0.0.1:8080/chats';
         let res = '';
-        await axios.get(ERLANG_ENDPOINT)
+        await axios.get(CHATS_ENDPOINT)
           .then(response => {
-            console.log("Success:", response.data);
+            console.log("Success:", response);
             res = response.data;
           })
           .catch(error => {
