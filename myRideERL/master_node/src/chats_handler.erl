@@ -1,17 +1,8 @@
 -module(chats_handler).
 -behaviour(cowboy_rest).
 
-%% Callback Callbacks
--export([allowed_methods/2]).
--export([content_types_accepted/2]).
--export([resource_exists/2]).
--export([commands/2]).
-
--export([handle/3, init/2]).
-
-%% Helpes
+-export([allowed_methods/2, content_types_accepted/2, resource_exists/2, commands/2, handle/3, init/2]).
 -import(helper, [get_body/2, get_model/3, reply/3]).
-
 -record(requests, {user_pid, username, bike_id}).
 
 init(Req, State) ->

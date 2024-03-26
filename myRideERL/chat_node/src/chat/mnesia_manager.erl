@@ -1,7 +1,6 @@
 -module(mnesia_manager).
 
--export([start_chat/3, end_chat/3, remove_users_by_username/1, get_bike_pids/1, get_chat_requests/0]).
-
+-export([start_chat/3, end_chat/3, remove_users_by_username/1, get_bike_pids/1]).
 -record(requests, {user_pid, username, bike_id}).
 
 % Add a user to a given chat
@@ -34,8 +33,6 @@ start_chat(UserPid, Username, BikeID)
 	io:format("[mnesia_manager] start_chat => chat start request returned response: ~p~n",[Result]),
 	Result.
 
-
-
 % Remove a user from a given chat
 end_chat(UserPid, Username, BikeID) when is_pid(UserPid), is_integer(BikeID) -> 
 	Fun = fun() ->
@@ -53,8 +50,6 @@ end_chat(UserPid, Username, BikeID) when is_pid(UserPid), is_integer(BikeID) ->
 	io:format("[mnesia_manager] end_chat => transaction result is ~p~n", [Result]),
 	Result.
 
-
-
 % Remove all the users connected to this server
 remove_users_by_username(Username) ->
 	Fun = fun() ->
@@ -67,16 +62,6 @@ remove_users_by_username(Username) ->
 	{atomic, ok} = mnesia:transaction(Fun),
 	io:format("[mnesia_manager] remove_users_by_username => transaction succeeded"),
 	ok.
-
-% Get all the active chat requests
-get_chat_requests()-> 
-	Fun = fun() ->
-        io:format("[mnesia_manager] get_chat_requests => Get all the chat requests~n"),
-		qlc:e(qlc:q([X || X <- mnesia:table(requests)]))
-    end,
-	{atomic, Result} = mnesia:transaction(Fun),
-	io:format("[mnesia_manager] get_chat_requests => Chat Requests: ~p~n", [Result]),
-	Result.
 
 % Recursively remove all users connected to the chat through the crashed erlang node
 delete_by_username([]) ->

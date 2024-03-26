@@ -1,3 +1,6 @@
+-- sqlite3 myRide.db
+-- sqlite> .read db.sql
+
 -- Queries SQL
 
 CREATE TABLE users (
@@ -51,51 +54,3 @@ INSERT INTO bikes(type, price, stationID) VALUES ('tandem', 1.00, 1);
 INSERT INTO bikes(type, price, stationID) VALUES ('tandem', 1.00, 1);
 INSERT INTO bikes(type, price, stationID) VALUES ('tandem', 1.00, 1);
 INSERT INTO bikes(type, price, stationID) VALUES ('tandem', 1.00, 1);
-
-// Comportamento nodi Erlang
-
-10.2.1.122 -> master node -> fa spawnare le chat sui container inizializza i DB Mnesia 
-    Nota sui DB Mnesia è che questi condividono gli stessi dati fra di loro
-10.2.1.123-124 -> slave node -> fanno l'handling delle chat
-
-// NGINX
-10.2.1.121 -> backend, frontend, database
-10.2.1.122 -> backed, frontend, database, NGINX, master node Erlang
-10.2.1.123 -> slave node Erlang
-10.2.1.124 -> slave node Erlang
-
-Creare file: nginx.conf
-Spostarlo in: etc/nginx
-Riavviare il servizio NGINX: systemctl restart nginx
-
-# Inizio file
-
-http {
-    upstream myride {
-        least_conn;
-        server 10.2.1.123:porta;
-        server 10.2.1.124:porta;
-    }
-
-    server {
-        listen 80;
-
-        location / {
-            proxy_pass http://myride;
-        }
-    }
-}
-
-% Rebar3 create app and check dependencies
-rebar3 new app <app_name>
-rebar3 get-deps
-rebar3 tree
-
-% Rebar3 compile project
-rebar3 compile
-
-% Rebar3 Master Node (run inside master_node/)
-rebar3 shell --name master@127.0.0.1 --setcookie myRide
-
-% Rebar3 Chat Node (run inside chat_node/)
-rebar3 shell --name server@127.0.0.1 --setcookie myRide

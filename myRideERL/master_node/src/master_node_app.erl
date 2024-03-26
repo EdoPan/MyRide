@@ -1,13 +1,8 @@
-%%%-------------------------------------------------------------------
-%% @doc master_node public API
-%% @end
-%%%-------------------------------------------------------------------
-
 -module(master_node_app).
 -behaviour(application).
 
 -export([start/2, stop/1]).
-
+-record(requests, {user_pid, username, bike_id}).
 
 start(_StartType, _StartArgs) ->
 	% Connect to cluster nodes
@@ -39,12 +34,10 @@ start(_StartType, _StartArgs) ->
         [{port, 8023}],
         #{env => #{dispatch => Dispatch}}
     ),
-    io:format("[MASTER NODE] Cowboy started on port ~p~n", [8023]),
+    io:format("[master_node_app] Cowboy started on port ~p~n", [8023]),
 
     % Return current Pid and state
     {ok, self(), Nodes}.
-
-
 
 stop(Nodes) ->
 	io:format("[master_node_app] stop => master_node_app:stop(~p)~n", [Nodes]),
@@ -74,8 +67,6 @@ start_nodes([Node | T]) ->
 	spawn(Node, application, start, [chat_node]), % application:start(chat_node)
 	start_nodes(T).
 
-
-
 %% Stop remote nodes
 stop_nodes([]) ->
 	ok;
@@ -84,12 +75,6 @@ stop_nodes([Node | T]) ->
 	io:format("[master_node_app] stop_nodes => ~p~n", [Node]),
 	spawn(Node, application, stop, [chat_node]),
 	stop_nodes(T).
-
-
-
-%%% MNESIA
-
--record(requests, {user_pid, username, bike_id}).
 
 start_mnesia(Nodes) when is_list(Nodes) ->
 	% Create mnesia schema if doesn't exists

@@ -123,6 +123,23 @@
                   <input type="submit" value="Delete" class="btn btn-danger py-3 px-4">
                 </div>
               </form>
+              <br>
+
+              <form action="" class="request-form ftco-animate bg-primary" id="delete_bike_form">
+                <h2>Delete Bike</h2>
+                <div class="d-flex">
+                  <div class="form-group mr-2">
+                    <div class="form-group">
+                      <label for="bike_id_delete" class="label">Bike ID</label>
+                      <input type="number" class="form-control" id="bike_id" required="">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input type="submit" value="Delete" class="btn btn-danger py-3 px-4">
+                </div>
+              </form>
+
           </div>
 				</div>
   		</div>
@@ -210,6 +227,21 @@
               //console.error("Error:", error);
           });
 
+      location.reload();    
+  });
+
+  document.getElementById("delete_bike_form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const bikeID = document.getElementById("bike_id").value;
+      const DELETE_BIKE_ENDPOINT = "http://127.0.0.1:8080/bike/" + bikeID;
+      // Make Axios requests
+      axios.delete(DELETE_BIKE_ENDPOINT)
+          .then(response => {
+              console.log("Success:", response.data);
+          })
+          .catch(error => {
+              console.error("Error:", error);
+          });
       location.reload();    
   });
 

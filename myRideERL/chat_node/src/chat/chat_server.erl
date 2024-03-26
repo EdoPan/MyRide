@@ -1,18 +1,11 @@
-%%%-------------------------------------------------------------------
-%% Module that instantiate a chat server using Cowboy library.
-%%%-------------------------------------------------------------------
 -module(chat_server).
 
 -export([start_chat/3, end_chat/3, send_message/4, send_message_in_chat/3]).
-
-
 
 % Execute start_chat for user
 start_chat(Pid, Username, BikeID) when is_pid(Pid), is_integer(BikeID) ->
 	io:format("[chat_server] start_chat => pid ~p, bike_id ~p~n", [Pid, BikeID]),
 	mnesia_manager:start_chat(Pid, Username, BikeID).
-
-
 
 % Execute end_chat for user
 end_chat(Pid, Username, BikeID) when is_pid(Pid), is_integer(BikeID)->
@@ -20,7 +13,6 @@ end_chat(Pid, Username, BikeID) when is_pid(Pid), is_integer(BikeID)->
 	% Remove the websocket PID from DB list of users inside the chat
 	mnesia_manager:end_chat(Pid, Username, BikeID),
 	ok.
-
 
 % Send a message in the chat
 send_message(PidSender, SenderName, BikeID, Text) 
@@ -52,7 +44,6 @@ send_message(PidSender, SenderName, BikeID, Text)
 			PidSender ! {send_message, PidSender, "Error: bike_id does not exist~n"}
 	end,
 	ok.
-
 
 %% send_message_in_chat/3: send a message in a chat
 send_message_in_chat([], _PidSender, _Message) when is_pid(_PidSender) ->

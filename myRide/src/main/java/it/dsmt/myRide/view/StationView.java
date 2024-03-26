@@ -12,7 +12,6 @@ import it.dsmt.myRide.controller.StationController;
 import it.dsmt.myRide.model.Station;
 import java.util.List;
 
-
 @Controller
 public class StationView {
 
@@ -71,5 +70,4 @@ public class StationView {
         }
         return new ResponseEntity<>("Bikes listed!", HttpStatus.OK);
     }
-    
 }

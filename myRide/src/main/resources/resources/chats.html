@@ -141,8 +141,10 @@
 
       async function setupPage() {
         const responseData = await getChatRequests();
-        const parsedData = parseRequestsList(responseData);
-        fillPage(parsedData);
+        if (responseData !== "") {
+          const parsedData = parseRequestsList(responseData);
+          fillPage(parsedData);
+        }
       }
   </script>
   </body>

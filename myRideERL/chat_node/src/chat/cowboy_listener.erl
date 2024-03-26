@@ -3,11 +3,9 @@
 
 -export([start_link/0, init/1, handle_call/3, handle_cast/2]).
 
-
 start_link() ->
 	io:format("[cowboy_listener] start_link~n"),
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
-
 
 init(_) ->
 	% Cleanup Mnesia (in case of restoring from a crash)
@@ -31,12 +29,8 @@ init(_) ->
 	io:format("[cowboy_listener] init => cowboy is listening from process ~p~n", [Pid]),
 	{ok, []}.
 
-
-
 handle_call(Req, _, State) ->
 	{reply, Req, State}.
-
-
 
 handle_cast(_, State) ->
 	{noreply, State}.

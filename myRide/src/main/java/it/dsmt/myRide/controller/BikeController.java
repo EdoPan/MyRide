@@ -45,7 +45,6 @@ public class BikeController {
         }    
     }
 
-
     public static void removeBike(int id) throws Exception{
         Bike bike = Bike.getBikeByID(id);
         try{

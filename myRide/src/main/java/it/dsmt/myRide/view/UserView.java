@@ -55,11 +55,10 @@ public class UserView {
         try{
             result = UserController.getChatRequests();
         } catch (Exception e){
-        System.out.println("[USER VIEW] Impossible to get active chats");
+            System.out.println("[USER VIEW] Impossible to get active chats");
             return new ResponseEntity<>("NOT_FOUND" , HttpStatus.NOT_FOUND);
 
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-
 }

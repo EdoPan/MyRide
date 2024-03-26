@@ -77,7 +77,7 @@ public class Ride {
             res.getInt("bikeID"), res.getString("username"));
             res.close();
          } catch (SQLException e) {
-             System.out.println(e.getMessage());
+            System.out.println(e.getMessage());
          }
          return ride;
     }

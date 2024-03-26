@@ -50,7 +50,7 @@ public class UserController {
                 res = res.replace(String.valueOf(c), "");
             }
             return res;
-        }catch(RuntimeException e){
+        } catch (RuntimeException e){
             throw e;
         }
     }

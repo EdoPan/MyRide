@@ -109,8 +109,8 @@ public class Bike {
     }
 
     public void addBike(){
-        String query = "INSERT INTO bikes(type, price, condition, stationID) VALUES('" + this.type + "'," + this.price + 
-        ",'" + "new" + "'," + this.stationID + ")";
+        String query = "INSERT INTO bikes(type, price, stationID) VALUES('" + this.type + "'," + this.price + 
+        "," + this.stationID + ")";
         try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
             stmt.executeUpdate(query);
             } catch (SQLException e) {

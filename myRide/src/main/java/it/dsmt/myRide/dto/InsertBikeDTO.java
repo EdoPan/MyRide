@@ -4,7 +4,6 @@ public class InsertBikeDTO {
     private String type;
     private int quantity;
     private int stationID;
- 
 
     public InsertBikeDTO(String type, int quantity, int stationID){
         this.type = type;
