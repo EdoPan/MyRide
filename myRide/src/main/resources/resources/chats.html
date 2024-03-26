@@ -13,26 +13,8 @@
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-    <script>
-      async function erlangTest() {
-        const CHATS_ENDPOINT = 'http://127.0.0.1:8080/chats';
-        let res = '';
-        await axios.get(CHATS_ENDPOINT)
-          .then(response => {
-            console.log("Success:", response);
-            res = response.data;
-          })
-          .catch(error => {
-            console.error("Error:", error);
-          });
-        return res;
-      }
-      erlangTest();
-    </script>
-
   </head>
-  <body onload="">
+  <body onload="setupPage()">
     <script>
       document.addEventListener("DOMContentLoaded", function () {
           if (localStorage.getItem("isMaintainer") === 'true') {
@@ -42,6 +24,9 @@
             document.getElementById("cha").innerHTML = `
               <a href="chats.html" class="nav-link">Chats</a>
               `
+          }
+          else{
+            location.href = "index.html"
           }
       });
     </script>
@@ -75,50 +60,12 @@
         </div>
       </div>
     </section>
-
-	<section class="ftco-section bg-light">
-		<div class="container">
-			<div class="row">
-                <div class="col-md-4">
-					<div class="car-wrap rounded ftco-animate fadeInUp ftco-animated">
-						<div class="text">
-							<h2 class="mb-0"><a href="#">Chat bikeID</a></h2>
-							<div class="d-flex mb-3">
-								<span class="cat">Username</span>
-							</div>
-							<p class="d-flex mb-0 d-block"></p>
-						</div>
-					</div>
-                </div>
-
-                <div class="col-md-4">
-					<div class="car-wrap rounded ftco-animate fadeInUp ftco-animated">
-						<div class="text">
-							<h2 class="mb-0"><a href="#">Chat bikeID</a></h2>
-							<div class="d-flex mb-3">
-								<span class="cat">Username</span>
-							</div>
-							<p class="d-flex mb-0 d-block"></p>
-						</div>
-					</div>
-                </div>
-
-                <div class="col-md-4">
-					<div class="car-wrap rounded ftco-animate fadeInUp ftco-animated">
-						<div class="text">
-							<h2 class="mb-0"><a href="#">Chat bikeID</a></h2>
-							<div class="d-flex mb-3">
-								<span class="cat">Username</span>
-							</div>
-							<p class="d-flex mb-0 d-block"></p>
-						</div>
-					</div>
-                </div>
-
-
-			</div>
-		</div>
-	</section>
+    <section class="ftco-section bg-light">
+      <div class="container">
+        <div class="row" id="main-row-chats">
+        </div>
+      </div>
+    </section>
     
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
@@ -147,7 +94,56 @@
         localStorage.removeItem("isMaintainer");
         window.location.href = "login.html";
     });
-  </script>
 
+    async function getChatRequests() {
+        const CHATS_ENDPOINT = 'http://127.0.0.1:8080/chats';
+        let res = '';
+        await axios.get(CHATS_ENDPOINT)
+          .then(response => {
+            res = response.data;
+          })
+          .catch(error => {
+          });
+        return res;
+      }
+
+      function fillPage(responseData) {
+        let mainRow = document.getElementById("main-row-chats");
+			  responseData?.forEach(function (request) {
+          if(request.username != "maintainer"){
+				    let card = document.createElement("div");
+				    card.className="col-md-4";
+				    card.innerHTML = `
+					    <div class="car-wrap rounded ftco-animate fadeInUp ftco-animated">
+						    <div class="img rounded d-flex align-items-end" style="background-image: url(images/chat_bg.png);"></div>
+                <div class="text">
+							    <h2 class="mb-0"><a href="/chat.html?bike_id=${request.bike_id}">Username: ${request.username}</a></h2>
+							    <p class="d-flex mb-0 d-block">BikeID: ${request.bike_id}</p>
+						    </div>
+					    </div>
+				    `;
+				    mainRow.appendChild(card);
+          }
+        });
+      }
+
+      function parseRequestsList(responseData) {
+        let cleanedData = responseData.replace("{", "");
+        cleanedData = cleanedData.replace("}", "");
+        let valueList = cleanedData.split(",");
+        let res = [];
+        for (let i = 0; i < valueList.length; i += 3) {
+          let obj = JSON.parse("{" + valueList[i] + "," + valueList[i + 1] + "," + valueList[i + 2] + "}");
+          res.push(obj);
+        }
+        return res;
+      }
+
+      async function setupPage() {
+        const responseData = await getChatRequests();
+        const parsedData = parseRequestsList(responseData);
+        fillPage(parsedData);
+      }
+  </script>
   </body>
 </html>

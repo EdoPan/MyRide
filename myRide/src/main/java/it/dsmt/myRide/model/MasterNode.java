@@ -19,8 +19,6 @@ public class MasterNode {
 
             // Leggi la risposta dal server Erlang
             int responseCode = connection.getResponseCode();
-            System.out.println("HTTP Response Code: " + responseCode);
-
             if (responseCode != 200) {
                 throw new RuntimeException("HTTP Response Code: " + responseCode);
             }
@@ -35,10 +33,7 @@ public class MasterNode {
                 // Chiudere la connessione
                 connection.disconnect();
              }
-            // Stampare o elaborare il corpo della risposta qui
-            System.out.println("Response Body: " + response.toString());
             return response.toString();
-            // Puoi leggere la risposta dal server utilizzando connection.getInputStream() se necessario
 
         } catch (Exception e) {
             e.printStackTrace();
