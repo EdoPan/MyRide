@@ -44,7 +44,7 @@ public class UserView {
             response = UserController.checkIfMaintainer(username);
         } catch (Exception e){
             System.out.println("[USER VIEW] Impossible to fetch the user");
-            return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(response);
     }

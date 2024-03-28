@@ -22,7 +22,7 @@ public class StationView {
             response = StationController.getStationByID(id);
         } catch (Exception e){
             System.out.println("Impossible to fetch the station");
-            return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(response);
     }
@@ -34,7 +34,7 @@ public class StationView {
             response = StationController.getStations(type);
         } catch (Exception e){
             System.out.println("Impossible to fetch stations");
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(response);
     }
@@ -44,10 +44,10 @@ public class StationView {
         try{
             StationController.addStation(station.getAddress());
         } catch (Exception e){
-            return new ResponseEntity("ERROR", null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("ERROR", null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
-        return new ResponseEntity("Station inserted",null, HttpStatus.OK);
+        return new ResponseEntity<>("Station inserted",null, HttpStatus.OK);
     }
 
     @DeleteMapping("/station/{id_station}")

@@ -58,3 +58,9 @@ rebar3.crashdump
 
 ### Mnesia ###
 Mnesia.*
+
+### MacOS ###
+.DS_Store
+
+### RQLite ###
+data/

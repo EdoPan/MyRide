@@ -23,7 +23,7 @@ public class BikeView {
             response = BikeController.getBikeByID(id);
         } catch (Exception e){
             System.out.println("[BIKE VIEW] Impossible to fetch the bike");
-            return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(response);
     }
@@ -35,7 +35,7 @@ public class BikeView {
             response = BikeController.getAllBikes();
         } catch (Exception e){
             System.out.println("[BIKE VIEW] Impossible to fetch all bikes");
-            return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(response);
     }

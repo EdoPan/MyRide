@@ -24,7 +24,7 @@ public class RideView {
             response = RideController.getRideByID(id);
         } catch (Exception e){
             System.out.println("[RIDE VIEW] Impossible to fetch the ride");
-            return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(response);
     }
@@ -36,7 +36,7 @@ public class RideView {
             response = RideController.getActiveRide(username);
         } catch (Exception e){
             System.out.println("Impossible to fetch the active ride");
-            return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(response);
     }

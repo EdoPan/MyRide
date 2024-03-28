@@ -2,19 +2,20 @@ package it.dsmt.myRide.controller;
 import it.dsmt.myRide.dto.LoginDTO;
 import it.dsmt.myRide.model.MasterNode;
 import it.dsmt.myRide.model.User;
+import com.rqlite.NodeUnavailableException;
 
 public class UserController {
 
-    public static void registerUser(String username, String password) throws Exception{
+    public static void registerUser(String username, String password) throws NodeUnavailableException{
         User user = new User(username, password, false);
         try{
             user.register();
-        } catch (Exception e){
+        } catch (NodeUnavailableException e){
             throw e;
         }  
     }
     
-    public static LoginDTO loginUser(String username, String password) throws Exception{
+    public static LoginDTO loginUser(String username, String password) throws Exception, NodeUnavailableException{
         User user = new User(username, password, false);
         try {
             if(user.login()){
@@ -24,16 +25,16 @@ public class UserController {
             else{
                 throw new Exception();
             }
-        } catch (Exception e){
+        } catch (NodeUnavailableException e){
             throw e;
         }
     }
 
-    public static boolean checkIfMaintainer(String username) throws Exception{
+    public static boolean checkIfMaintainer(String username) throws NodeUnavailableException{
         User user = User.getUserByUsername(username);
         try {
             return user.checkIfMaintainer();
-        } catch (Exception e){
+        } catch (NodeUnavailableException e){
             throw e;
         }
     }

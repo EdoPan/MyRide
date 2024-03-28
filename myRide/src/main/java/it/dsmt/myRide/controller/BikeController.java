@@ -1,27 +1,28 @@
 package it.dsmt.myRide.controller;
 import it.dsmt.myRide.model.Bike;
 import java.util.List;
+import com.rqlite.NodeUnavailableException;
 
 public class BikeController {
 
-    public static Bike getBikeByID(int id) throws Exception{
+    public static Bike getBikeByID(int id) throws NodeUnavailableException{
 
         try{
             return Bike.getBikeByID(id);
-        } catch (Exception e) {
+        } catch (NodeUnavailableException e) {
             throw e;
         } 
     }
 
-    public static List<Bike> getAllBikes() throws Exception{
+    public static List<Bike> getAllBikes() throws NodeUnavailableException{
         try{
             return Bike.getAllBikes();
-        } catch (Exception e){
+        } catch (NodeUnavailableException e){
             throw e;
         }
     }
 
-    public static void addBike(String type, int quantity, int stationID) throws Exception{
+    public static void addBike(String type, int quantity, int stationID) throws NodeUnavailableException{
         double price; 
         switch (type) {
             case "city": price=0.25;
@@ -39,47 +40,47 @@ public class BikeController {
             Bike bike = new Bike(type, price, stationID);
             try{
                 bike.addBike();
-            } catch (Exception e){
+            } catch (NodeUnavailableException e){
                 throw e;
             }
         }    
     }
 
-    public static void removeBike(int id) throws Exception{
+    public static void removeBike(int id) throws NodeUnavailableException{
         Bike bike = Bike.getBikeByID(id);
         try{
             bike.removeBike();
-        } catch (Exception e){
+        } catch (NodeUnavailableException e){
             throw e;
         }
     }
 
-    public static void removeBikesByStation(int stationID) throws Exception{
+    public static void removeBikesByStation(int stationID) throws NodeUnavailableException{
         try{
             List<Bike> bikes = Bike.getAllBikesByStation(stationID);
             for (Bike bike : bikes) {
                 bike.removeBike();
             }
-        } catch (Exception e){
+        } catch (NodeUnavailableException e){
             throw e;
         }
     }
 
-    public static void assignBikeToStation(int id, int stationID) throws Exception{
+    public static void assignBikeToStation(int id, int stationID) throws NodeUnavailableException{
         Bike bike = Bike.getBikeByID(id);
         bike.setStationID(stationID);
         try{
             bike.assignBikeToStation();
-        } catch (Exception e) {
+        } catch (NodeUnavailableException e) {
             throw e;
         }
     }
 
-    public static void deallocateBikeByStation(int bikeID){
+    public static void deallocateBikeByStation(int bikeID) throws NodeUnavailableException{
         Bike bike = Bike.getBikeByID(bikeID);
         try{
             bike.deallocateBikeByStation();
-        } catch (Exception e) {
+        } catch (NodeUnavailableException e) {
             throw e;
         }
     }

@@ -1,50 +1,33 @@
 package it.dsmt.myRide.controller;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import com.rqlite.NodeUnavailableException;
+import com.rqlite.Rqlite;
+import com.rqlite.dto.ExecuteResults;
+import com.rqlite.RqliteFactory;
 
 public class DBController {
     private static DBController instance = null;
-    Connection connection = null;
+    private Rqlite connection = null;
+    private ExecuteResults results = null;
 
     public static  DBController getInstance(){
         if (instance == null) {
             try{
                 instance = new DBController();
-            } catch (Exception e){
+            } catch (NodeUnavailableException e){
                 System.out.println(e.getMessage());
             }
         }
         return instance;
     }
 
-    public DBController () throws Exception {
-        // SQLite connection string
-        String url = "jdbc:sqlite:" + System.getenv("DB_PATH");
-        try {
-            this.connection = DriverManager.getConnection(url);
-            System.out.println("Connection to SQLite has been established.");
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public Connection getConnection(){
+    public Rqlite getConnection(){
         return DBController.getInstance().connection;
     }
-    
-    public static Connection connect() {
-        // SQLite connection string
-        String url = "jdbc:sqlite:" + System.getenv("DB_PATH");
-        Connection conn = null;
-        try {
-            conn = DriverManager.getConnection(url);
-            System.out.println("Connection to SQLite has been established.");
 
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return conn;
+    public DBController () throws NodeUnavailableException {
+        String protocol = System.getenv("RQLITE_PROTOCOL");
+        String ip = System.getenv("RQLITE_IP");
+        int port = Integer.parseInt(System.getenv("RQLITE_PORT"));
+        this.connection = RqliteFactory.connect(protocol, ip, port);
     }
 }

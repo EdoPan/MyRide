@@ -1,33 +1,8 @@
--- sqlite3 myRide.db
--- sqlite> .read db.sql
-
 -- Queries SQL
-
-CREATE TABLE users (
-    username varchar(255) PRIMARY KEY,
-    password varchar(255),
-    isMaintainer boolean
-);
-
-CREATE TABLE bikes (
-    id INTEGER PRIMARY KEY,
-    type varchar(255),
-  	price double,
-  	stationID int
-);
-
-CREATE TABLE rides (
-    id INTEGER PRIMARY KEY,
-    startTime TEXT,
-  	endTime TEXT,
-    bikeID int,
-  	username varchar(255)
-);
-
-CREATE TABLE stations (
-    id INTEGER PRIMARY KEY,
-    address varchar(255)
-);
+CREATE TABLE IF NOT EXISTS  users (username text not null primary key, password text, isMaintainer boolean)
+CREATE TABLE IF NOT EXISTS rides (id INTEGER PRIMARY KEY autoincrement, startTime text, endTime text, bikeID INTEGER, username text)
+CREATE TABLE IF NOT EXISTS stations (id INTEGER PRIMARY KEY autoincrement, address text)
+CREATE TABLE IF NOT EXISTS bikes (id INTEGER PRIMARY KEY autoincrement, type text, price double, stationID INTEGER)
 
 INSERT INTO users(username, password, isMaintainer) VALUES ('maintainer', 'maintainer', true);
 

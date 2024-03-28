@@ -1,9 +1,10 @@
 package it.dsmt.myRide.model;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import it.dsmt.myRide.controller.DBController;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.rqlite.NodeUnavailableException;
+import com.rqlite.Rqlite;
+import com.rqlite.dto.QueryResults;
 
 public class User {
     private String username;
@@ -42,61 +43,55 @@ public class User {
         this.isMaintainer = isMaintainer;
     }
 
-    public void register() throws Exception{
+    public void register() throws NodeUnavailableException{
         // Default registration is for user not maintainers so isMaintainer is set to false
         String query = "INSERT INTO users(username, password, isMaintainer) VALUES('" + 
         this.username + "','" + this.password + "',FALSE)";
-        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            stmt.executeUpdate(query);
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-                throw e;
-            }
+        DBController.getInstance().getConnection().Execute(query);
     }
     
-    public boolean login(){
+    public boolean login() throws NodeUnavailableException{
         String query = "SELECT * FROM users where username = '" + this.username + "' and password = '" + this.password + "'";
+        QueryResults res = DBController.getInstance().getConnection().Query(query, Rqlite.ReadConsistencyLevel.STRONG);
+        Gson gson = new Gson();
+        String json = gson.toJson(res);
+        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
 
-        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            ResultSet res = stmt.executeQuery(query);
-            if (res != null && res.next()) {
-                this.isMaintainer = res.getBoolean("isMaintainer");
-                res.close();
-                return true;
-            }
-            else{
-                return false;
-            }
-        } catch (SQLException e) {
-           System.out.println(e.getMessage());
-       }
+        if (res != null && res.results != null && res.results.length > 0) {
+            this.isMaintainer = jsonObject.getAsJsonArray("results")
+            .get(0).getAsJsonObject()
+            .getAsJsonArray("values").get(0).getAsJsonArray().get(2).getAsBoolean();
+            return true;
+        }
         return false;
     }
 
-    public static User getUserByUsername(String username){
-        User user = new User();
+    public static User getUserByUsername(String username) throws NodeUnavailableException{
         String query = "SELECT * FROM users WHERE username = '" + username + "'";
-        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            ResultSet res = stmt.executeQuery(query);
-            user = new User(res.getString("username"), res.getString("password"), 
-            res.getBoolean("isMaintainer"));
-            res.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        QueryResults res = DBController.getInstance().getConnection().Query(query, Rqlite.ReadConsistencyLevel.STRONG);
+        Gson gson = new Gson();
+        String json = gson.toJson(res);
+        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+        String password = jsonObject.getAsJsonArray("results")
+            .get(0).getAsJsonObject()
+            .getAsJsonArray("values").get(0).getAsJsonArray().get(1).getAsString();
+        Boolean isMaintainer = jsonObject.getAsJsonArray("results")
+            .get(0).getAsJsonObject()
+            .getAsJsonArray("values").get(0).getAsJsonArray().get(2).getAsBoolean();
+        User user = new User(username, password, isMaintainer);
         return user;
     }
 
-    public boolean checkIfMaintainer(){
-        String query = "SELECT isMaintainer FROM users WHERE username = " + this.username;
+    public boolean checkIfMaintainer() throws NodeUnavailableException{
         boolean check = false;
-        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            ResultSet res = stmt.executeQuery(query);
-            check = res.getBoolean("isMaintainer");
-            res.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        String query = "SELECT isMaintainer FROM users WHERE username = " + this.username;
+        QueryResults res = DBController.getInstance().getConnection().Query(query, Rqlite.ReadConsistencyLevel.STRONG);
+        Gson gson = new Gson();
+        String json = gson.toJson(res);
+        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+        check = jsonObject.getAsJsonArray("results")
+            .get(0).getAsJsonObject()
+            .getAsJsonArray("values").get(0).getAsJsonArray().get(2).getAsBoolean();
         return check;
     }
 }

@@ -1,10 +1,14 @@
 package it.dsmt.myRide.model;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import it.dsmt.myRide.controller.DBController;
 import java.util.ArrayList;
 import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.rqlite.NodeUnavailableException;
+import com.rqlite.Rqlite;
+import com.rqlite.dto.QueryResults;
 
 public class Station {
     private int id;
@@ -38,10 +42,46 @@ public class Station {
         this.address = address;
     }
 
-    public static List<Station> getStations(String type){
-        List<Station> stations = new ArrayList<>();
+    private static Station parseStationQueryResult(JsonElement element){
+        int id = element.getAsJsonArray().get(0).getAsInt();
+        String address = element.getAsJsonArray().get(1).getAsString();
+        return new Station(id, address);
+    }
+
+    private static Bike parseBikeQueryResult(JsonElement element){
+        int id = element.getAsJsonArray().get(0).getAsInt();
+        String type = element.getAsJsonArray().get(1).getAsString();
+        double price = element.getAsJsonArray().get(2).getAsDouble();
+        int stationID = element.getAsJsonArray().get(3).getAsInt();
+        return new Bike(id, type, price, stationID);
+    }
+
+    public static Station getStationByID(int id) throws NodeUnavailableException{
+        String query = "SELECT * FROM stations WHERE id = " + id;
+        QueryResults res = DBController.getInstance().getConnection().Query(query, Rqlite.ReadConsistencyLevel.STRONG);
+        Gson gson = new Gson();
+        String json = gson.toJson(res);
+        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+        String address = jsonObject.getAsJsonArray("results")
+            .get(0).getAsJsonObject()
+            .getAsJsonArray("values").get(0).getAsJsonArray().get(1).getAsString();
+        Station station = new Station(id, address);
+        return station;
+    }
+
+    public void addStation() throws NodeUnavailableException{
+        String query = "INSERT INTO stations(address) VALUES('" +
+        this.address + "')";
+        DBController.getInstance().getConnection().Execute(query);
+    }
+
+    public void removeStation() throws NodeUnavailableException{
+        String query = "DELETE FROM stations WHERE id = " + this.id;
+        DBController.getInstance().getConnection().Execute(query);
+    }
+
+    public static List<Station> getStations(String type) throws NodeUnavailableException{
         String query;
-        
         if(type.equals("all")){
             query = "SELECT * FROM stations";
         }
@@ -51,65 +91,46 @@ public class Station {
             "GROUP BY a.id " +
             "HAVING COUNT(*) > 0";
         }    
-        try (Statement stmt = DBController.getInstance().getConnection().createStatement();
-        ResultSet rs = stmt.executeQuery(query)){
-            while(rs.next()){
-                Station stationIstance;
-                stationIstance = new Station(rs.getInt("id"), rs.getString("address"));
-                stations.add(stationIstance);
+        QueryResults res = DBController.getInstance().getConnection().Query(query, Rqlite.ReadConsistencyLevel.STRONG);
+        Gson gson = new Gson();
+        String json = gson.toJson(res);
+        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+        List<Station> stations = new ArrayList<Station>();
+        try{
+            if (!jsonObject.has("error")) {
+                JsonArray values = jsonObject.getAsJsonArray("results")
+                        .get(0).getAsJsonObject()
+                        .getAsJsonArray("values");
+                for (JsonElement row : values) {
+                    stations.add(Station.parseStationQueryResult(row));
+                }
+                return stations;
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch(Exception e){
+            throw e;
         }
         return stations;
     }
 
-    public static Station getStationByID(int id){
-        Station station = new Station();
-        String query = "SELECT * FROM stations WHERE id = " + id;
-        
-        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            ResultSet res = stmt.executeQuery(query);
-            station = new Station(res.getInt("id"), res.getString("address"));
-            res.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return station;
-    }
-
-    public void addStation(){
-        String query = "INSERT INTO stations(address) VALUES('" +
-        this.address + "')";
-        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            stmt.executeUpdate(query);
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-    public void removeStation(){
-        String query = "DELETE FROM stations WHERE id = " + this.id;
-        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            stmt.executeUpdate(query);
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }     
-        }
-
-    public List<Bike> getBikes(){
-        List<Bike> bikes = new ArrayList<Bike>();
+    public List<Bike> getBikes() throws NodeUnavailableException{
         String query = "SELECT * FROM bikes WHERE stationID = " + this.id;
-        try (Statement stmt = DBController.getInstance().getConnection().createStatement();){
-            ResultSet res = stmt.executeQuery(query);
-            while(res.next()){
-                Bike bike = new Bike(res.getInt("id"), res.getString("type"), 
-                res.getDouble("price"), res.getInt("stationID"));
-                bikes.add(bike);
+        QueryResults res = DBController.getInstance().getConnection().Query(query, Rqlite.ReadConsistencyLevel.STRONG);
+        Gson gson = new Gson();
+        String json = gson.toJson(res);
+        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+        List<Bike> bikes = new ArrayList<Bike>();
+        try{
+            if (!jsonObject.has("error")) {
+                JsonArray values = jsonObject.getAsJsonArray("results")
+                        .get(0).getAsJsonObject()
+                        .getAsJsonArray("values");
+                for (JsonElement row : values) {
+                    bikes.add(Station.parseBikeQueryResult(row));
+                }
+                return bikes;
             }
-            res.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch(Exception e){
+            throw e;
         }
         return bikes;
     }
