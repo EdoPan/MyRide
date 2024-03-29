@@ -78,27 +78,23 @@ public class Bike {
         Gson gson = new Gson();
         String json = gson.toJson(res);
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
-        String type = jsonObject.getAsJsonArray("results")
+        Bike bike = null;
+        boolean check = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().has("values");
+        if(check == true && !jsonObject.has("error")){
+            String type = jsonObject.getAsJsonArray("results")
             .get(0).getAsJsonObject()
             .getAsJsonArray("values").get(0).getAsJsonArray().get(1).getAsString();
         double price = jsonObject.getAsJsonArray("results")
             .get(0).getAsJsonObject()
             .getAsJsonArray("values").get(0).getAsJsonArray().get(2).getAsDouble();
-
-        int stationID;
-        boolean check = jsonObject.getAsJsonArray("results")
-            .get(0).getAsJsonObject()
-            .getAsJsonArray("values").get(0).getAsJsonArray().get(3).getAsJsonObject().isEmpty();
-        if(check == true){
-            stationID = 0;
-        } else {
-            stationID = jsonObject.getAsJsonArray("results")
+        int stationID = jsonObject.getAsJsonArray("results")
                 .get(0).getAsJsonObject()
                 .getAsJsonArray("values").get(0).getAsJsonArray().get(3).getAsInt();
-        }
-        Bike bike = new Bike(id, type, price, stationID);
-        return bike;
 
+        bike = new Bike(id, type, price, stationID);
+        }
+
+        return bike;
     }
 
     public static List<Bike> getAllBikes() throws NodeUnavailableException{
@@ -109,14 +105,14 @@ public class Bike {
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
         List<Bike> bikes = new ArrayList<Bike>();
         try{
-            if (!jsonObject.has("error")) {
+            boolean check = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().has("values");
+            if (!jsonObject.has("error" ) && check) {
                 JsonArray values = jsonObject.getAsJsonArray("results")
                         .get(0).getAsJsonObject()
                         .getAsJsonArray("values");
                 for (JsonElement row : values) {
                     bikes.add(Bike.parseQueryResult(row));
                 }
-                return bikes;
             }
         } catch(Exception e){
             throw e;
@@ -131,8 +127,9 @@ public class Bike {
         String json = gson.toJson(res);
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
         List<Bike> bikes = new ArrayList<Bike>();
+        boolean check = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().has("values");
         try{
-            if (!jsonObject.has("error")) {
+            if (!jsonObject.has("error") && check) {
                 JsonArray values = jsonObject.getAsJsonArray("results")
                         .get(0).getAsJsonObject()
                         .getAsJsonArray("values");

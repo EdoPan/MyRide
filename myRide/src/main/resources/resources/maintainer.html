@@ -131,7 +131,8 @@
                   <div class="form-group mr-2">
                     <div class="form-group">
                       <label for="bike_id_delete" class="label">Bike ID</label>
-                      <input type="number" class="form-control" id="bike_id" required="">
+                      <select id="bike_id_delete" name="bike_id_delete" required>
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -213,18 +214,14 @@
       // Make Axios requests
       axios.delete(DELETE_BIKES_ENDPOINT)
           .then(response => {
-              //console.log("Success:", response.data);
           })
           .catch(error => {
-              //console.error("Error:", error);
           });
 
       axios.delete(DELETE_STATION_ENDPOINT)
           .then(response => {
-              //console.log("Success:", response.data);
           })
           .catch(error => {
-              //console.error("Error:", error);
           });
 
       location.reload();    
@@ -232,7 +229,7 @@
 
   document.getElementById("delete_bike_form").addEventListener("submit", function (event) {
       event.preventDefault();
-      const bikeID = document.getElementById("bike_id").value;
+      const bikeID = document.getElementById("bike_id_delete").value;
       const DELETE_BIKE_ENDPOINT = "http://127.0.0.1:8080/bike/" + bikeID;
       // Make Axios requests
       axios.delete(DELETE_BIKE_ENDPOINT)
@@ -258,7 +255,19 @@
     return res;
   }
 
-  function fillOptions(stations){
+  async function getBikesAPI() {
+    const BIKES_ENDPOINT = "http://127.0.0.1:8080/bikes";
+    let res = '';
+    await axios.get(BIKES_ENDPOINT)
+      .then(response => {
+        res = response.data;
+      })
+      .catch(error => {
+      });
+    return res;
+  }
+
+  function fillOptionsStations(stations){
     let options = document.getElementById("station_id");
     let optionsDelete = document.getElementById("station_id_delete");
     stations?.forEach(function (station) {
@@ -273,9 +282,22 @@
     });
   }
 
+  function fillOptionsBikes(bikes){
+    let optionsDelete = document.getElementById("bike_id_delete");
+    bikes?.forEach(function (bike) {
+      let optionDelete = document.createElement("option");
+      optionDelete.value = `${bike.id}`;
+      optionDelete.innerHTML = `${bike.type} - ${bike.id}`;
+      optionsDelete.appendChild(optionDelete);
+    });
+  }
+
   async function getStations(){
     const stations = await getStationsAPI();
-    fillOptions(stations);
+    const bikes = await getBikesAPI();
+    fillOptionsStations(stations);
+    fillOptionsBikes(bikes);
+
   }
 
   document.getElementById("logout_nav").addEventListener("click", function (event) {

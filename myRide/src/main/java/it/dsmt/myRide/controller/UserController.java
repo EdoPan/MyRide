@@ -2,11 +2,14 @@ package it.dsmt.myRide.controller;
 import it.dsmt.myRide.dto.LoginDTO;
 import it.dsmt.myRide.model.MasterNode;
 import it.dsmt.myRide.model.User;
+
+import java.sql.SQLException;
+
 import com.rqlite.NodeUnavailableException;
 
 public class UserController {
 
-    public static void registerUser(String username, String password) throws NodeUnavailableException{
+    public static void registerUser(String username, String password) throws NodeUnavailableException,SQLException{
         User user = new User(username, password, false);
         try{
             user.register();

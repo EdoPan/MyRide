@@ -1,5 +1,6 @@
 package it.dsmt.myRide.model;
 import it.dsmt.myRide.controller.DBController;
+import java.sql.SQLException;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.rqlite.NodeUnavailableException;
@@ -43,11 +44,21 @@ public class User {
         this.isMaintainer = isMaintainer;
     }
 
-    public void register() throws NodeUnavailableException{
+    public void register() throws NodeUnavailableException,SQLException{
         // Default registration is for user not maintainers so isMaintainer is set to false
-        String query = "INSERT INTO users(username, password, isMaintainer) VALUES('" + 
-        this.username + "','" + this.password + "',FALSE)";
-        DBController.getInstance().getConnection().Execute(query);
+        try{
+            if(getUserByUsername(this.username) == null){
+                String query = "INSERT INTO users(username, password, isMaintainer) VALUES('" + 
+                this.username + "','" + this.password + "',FALSE)";
+                DBController.getInstance().getConnection().Execute(query);
+            }
+            else{
+                throw new SQLException();
+            }    
+        }
+        catch(Exception e){
+            throw e;
+        }
     }
     
     public boolean login() throws NodeUnavailableException{
@@ -56,8 +67,8 @@ public class User {
         Gson gson = new Gson();
         String json = gson.toJson(res);
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
-
-        if (res != null && res.results != null && res.results.length > 0) {
+        boolean check = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().has("values");
+        if (res != null && res.results != null && res.results.length > 0 && !jsonObject.has("error") && check) {
             this.isMaintainer = jsonObject.getAsJsonArray("results")
             .get(0).getAsJsonObject()
             .getAsJsonArray("values").get(0).getAsJsonArray().get(2).getAsBoolean();
@@ -72,26 +83,35 @@ public class User {
         Gson gson = new Gson();
         String json = gson.toJson(res);
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
-        String password = jsonObject.getAsJsonArray("results")
-            .get(0).getAsJsonObject()
-            .getAsJsonArray("values").get(0).getAsJsonArray().get(1).getAsString();
-        Boolean isMaintainer = jsonObject.getAsJsonArray("results")
-            .get(0).getAsJsonObject()
-            .getAsJsonArray("values").get(0).getAsJsonArray().get(2).getAsBoolean();
-        User user = new User(username, password, isMaintainer);
-        return user;
+        boolean check = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().has("values");
+        if(!jsonObject.has("error") && check){
+            String password = jsonObject.getAsJsonArray("results")
+                .get(0).getAsJsonObject()
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(1).getAsString();
+            Boolean isMaintainer = jsonObject.getAsJsonArray("results")
+                .get(0).getAsJsonObject()
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(2).getAsBoolean();
+            User user = new User(username, password, isMaintainer);
+            return user;
+        }
+        else{
+            return null;
+        }
     }
 
     public boolean checkIfMaintainer() throws NodeUnavailableException{
-        boolean check = false;
+        boolean checkIfMaintainer = false;
         String query = "SELECT isMaintainer FROM users WHERE username = " + this.username;
         QueryResults res = DBController.getInstance().getConnection().Query(query, Rqlite.ReadConsistencyLevel.STRONG);
         Gson gson = new Gson();
         String json = gson.toJson(res);
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
-        check = jsonObject.getAsJsonArray("results")
-            .get(0).getAsJsonObject()
-            .getAsJsonArray("values").get(0).getAsJsonArray().get(2).getAsBoolean();
-        return check;
+        boolean check = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().has("values");
+        if(!jsonObject.has("error") && check){
+            checkIfMaintainer = jsonObject.getAsJsonArray("results")
+                .get(0).getAsJsonObject()
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(2).getAsBoolean();
+        }        
+        return checkIfMaintainer;
     }
 }

@@ -62,11 +62,17 @@ public class Station {
         Gson gson = new Gson();
         String json = gson.toJson(res);
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
-        String address = jsonObject.getAsJsonArray("results")
-            .get(0).getAsJsonObject()
-            .getAsJsonArray("values").get(0).getAsJsonArray().get(1).getAsString();
-        Station station = new Station(id, address);
-        return station;
+        boolean check = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().has("values");
+        if(check && !jsonObject.has("error")){
+            String address = jsonObject.getAsJsonArray("results")
+                .get(0).getAsJsonObject()
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(1).getAsString();
+            Station station = new Station(id, address);
+            return station;
+        }
+        else{
+            return null;
+        }
     }
 
     public void addStation() throws NodeUnavailableException{
@@ -97,7 +103,8 @@ public class Station {
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
         List<Station> stations = new ArrayList<Station>();
         try{
-            if (!jsonObject.has("error")) {
+            boolean check = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().has("values");
+            if (!jsonObject.has("error") && check) {
                 JsonArray values = jsonObject.getAsJsonArray("results")
                         .get(0).getAsJsonObject()
                         .getAsJsonArray("values");

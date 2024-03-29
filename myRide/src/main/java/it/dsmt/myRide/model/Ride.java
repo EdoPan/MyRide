@@ -76,20 +76,26 @@ public class Ride {
         Gson gson = new Gson();
         String json = gson.toJson(res);
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
-        String startTime = jsonObject.getAsJsonArray("results")
-            .get(0).getAsJsonObject()
-            .getAsJsonArray("values").get(0).getAsJsonArray().get(1).getAsString();
-        String endTime = jsonObject.getAsJsonArray("results")
-            .get(0).getAsJsonObject()
-            .getAsJsonArray("values").get(0).getAsJsonArray().get(2).getAsString();
-        int bikeID = jsonObject.getAsJsonArray("results")
-            .get(0).getAsJsonObject()
-            .getAsJsonArray("values").get(0).getAsJsonArray().get(3).getAsInt();
-        String username = jsonObject.getAsJsonArray("results")
-            .get(0).getAsJsonObject()
-            .getAsJsonArray("values").get(0).getAsJsonArray().get(4).getAsString();
-        Ride ride = new Ride(id, startTime, endTime, bikeID, username);
-        return ride;
+        boolean check = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().has("values");
+        if(check == true && !jsonObject.has("error" )){
+            String startTime = jsonObject.getAsJsonArray("results")
+                .get(0).getAsJsonObject()
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(1).getAsString();
+            String endTime = jsonObject.getAsJsonArray("results")
+                .get(0).getAsJsonObject()
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(2).getAsString();
+            int bikeID = jsonObject.getAsJsonArray("results")
+                .get(0).getAsJsonObject()
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(3).getAsInt();
+            String username = jsonObject.getAsJsonArray("results")
+                .get(0).getAsJsonObject()
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(4).getAsString();
+            Ride ride = new Ride(id, startTime, endTime, bikeID, username);
+            return ride;
+        }
+        else {
+            return null;   
+        }     
     }
 
     public static ActiveRideDTO getActiveRide(String username) throws NodeUnavailableException{
@@ -99,9 +105,8 @@ public class Ride {
         Gson gson = new Gson();
         String json = gson.toJson(res);
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
-
         boolean check = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().has("values");
-        if(check == true){
+        if(check == true && !jsonObject.has("error" )){
             int rideID = jsonObject.getAsJsonArray("results")
                 .get(0).getAsJsonObject()
                 .getAsJsonArray("values").get(0).getAsJsonArray().get(0).getAsInt();          
