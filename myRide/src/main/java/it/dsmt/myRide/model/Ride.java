@@ -99,23 +99,28 @@ public class Ride {
         Gson gson = new Gson();
         String json = gson.toJson(res);
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
-        int rideID = jsonObject.getAsJsonArray("results")
-            .get(0).getAsJsonObject()
-            .getAsJsonArray("values").get(0).getAsJsonArray().get(0).getAsInt();          
-        int bikeID = jsonObject.getAsJsonArray("results")
-            .get(0).getAsJsonObject()
-            .getAsJsonArray("values").get(0).getAsJsonArray().get(2).getAsInt();
-        String bikeType = jsonObject.getAsJsonArray("results")
-            .get(0).getAsJsonObject()
-            .getAsJsonArray("values").get(0).getAsJsonArray().get(3).getAsString();
-        String startTime = jsonObject.getAsJsonArray("results")
-            .get(0).getAsJsonObject()
-            .getAsJsonArray("values").get(0).getAsJsonArray().get(1).getAsString();
-        double price = jsonObject.getAsJsonArray("results")
-            .get(0).getAsJsonObject()
-            .getAsJsonArray("values").get(0).getAsJsonArray().get(4).getAsDouble();
-        ActiveRideDTO activeRide = new ActiveRideDTO(rideID, bikeID, bikeType, startTime, price);
-        return activeRide;
+
+        boolean check = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().has("values");
+        if(check == true){
+            int rideID = jsonObject.getAsJsonArray("results")
+                .get(0).getAsJsonObject()
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(0).getAsInt();          
+            int bikeID = jsonObject.getAsJsonArray("results")
+                .get(0).getAsJsonObject()
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(2).getAsInt();
+            String bikeType = jsonObject.getAsJsonArray("results")
+                .get(0).getAsJsonObject()
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(3).getAsString();
+            String startTime = jsonObject.getAsJsonArray("results")
+                .get(0).getAsJsonObject()
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(1).getAsString();
+            double price = jsonObject.getAsJsonArray("results")
+                .get(0).getAsJsonObject()
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(4).getAsDouble();
+            ActiveRideDTO activeRide = new ActiveRideDTO(rideID, bikeID, bikeType, startTime, price);
+            return activeRide;
+        }
+        return null;
      }
 
     public void bookRide() throws NodeUnavailableException{

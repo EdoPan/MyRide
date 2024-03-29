@@ -84,9 +84,18 @@ public class Bike {
         double price = jsonObject.getAsJsonArray("results")
             .get(0).getAsJsonObject()
             .getAsJsonArray("values").get(0).getAsJsonArray().get(2).getAsDouble();
-        int stationID = jsonObject.getAsJsonArray("results")
+
+        int stationID;
+        boolean check = jsonObject.getAsJsonArray("results")
             .get(0).getAsJsonObject()
-            .getAsJsonArray("values").get(0).getAsJsonArray().get(3).getAsInt();
+            .getAsJsonArray("values").get(0).getAsJsonArray().get(3).getAsJsonObject().isEmpty();
+        if(check == true){
+            stationID = 0;
+        } else {
+            stationID = jsonObject.getAsJsonArray("results")
+                .get(0).getAsJsonObject()
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(3).getAsInt();
+        }
         Bike bike = new Bike(id, type, price, stationID);
         return bike;
 

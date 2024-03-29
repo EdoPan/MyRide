@@ -1,13 +1,11 @@
 package it.dsmt.myRide.controller;
 import com.rqlite.NodeUnavailableException;
 import com.rqlite.Rqlite;
-import com.rqlite.dto.ExecuteResults;
 import com.rqlite.RqliteFactory;
 
 public class DBController {
     private static DBController instance = null;
     private Rqlite connection = null;
-    private ExecuteResults results = null;
 
     public static  DBController getInstance(){
         if (instance == null) {

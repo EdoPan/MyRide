@@ -120,7 +120,8 @@ public class Station {
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
         List<Bike> bikes = new ArrayList<Bike>();
         try{
-            if (!jsonObject.has("error")) {
+            boolean check = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().has("values");
+            if ((!jsonObject.has("error")) && check) {
                 JsonArray values = jsonObject.getAsJsonArray("results")
                         .get(0).getAsJsonObject()
                         .getAsJsonArray("values");
@@ -133,5 +134,6 @@ public class Station {
             throw e;
         }
         return bikes;
+    
     }
 }
