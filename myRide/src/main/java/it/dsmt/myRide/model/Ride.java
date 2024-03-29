@@ -76,7 +76,7 @@ public class Ride {
         Gson gson = new Gson();
         String json = gson.toJson(res);
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
-        boolean check = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().has("values");
+        boolean check = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().has("values");   
         if(check == true && !jsonObject.has("error" )){
             String startTime = jsonObject.getAsJsonArray("results")
                 .get(0).getAsJsonObject()
@@ -89,7 +89,7 @@ public class Ride {
                 .getAsJsonArray("values").get(0).getAsJsonArray().get(3).getAsInt();
             String username = jsonObject.getAsJsonArray("results")
                 .get(0).getAsJsonObject()
-                .getAsJsonArray("values").get(0).getAsJsonArray().get(4).getAsString();
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(4).getAsString();   
             Ride ride = new Ride(id, startTime, endTime, bikeID, username);
             return ride;
         }

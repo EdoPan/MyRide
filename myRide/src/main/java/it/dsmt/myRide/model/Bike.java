@@ -80,20 +80,25 @@ public class Bike {
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
         Bike bike = null;
         boolean check = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().has("values");
-        if(check == true && !jsonObject.has("error")){
+       
+        if(check == true && !jsonObject.has("error")){ 
             String type = jsonObject.getAsJsonArray("results")
-            .get(0).getAsJsonObject()
-            .getAsJsonArray("values").get(0).getAsJsonArray().get(1).getAsString();
-        double price = jsonObject.getAsJsonArray("results")
-            .get(0).getAsJsonObject()
-            .getAsJsonArray("values").get(0).getAsJsonArray().get(2).getAsDouble();
-        int stationID = jsonObject.getAsJsonArray("results")
                 .get(0).getAsJsonObject()
-                .getAsJsonArray("values").get(0).getAsJsonArray().get(3).getAsInt();
-
-        bike = new Bike(id, type, price, stationID);
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(1).getAsString();
+            double price = jsonObject.getAsJsonArray("results")
+                .get(0).getAsJsonObject()
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(2).getAsDouble();
+            boolean checkStationID = jsonObject.getAsJsonArray("results")
+                .get(0).getAsJsonObject()
+                .getAsJsonArray("values").get(0).getAsJsonArray().get(3).isJsonPrimitive();
+            int stationID = -1;
+            if(checkStationID){
+                stationID = jsonObject.getAsJsonArray("results")
+                    .get(0).getAsJsonObject()
+                    .getAsJsonArray("values").get(0).getAsJsonArray().get(3).getAsInt();
+            }       
+            bike = new Bike(id, type, price, stationID);
         }
-
         return bike;
     }
 

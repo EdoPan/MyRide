@@ -250,7 +250,6 @@ function convertToLocalDateTime(localDateTime) {
 function releaseBike(rideID){
 event.preventDefault();
 const RELEASE_BIKE_ENDPOINT = "http://127.0.0.1:8080/ride/end";
-
 const jsonData = {
   "rideID" : rideID,
   "stationID" : document.getElementById("station_id").value,
@@ -258,11 +257,9 @@ const jsonData = {
 // Make Axios request
 axios.post(RELEASE_BIKE_ENDPOINT, jsonData)
   .then(response => {
-    //console.log("Success:", response.data);
     location.reload();  
   })
   .catch(error => {
-    //console.error("Error:", error);
 });
 }
 </script>
